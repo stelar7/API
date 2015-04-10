@@ -42,14 +42,9 @@ public class Fraction
         return divide(new Fraction(f, 1));
     }
 
-    public int greatestCommonDivisor(final int a, final int b)
-    {
-        return (b == 0) ? a : greatestCommonDivisor(b, a % b);
-    }
-
     public Fraction minimalize()
     {
-        final int gcd = greatestCommonDivisor(numerator, denominator);
+        final int gcd = Stuff.greatestCommonDivisor(numerator, denominator);
         return new Fraction(numerator / gcd, denominator / gcd);
     }
 

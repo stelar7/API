@@ -3,6 +3,18 @@ package math;
 public class Stuff
 {
 
+    public static double mapToRange(double x, double in_min, double in_max, double out_min, double out_max)
+    {
+        return (x - in_min) * (out_max - out_min) / (in_max - in_min) + out_min;
+    }
+
+    public static double constrain(double x, double min, double max)
+    {
+        if (x < min) return min;
+        if (x > max) return max;
+        return x;
+    }
+
     public static int binaryToDecimal(final String s)
     {
         int i = 0;

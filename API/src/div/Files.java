@@ -1,20 +1,11 @@
 package div;
 
 import java.awt.Desktop;
-import java.io.BufferedReader;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
-import java.io.FileReader;
-import java.io.FileWriter;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.ObjectInputStream;
-import java.io.ObjectOutputStream;
-import java.io.UnsupportedEncodingException;
+import java.io.*;
 import java.net.URISyntaxException;
 import java.net.URLDecoder;
+import java.nio.MappedByteBuffer;
+import java.nio.charset.Charset;
 import java.nio.file.FileVisitResult;
 import java.nio.file.FileVisitor;
 import java.nio.file.Path;
@@ -49,6 +40,39 @@ public class Files
             Desktop.getDesktop().browse(file.toURI());
         }
         return true;
+    }
+
+    /**
+     * Searches a MappedByteBuffer for a string
+     * 
+     * @param buffer
+     *            the buffer to seach
+     * @param search
+     *            the string to seach
+     * @return if the string was found
+     */
+    public static boolean lookFor(MappedByteBuffer buffer, String search)
+    {
+        byte[] lookup = search.getBytes(Charset.defaultCharset());
+        int datalength = lookup.length;
+        buffer.rewind();
+        outer: while (buffer.hasRemaining())
+        {
+            byte b = buffer.get();
+            if (b == lookup[0])
+            {
+                byte[] data = new byte[datalength];
+                buffer.position(buffer.position() - 1);
+                buffer.get(data, 0, datalength);
+                String found = new String(data);
+                if (!found.equals(search))
+                {
+                    continue outer;
+                }
+                return true;
+            }
+        }
+        return false;
     }
 
     /**

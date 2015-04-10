@@ -1,23 +1,23 @@
 package raspberrypi;
 
-import com.pi4j.io.gpio.GpioFactory;
-import com.pi4j.io.gpio.GpioPin;
-import com.pi4j.io.gpio.GpioPinDigitalOutput;
-import com.pi4j.io.gpio.PinMode;
+import com.pi4j.io.gpio.*;
 
 public class StepperMotor
 {
 
-    private int     stepCount;
-    private int     currentStep;
-    private int     pinCount;
-    private long    lastStepTime;
-    private long    stepDelay;
-    private boolean direction;
-    private boolean halfstep;
-    private GpioPinDigitalOutput pin1, pin2, pin3, pin4;
+    private int                  stepCount;
+    private int                  currentStep;
+    private int                  pinCount;
+    private long                 lastStepTime;
+    private long                 stepDelay;
+    private boolean              direction;
+    private boolean              halfstep;
+    private GpioPinDigitalOutput pin1;
+    private GpioPinDigitalOutput pin2;
+    private GpioPinDigitalOutput pin3;
+    private GpioPinDigitalOutput pin4;
 
-    public StepperMotor(int stepsPerRotation, GpioPin pin1, GpioPin pin2)
+    public StepperMotor(int stepsPerRotation, Pin pin1, Pin pin2)
     {
 
         this.currentStep = 0;
@@ -25,8 +25,8 @@ public class StepperMotor
         this.lastStepTime = 0;
         this.stepCount = stepsPerRotation;
 
-        this.pin1 = GpioFactory.getInstance().provisionDigitalOutputPin(pin1.getPin());
-        this.pin2 = GpioFactory.getInstance().provisionDigitalOutputPin(pin2.getPin());
+        this.pin1 = GpioFactory.getInstance().provisionDigitalOutputPin(pin1);
+        this.pin2 = GpioFactory.getInstance().provisionDigitalOutputPin(pin2);
 
         this.pin1.setMode(PinMode.DIGITAL_OUTPUT);
         this.pin2.setMode(PinMode.DIGITAL_OUTPUT);
