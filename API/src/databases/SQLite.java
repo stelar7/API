@@ -38,51 +38,6 @@ public class SQLite
         }
     }
 
-    public void deleteTable(final String table)
-    {
-        try
-        {
-            this.db.beginTransaction(SqlJetTransactionMode.WRITE);
-            this.db.dropTable(table);
-            this.db.commit();
-        } catch (final SqlJetException e)
-        {
-            e.printStackTrace();
-        }
-    }
-
-    public ISqlJetCursor select(final String tableName, final String indexKey, final Object... value)
-    {
-        try
-        {
-            this.db.beginTransaction(SqlJetTransactionMode.READ_ONLY);
-            ISqlJetTable table = this.db.getTable(tableName);
-            ISqlJetCursor cursor = table.lookup(indexKey, value);
-            this.db.commit();
-            return cursor;
-        } catch (final SqlJetException e)
-        {
-            e.printStackTrace();
-            return null;
-        }
-    }
-
-    public long insert(final String tableName, final Map<String, Object> data)
-    {
-        try
-        {
-            this.db.beginTransaction(SqlJetTransactionMode.WRITE);
-            ISqlJetTable table = this.db.getTable(tableName);
-            long rowid = table.insertByFieldNames(data);
-            this.db.commit();
-            return rowid;
-        } catch (final SqlJetException e)
-        {
-            e.printStackTrace();
-            return -1;
-        }
-    }
-
     public void createTable(final String table, final Map<String, String> fields)
     {
 
@@ -109,6 +64,35 @@ public class SQLite
         }
     }
 
+    public void deleteTable(final String table)
+    {
+        try
+        {
+            this.db.beginTransaction(SqlJetTransactionMode.WRITE);
+            this.db.dropTable(table);
+            this.db.commit();
+        } catch (final SqlJetException e)
+        {
+            e.printStackTrace();
+        }
+    }
+
+    public long insert(final String tableName, final Map<String, Object> data)
+    {
+        try
+        {
+            this.db.beginTransaction(SqlJetTransactionMode.WRITE);
+            final ISqlJetTable table = this.db.getTable(tableName);
+            final long rowid = table.insertByFieldNames(data);
+            this.db.commit();
+            return rowid;
+        } catch (final SqlJetException e)
+        {
+            e.printStackTrace();
+            return -1;
+        }
+    }
+
     public void open()
     {
         try
@@ -121,6 +105,22 @@ public class SQLite
         } catch (final SqlJetException e)
         {
             e.printStackTrace();
+        }
+    }
+
+    public ISqlJetCursor select(final String tableName, final String indexKey, final Object... value)
+    {
+        try
+        {
+            this.db.beginTransaction(SqlJetTransactionMode.READ_ONLY);
+            final ISqlJetTable table = this.db.getTable(tableName);
+            final ISqlJetCursor cursor = table.lookup(indexKey, value);
+            this.db.commit();
+            return cursor;
+        } catch (final SqlJetException e)
+        {
+            e.printStackTrace();
+            return null;
         }
     }
 }

@@ -9,20 +9,29 @@ public class Notation
 
     private static final List<Character> operators = Arrays.asList('+', '-', '*', '/');
 
-    public static String fromPostfix(String input, boolean verbose)
+    public static String fromPostfix(final String input, final boolean verbose)
     {
-        Stack<Float> stack = new Stack<Float>();
-        char[] items = input.toCharArray();
+        final Stack<Float> stack = new Stack<Float>();
+        final char[] items = input.toCharArray();
         for (int i = 0; i < items.length; i++)
         {
-            char c = items[i];
-            if (!isValidChar(c)) return "INVALID INPUT " + c;
-            if (verbose) System.out.println("REMAINING INPUT:" + input.substring(i) + "\tSTACK: " + stack + "\tNEXT ACTION: " + (operators.contains(c) ? stack.get(0) + Character.toString(c) + stack.get(1) : "PUSH " + (char) c));
-            if (operators.contains(c))
+            final char c = items[i];
+            if (!Notation.isValidChar(c))
             {
-                if (stack.size() < 2) return "Can't pop when less than 2 items!";
-                float f1 = stack.pop();
-                float f2 = stack.pop();
+                return "INVALID INPUT " + c;
+            }
+            if (verbose)
+            {
+                System.out.println("REMAINING INPUT:" + input.substring(i) + "\tSTACK: " + stack + "\tNEXT ACTION: " + (Notation.operators.contains(c) ? stack.get(0) + Character.toString(c) + stack.get(1) : "PUSH " + c));
+            }
+            if (Notation.operators.contains(c))
+            {
+                if (stack.size() < 2)
+                {
+                    return "Can't pop when less than 2 items!";
+                }
+                final float f1 = stack.pop();
+                final float f2 = stack.pop();
                 if (c == '+')
                 {
                     stack.push(f2 + f1);
@@ -46,19 +55,22 @@ public class Notation
             }
             stack.push(Float.parseFloat(Character.toString(c)));
         }
-        if (stack.size() > 1) return "More elements left on stack!";
+        if (stack.size() > 1)
+        {
+            return "ERROR!! More elements left on stack!";
+        }
         return stack.pop().toString();
     }
 
-    private static boolean isValidChar(char c)
+    public static String fromPrefix(final String input, final boolean verbose)
     {
-        return operators.contains(c) || Character.toString(c).matches("[0-9]");
+        final StringBuilder sb = new StringBuilder(input).reverse();
+        return Notation.fromPostfix(sb.toString(), verbose);
     }
 
-    public static String fromPrefix(String input, boolean verbose)
+    private static boolean isValidChar(final char c)
     {
-        StringBuilder sb = new StringBuilder(input).reverse();
-        return fromPostfix(sb.toString(), verbose);
+        return Notation.operators.contains(c) || Character.toString(c).matches("[0-9]");
     }
 
 }

@@ -13,7 +13,7 @@ public class Web extends Internet
 
     /**
      * Downloads the specified skin from the servers
-     * 
+     *
      * @param player
      *            the players skin to download
      * @param output
@@ -25,13 +25,13 @@ public class Web extends Internet
     {
         final String url = "http://s3.amazonaws.com/MinecraftSkins/" + player + ".png";
         final File returnme = new File(output.getAbsolutePath(), player + ".png");
-        download(url, returnme);
+        Internet.download(url, returnme);
         return returnme;
     }
 
     /**
      * Checks if a player is currently on a Premium account
-     * 
+     *
      * @param player
      *            the player to check
      * @return true if the player is on a Premium account

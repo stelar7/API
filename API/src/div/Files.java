@@ -23,12 +23,12 @@ public class Files
 
     /**
      * Browse to a file on the system
-     * 
+     *
      * @param file
      *            the file to browse to
      * @return true if action is supported by OS
      * @throws IOException
-     * 
+     *
      * */
     public static boolean browse(final File file) throws IOException
     {
@@ -43,41 +43,8 @@ public class Files
     }
 
     /**
-     * Searches a MappedByteBuffer for a string
-     * 
-     * @param buffer
-     *            the buffer to seach
-     * @param search
-     *            the string to seach
-     * @return if the string was found
-     */
-    public static boolean lookFor(MappedByteBuffer buffer, String search)
-    {
-        byte[] lookup = search.getBytes(Charset.defaultCharset());
-        int datalength = lookup.length;
-        buffer.rewind();
-        outer: while (buffer.hasRemaining())
-        {
-            byte b = buffer.get();
-            if (b == lookup[0])
-            {
-                byte[] data = new byte[datalength];
-                buffer.position(buffer.position() - 1);
-                buffer.get(data, 0, datalength);
-                String found = new String(data);
-                if (!found.equals(search))
-                {
-                    continue outer;
-                }
-                return true;
-            }
-        }
-        return false;
-    }
-
-    /**
      * Extracts all files from a .jar
-     * 
+     *
      * @param jarFile
      *            the file to extract from
      * @param destDir
@@ -126,13 +93,13 @@ public class Files
 
     /**
      * Gets all classes in the given package
-     * 
+     *
      * @param jarfile
      *            the .jar-file
      * @param packageName
      *            the package
      * @return List<Class<?>> list of all the classes in that package
-     * 
+     *
      * */
 
     public static List<Class<?>> getClassNamesInPackage(final File jarfile, String packageName)
@@ -164,13 +131,13 @@ public class Files
 
     /**
      * Gets the location of a Jar
-     * 
+     *
      * @param c
      *            a class in the Jar to get the location from
      * @return the location of the Jar
      * @throws URISyntaxException
      * @throws Exception
-     * 
+     *
      **/
     public static String getJarLocation(final Class<?> c) throws URISyntaxException, UnsupportedEncodingException
     {
@@ -178,9 +145,41 @@ public class Files
         return URLDecoder.decode(temp, "UTF-8");
     }
 
+    public static void listFilesInFolderAndSubFolders(final File folder)
+    {
+        final Path origin = folder.toPath();
+        final FileVisitor<Path> visitor = new SimpleFileVisitor<Path>()
+                {
+            @Override
+            public FileVisitResult preVisitDirectory(final Path dir, final BasicFileAttributes exc)
+            {
+                if (dir.getFileName() == null)
+                {
+                    return FileVisitResult.CONTINUE;
+                }
+                if (dir.getFileName().toString().equals("System Volume Information") || dir.getFileName().toString().equals("$RECYCLE.BIN"))
+                {
+                    return FileVisitResult.CONTINUE;
+                }
+                if ((dir.getParent() == null) || dir.getParent().equals(origin))
+                {
+                    System.out.format("%s%n", dir.getFileName());
+                }
+                return FileVisitResult.CONTINUE;
+            }
+                };
+                try
+                {
+                    java.nio.file.Files.walkFileTree(origin, visitor);
+                } catch (final IOException e)
+                {
+                    e.printStackTrace();
+                }
+    }
+
     /**
      * Loads a Object from the specified path
-     * 
+     *
      * @param file
      *            the path to load from
      * @return the object that has been loaded
@@ -202,13 +201,46 @@ public class Files
     }
 
     /**
+     * Searches a MappedByteBuffer for a string
+     *
+     * @param buffer
+     *            the buffer to seach
+     * @param search
+     *            the string to seach
+     * @return if the string was found
+     */
+    public static boolean lookFor(final MappedByteBuffer buffer, final String search)
+    {
+        final byte[] lookup = search.getBytes(Charset.defaultCharset());
+        final int datalength = lookup.length;
+        buffer.rewind();
+        outer: while (buffer.hasRemaining())
+        {
+            final byte b = buffer.get();
+            if (b == lookup[0])
+            {
+                final byte[] data = new byte[datalength];
+                buffer.position(buffer.position() - 1);
+                buffer.get(data, 0, datalength);
+                final String found = new String(data);
+                if (!found.equals(search))
+                {
+                    continue outer;
+                }
+                return true;
+            }
+        }
+        return false;
+    }
+
+    /**
      * Reads from the given file
-     * 
+     *
      * @param file
      *            the file to read from
      * @return the read string
      * @throws IOException
-     * 
+     *
      **/
     public static String read(final File file)
     {
@@ -230,12 +262,12 @@ public class Files
 
     /**
      * Renames a file to the specified name
-     * 
+     *
      * @param file
      *            the file to rename
      * @param s
      *            the new filename
-     * 
+     *
      **/
     public static void rename(final File file, final String s)
     {
@@ -244,7 +276,7 @@ public class Files
 
     /**
      * Saves a object to the specified path
-     * 
+     *
      * @param obj
      *            the object to save
      * @param file
@@ -266,7 +298,7 @@ public class Files
 
     /**
      * Writes to the given file
-     * 
+     *
      * @param file
      *            the file to write to
      * @param string
@@ -274,7 +306,7 @@ public class Files
      * @param append
      *            whether to append or rewrite the file
      * @throws IOException
-     * 
+     *
      **/
     public static void write(final File file, final String string, final boolean append)
     {
@@ -284,29 +316,6 @@ public class Files
             br.flush();
             br.close();
         } catch (final Exception e)
-        {
-            e.printStackTrace();
-        }
-    }
-
-    public static void listFilesInFolderAndSubFolders(File folder)
-    {
-        final Path origin = folder.toPath();
-        FileVisitor<Path> visitor = new SimpleFileVisitor<Path>()
-        {
-            @Override
-            public FileVisitResult preVisitDirectory(Path dir, BasicFileAttributes exc)
-            {
-                if (dir.getFileName() == null) return FileVisitResult.CONTINUE;
-                if (dir.getFileName().toString().equals("System Volume Information") || dir.getFileName().toString().equals("$RECYCLE.BIN")) return FileVisitResult.CONTINUE;
-                if (dir.getParent() == null || dir.getParent().equals(origin)) System.out.format("%s%n", dir.getFileName());
-                return FileVisitResult.CONTINUE;
-            }
-        };
-        try
-        {
-            java.nio.file.Files.walkFileTree(origin, visitor);
-        } catch (IOException e)
         {
             e.printStackTrace();
         }

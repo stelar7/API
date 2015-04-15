@@ -1,132 +1,141 @@
 package math;
 
-public class Vector2f 
+public class Vector2f
 {
-	private float x;
-	private float y;
-	
-	public Vector2f(float x, float y)
-	{
-		this.x = x;
-		this.y = y;
-	}
+    private float x;
+    private float y;
 
-	public float length()
-	{
-		return (float)Math.sqrt(x * x + y * y);
-	}
+    public Vector2f(final float x, final float y)
+    {
+        this.x = x;
+        this.y = y;
+    }
 
-	public float max()
-	{
-		return Math.max(x, y);
-	}
+    public Vector2f abs()
+    {
+        return new Vector2f(Math.abs(this.x), Math.abs(this.y));
+    }
 
-	public float dot(Vector2f r)
-	{
-		return x * r.getX() + y * r.getY();
-	}
-	
-	public Vector2f normalized()
-	{
-		float length = length();
-		
-		return new Vector2f(x / length, y / length);
-	}
+    public Vector2f add(final float r)
+    {
+        return new Vector2f(this.x + r, this.y + r);
+    }
 
-	public float cross(Vector2f r)
-	{
-		return x * r.getY() - y * r.getX();
-	}
+    public Vector2f add(final Vector2f r)
+    {
+        return new Vector2f(this.x + r.getX(), this.y + r.getY());
+    }
 
-	public Vector2f lerp(Vector2f dest, float lerpFactor)
-	{
-		return dest.sub(this).mul(lerpFactor).add(this);
-	}
+    public float cross(final Vector2f r)
+    {
+        return (this.x * r.getY()) - (this.y * r.getX());
+    }
 
-	public Vector2f rotate(float angle)
-	{
-		double rad = Math.toRadians(angle);
-		double cos = Math.cos(rad);
-		double sin = Math.sin(rad);
-		
-		return new Vector2f((float)(x * cos - y * sin),(float)(x * sin + y * cos));
-	}
-	
-	public Vector2f add(Vector2f r)
-	{
-		return new Vector2f(x + r.getX(), y + r.getY());
-	}
-	
-	public Vector2f add(float r)
-	{
-		return new Vector2f(x + r, y + r);
-	}
-	
-	public Vector2f sub(Vector2f r)
-	{
-		return new Vector2f(x - r.getX(), y - r.getY());
-	}
-	
-	public Vector2f sub(float r)
-	{
-		return new Vector2f(x - r, y - r);
-	}
-	
-	public Vector2f mul(Vector2f r)
-	{
-		return new Vector2f(x * r.getX(), y * r.getY());
-	}
-	
-	public Vector2f mul(float r)
-	{
-		return new Vector2f(x * r, y * r);
-	}
-	
-	public Vector2f div(Vector2f r)
-	{
-		return new Vector2f(x / r.getX(), y / r.getY());
-	}
-	
-	public Vector2f div(float r)
-	{
-		return new Vector2f(x / r, y / r);
-	}
-	
-	public Vector2f abs()
-	{
-		return new Vector2f(Math.abs(x), Math.abs(y));
-	}
-	
-	public String toString()
-	{
-		return "(" + x + " " + y + ")";
-	}
+    public Vector2f div(final float r)
+    {
+        return new Vector2f(this.x / r, this.y / r);
+    }
 
-	public Vector2f set(float x, float y) { this.x = x; this.y = y; return this; }
-	public Vector2f set(Vector2f r) { set(r.getX(), r.getY()); return this; }
+    public Vector2f div(final Vector2f r)
+    {
+        return new Vector2f(this.x / r.getX(), this.y / r.getY());
+    }
 
-	public float getX() 
-	{
-		return x;
-	}
+    public float dot(final Vector2f r)
+    {
+        return (this.x * r.getX()) + (this.y * r.getY());
+    }
 
-	public void setX(float x) 
-	{
-		this.x = x;
-	}
+    public boolean equals(final Vector2f r)
+    {
+        return (this.x == r.getX()) && (this.y == r.getY());
+    }
 
-	public float getY() 
-	{
-		return y;
-	}
+    public float getX()
+    {
+        return this.x;
+    }
 
-	public void setY(float y)
-	{
-		this.y = y;
-	}
+    public float getY()
+    {
+        return this.y;
+    }
 
-	public boolean equals(Vector2f r)
-	{
-		return x == r.getX() && y == r.getY();
-	}
+    public float length()
+    {
+        return (float) Math.sqrt((this.x * this.x) + (this.y * this.y));
+    }
+
+    public Vector2f lerp(final Vector2f dest, final float lerpFactor)
+    {
+        return dest.sub(this).mul(lerpFactor).add(this);
+    }
+
+    public float max()
+    {
+        return Math.max(this.x, this.y);
+    }
+
+    public Vector2f mul(final float r)
+    {
+        return new Vector2f(this.x * r, this.y * r);
+    }
+
+    public Vector2f mul(final Vector2f r)
+    {
+        return new Vector2f(this.x * r.getX(), this.y * r.getY());
+    }
+
+    public Vector2f normalized()
+    {
+        final float length = this.length();
+
+        return new Vector2f(this.x / length, this.y / length);
+    }
+
+    public Vector2f rotate(final float angle)
+    {
+        final double rad = Math.toRadians(angle);
+        final double cos = Math.cos(rad);
+        final double sin = Math.sin(rad);
+
+        return new Vector2f((float) ((this.x * cos) - (this.y * sin)), (float) ((this.x * sin) + (this.y * cos)));
+    }
+
+    public void set(final float x, final float y)
+    {
+        this.x = x;
+        this.y = y;
+    }
+
+    public void set(final Vector2f r)
+    {
+        this.set(r.getX(), r.getY());
+    }
+
+    public void setX(final float x)
+    {
+        this.x = x;
+    }
+
+    public void setY(final float y)
+    {
+        this.y = y;
+    }
+
+    public Vector2f sub(final float r)
+    {
+        return new Vector2f(this.x - r, this.y - r);
+    }
+
+    public Vector2f sub(final Vector2f r)
+    {
+        return new Vector2f(this.x - r.getX(), this.y - r.getY());
+    }
+
+    @Override
+    public String toString()
+    {
+        return "(" + this.x + " " + this.y + ")";
+    }
 }

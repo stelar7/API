@@ -5,36 +5,19 @@ import com.pi4j.io.gpio.*;
 public class StepperMotor
 {
 
-    private int                  stepCount;
-    private int                  currentStep;
-    private int                  pinCount;
-    private long                 lastStepTime;
-    private long                 stepDelay;
-    private boolean              direction;
-    private boolean              halfstep;
-    private GpioPinDigitalOutput pin1;
-    private GpioPinDigitalOutput pin2;
-    private GpioPinDigitalOutput pin3;
-    private GpioPinDigitalOutput pin4;
+    private final int                  stepCount;
+    private int                        currentStep;
+    private final int                  pinCount;
+    private long                       lastStepTime;
+    private long                       stepDelay;
+    private boolean                    direction;
+    private boolean                    halfstep;
+    private final GpioPinDigitalOutput pin1;
+    private final GpioPinDigitalOutput pin2;
+    private GpioPinDigitalOutput       pin3;
+    private GpioPinDigitalOutput       pin4;
 
-    public StepperMotor(int stepsPerRotation, Pin pin1, Pin pin2)
-    {
-
-        this.currentStep = 0;
-        this.direction = false;
-        this.lastStepTime = 0;
-        this.stepCount = stepsPerRotation;
-
-        this.pin1 = GpioFactory.getInstance().provisionDigitalOutputPin(pin1);
-        this.pin2 = GpioFactory.getInstance().provisionDigitalOutputPin(pin2);
-
-        this.pin1.setMode(PinMode.DIGITAL_OUTPUT);
-        this.pin2.setMode(PinMode.DIGITAL_OUTPUT);
-
-        this.pinCount = 2;
-    }
-
-    public StepperMotor(int stepsPerRotation, GpioPin pin1, GpioPin pin2, GpioPin pin3, GpioPin pin4)
+    public StepperMotor(final int stepsPerRotation, final GpioPin pin1, final GpioPin pin2, final GpioPin pin3, final GpioPin pin4)
     {
         this.currentStep = 0;
         this.direction = false;
@@ -54,7 +37,7 @@ public class StepperMotor
         this.pinCount = 4;
     }
 
-    public StepperMotor(int stepsPerRotation, GpioPin pin1, GpioPin pin2, GpioPin pin3, GpioPin pin4, boolean halfstep)
+    public StepperMotor(final int stepsPerRotation, final GpioPin pin1, final GpioPin pin2, final GpioPin pin3, final GpioPin pin4, final boolean halfstep)
     {
         this.halfstep = halfstep;
 
@@ -76,37 +59,202 @@ public class StepperMotor
         this.pinCount = 4;
     }
 
+    public StepperMotor(final int stepsPerRotation, final Pin pin1, final Pin pin2)
+    {
+
+        this.currentStep = 0;
+        this.direction = false;
+        this.lastStepTime = 0;
+        this.stepCount = stepsPerRotation;
+
+        this.pin1 = GpioFactory.getInstance().provisionDigitalOutputPin(pin1);
+        this.pin2 = GpioFactory.getInstance().provisionDigitalOutputPin(pin2);
+
+        this.pin1.setMode(PinMode.DIGITAL_OUTPUT);
+        this.pin2.setMode(PinMode.DIGITAL_OUTPUT);
+
+        this.pinCount = 2;
+    }
+
+    private void moveMotor(final int pos)
+    {
+        if (this.pinCount == 2)
+        {
+            switch (pos)
+            {
+                case 0:
+                {
+                    this.pin1.low();
+                    this.pin2.high();
+                    break;
+                }
+                case 1:
+                {
+                    this.pin1.high();
+                    this.pin2.high();
+                    break;
+                }
+                case 2:
+                {
+                    this.pin1.high();
+                    this.pin2.low();
+                    break;
+                }
+                case 3:
+                {
+                    this.pin1.low();
+                    this.pin2.low();
+                    break;
+                }
+            }
+        }
+        if ((this.pinCount == 4) && this.halfstep)
+        {
+            switch (pos)
+            {
+                case 0:
+                {
+                    this.pin1.high();
+                    this.pin2.low();
+                    this.pin3.high();
+                    this.pin4.low();
+                    break;
+                }
+                case 1:
+                {
+                    this.pin1.low();
+                    this.pin2.high();
+                    this.pin3.high();
+                    this.pin4.low();
+                    break;
+                }
+                case 2:
+                {
+                    this.pin1.low();
+                    this.pin2.high();
+                    this.pin3.low();
+                    this.pin4.high();
+                    break;
+                }
+                case 3:
+                {
+                    this.pin1.high();
+                    this.pin2.low();
+                    this.pin3.low();
+                    this.pin4.high();
+                    break;
+                }
+            }
+        }
+        if ((this.pinCount == 4) && this.halfstep)
+        {
+            switch (pos)
+            {
+                case 0:
+                {
+                    this.pin1.high();
+                    this.pin2.low();
+                    this.pin3.high();
+                    this.pin4.low();
+                    break;
+                }
+                case 1:
+                {
+                    this.pin1.low();
+                    this.pin2.low();
+                    this.pin3.high();
+                    this.pin4.low();
+                    break;
+                }
+                case 2:
+                {
+                    this.pin1.low();
+                    this.pin2.high();
+                    this.pin3.low();
+                    this.pin4.high();
+                    break;
+                }
+                case 3:
+                {
+                    this.pin1.low();
+                    this.pin2.high();
+                    this.pin3.low();
+                    this.pin4.low();
+                    break;
+                }
+                case 4:
+                {
+                    this.pin1.low();
+                    this.pin2.high();
+                    this.pin3.low();
+                    this.pin4.high();
+                    break;
+                }
+                case 5:
+                {
+                    this.pin1.low();
+                    this.pin2.low();
+                    this.pin3.low();
+                    this.pin4.high();
+                    break;
+                }
+                case 6:
+                {
+                    this.pin1.high();
+                    this.pin2.low();
+                    this.pin3.low();
+                    this.pin4.high();
+                    break;
+                }
+                case 7:
+                {
+                    this.pin1.high();
+                    this.pin2.low();
+                    this.pin3.low();
+                    this.pin4.low();
+                    break;
+                }
+            }
+        }
+    }
+
     /**
      * Sets the speed of the motor (100 steps on a 100 step motor will take 1 minute)
-     * 
+     *
      * @param rpm
      *            the amount of rotations per minute
      */
-    public void setRPM(long speed)
+    public void setRPM(final long speed)
     {
-        this.stepDelay = 60L * 1000L / this.stepCount / speed;
+        this.stepDelay = (60L * 1000L) / this.stepCount / speed;
     }
 
     /**
      * Moves the motor
-     * 
+     *
      * @param steps
      *            the amount steps to move
      */
-    public void step(int steps)
+    public void step(final int steps)
     {
         int stepsLeft = Math.abs(steps);
-        if (steps < 0) direction = false;
-        if (steps > 0) direction = true;
+        if (steps < 0)
+        {
+            this.direction = false;
+        }
+        if (steps > 0)
+        {
+            this.direction = true;
+        }
         while (stepsLeft > 0)
         {
-            if (System.currentTimeMillis() - this.lastStepTime >= this.stepDelay)
+            if ((System.currentTimeMillis() - this.lastStepTime) >= this.stepDelay)
             {
                 this.lastStepTime = System.currentTimeMillis();
-                if (direction)
+                if (this.direction)
                 {
-                    currentStep++;
-                    if (currentStep == this.stepCount)
+                    this.currentStep++;
+                    if (this.currentStep == this.stepCount)
                     {
                         this.currentStep = 0;
                     }
@@ -121,152 +269,10 @@ public class StepperMotor
                 stepsLeft--;
                 if (this.halfstep)
                 {
-                    moveMotor(this.currentStep % 8);
+                    this.moveMotor(this.currentStep % 8);
                 } else
                 {
-                    moveMotor(this.currentStep % 4);
-                }
-            }
-        }
-    }
-
-    private void moveMotor(int pos)
-    {
-        if (this.pinCount == 2)
-        {
-            switch (pos)
-            {
-                case 0:
-                {
-                    pin1.low();
-                    pin2.high();
-                    break;
-                }
-                case 1:
-                {
-                    pin1.high();
-                    pin2.high();
-                    break;
-                }
-                case 2:
-                {
-                    pin1.high();
-                    pin2.low();
-                    break;
-                }
-                case 3:
-                {
-                    pin1.low();
-                    pin2.low();
-                    break;
-                }
-            }
-        }
-        if (this.pinCount == 4 && this.halfstep)
-        {
-            switch (pos)
-            {
-                case 0:
-                {
-                    pin1.high();
-                    pin2.low();
-                    pin3.high();
-                    pin4.low();
-                    break;
-                }
-                case 1:
-                {
-                    pin1.low();
-                    pin2.high();
-                    pin3.high();
-                    pin4.low();
-                    break;
-                }
-                case 2:
-                {
-                    pin1.low();
-                    pin2.high();
-                    pin3.low();
-                    pin4.high();
-                    break;
-                }
-                case 3:
-                {
-                    pin1.high();
-                    pin2.low();
-                    pin3.low();
-                    pin4.high();
-                    break;
-                }
-            }
-        }
-        if (this.pinCount == 4 && this.halfstep)
-        {
-            switch (pos)
-            {
-                case 0:
-                {
-                    pin1.high();
-                    pin2.low();
-                    pin3.high();
-                    pin4.low();
-                    break;
-                }
-                case 1:
-                {
-                    pin1.low();
-                    pin2.low();
-                    pin3.high();
-                    pin4.low();
-                    break;
-                }
-                case 2:
-                {
-                    pin1.low();
-                    pin2.high();
-                    pin3.low();
-                    pin4.high();
-                    break;
-                }
-                case 3:
-                {
-                    pin1.low();
-                    pin2.high();
-                    pin3.low();
-                    pin4.low();
-                    break;
-                }
-                case 4:
-                {
-                    pin1.low();
-                    pin2.high();
-                    pin3.low();
-                    pin4.high();
-                    break;
-                }
-                case 5:
-                {
-                    pin1.low();
-                    pin2.low();
-                    pin3.low();
-                    pin4.high();
-                    break;
-                }
-                case 6:
-                {
-                    pin1.high();
-                    pin2.low();
-                    pin3.low();
-                    pin4.high();
-                    break;
-                }
-                case 7:
-                {
-                    pin1.high();
-                    pin2.low();
-                    pin3.low();
-                    pin4.low();
-                    break;
+                    this.moveMotor(this.currentStep % 4);
                 }
             }
         }

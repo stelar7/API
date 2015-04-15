@@ -1,176 +1,200 @@
 package math;
 
+import java.util.Arrays;
+
 public class Matrix4f
 {
-	private float[][] m;
-	
-	public Matrix4f()
-	{
-		m = new float[4][4];
-	}
+    private float[][] m;
 
-	public Matrix4f initIdentity()
-	{
-		m[0][0] = 1;	m[0][1] = 0;	m[0][2] = 0;	m[0][3] = 0;
-		m[1][0] = 0;	m[1][1] = 1;	m[1][2] = 0;	m[1][3] = 0;
-		m[2][0] = 0;	m[2][1] = 0;	m[2][2] = 1;	m[2][3] = 0;
-		m[3][0] = 0;	m[3][1] = 0;	m[3][2] = 0;	m[3][3] = 1;
+    public Matrix4f()
+    {
+        this.m = new float[4][4];
+        Arrays.fill(this.m, 0);
+    }
 
-		return this;
-	}
-	
-	public Matrix4f initTranslation(float x, float y, float z)
-	{
-		m[0][0] = 1;	m[0][1] = 0;	m[0][2] = 0;	m[0][3] = x;
-		m[1][0] = 0;	m[1][1] = 1;	m[1][2] = 0;	m[1][3] = y;
-		m[2][0] = 0;	m[2][1] = 0;	m[2][2] = 1;	m[2][3] = z;
-		m[3][0] = 0;	m[3][1] = 0;	m[3][2] = 0;	m[3][3] = 1;
-		
-		return this;
-	}
-	
-	public Matrix4f initRotation(float x, float y, float z)
-	{
-		Matrix4f rx = new Matrix4f();
-		Matrix4f ry = new Matrix4f();
-		Matrix4f rz = new Matrix4f();
-		
-		x = (float)Math.toRadians(x);
-		y = (float)Math.toRadians(y);
-		z = (float)Math.toRadians(z);
-		
-		rz.m[0][0] = (float)Math.cos(z);rz.m[0][1] = -(float)Math.sin(z);rz.m[0][2] = 0;				rz.m[0][3] = 0;
-		rz.m[1][0] = (float)Math.sin(z);rz.m[1][1] = (float)Math.cos(z);rz.m[1][2] = 0;					rz.m[1][3] = 0;
-		rz.m[2][0] = 0;					rz.m[2][1] = 0;					rz.m[2][2] = 1;					rz.m[2][3] = 0;
-		rz.m[3][0] = 0;					rz.m[3][1] = 0;					rz.m[3][2] = 0;					rz.m[3][3] = 1;
-		
-		rx.m[0][0] = 1;					rx.m[0][1] = 0;					rx.m[0][2] = 0;					rx.m[0][3] = 0;
-		rx.m[1][0] = 0;					rx.m[1][1] = (float)Math.cos(x);rx.m[1][2] = -(float)Math.sin(x);rx.m[1][3] = 0;
-		rx.m[2][0] = 0;					rx.m[2][1] = (float)Math.sin(x);rx.m[2][2] = (float)Math.cos(x);rx.m[2][3] = 0;
-		rx.m[3][0] = 0;					rx.m[3][1] = 0;					rx.m[3][2] = 0;					rx.m[3][3] = 1;
-		
-		ry.m[0][0] = (float)Math.cos(y);ry.m[0][1] = 0;					ry.m[0][2] = -(float)Math.sin(y);ry.m[0][3] = 0;
-		ry.m[1][0] = 0;					ry.m[1][1] = 1;					ry.m[1][2] = 0;					ry.m[1][3] = 0;
-		ry.m[2][0] = (float)Math.sin(y);ry.m[2][1] = 0;					ry.m[2][2] = (float)Math.cos(y);ry.m[2][3] = 0;
-		ry.m[3][0] = 0;					ry.m[3][1] = 0;					ry.m[3][2] = 0;					ry.m[3][3] = 1;
-		
-		m = rz.mul(ry.mul(rx)).getM();
-		
-		return this;
-	}
-	
-	public Matrix4f initScale(float x, float y, float z)
-	{
-		m[0][0] = x;	m[0][1] = 0;	m[0][2] = 0;	m[0][3] = 0;
-		m[1][0] = 0;	m[1][1] = y;	m[1][2] = 0;	m[1][3] = 0;
-		m[2][0] = 0;	m[2][1] = 0;	m[2][2] = z;	m[2][3] = 0;
-		m[3][0] = 0;	m[3][1] = 0;	m[3][2] = 0;	m[3][3] = 1;
-		
-		return this;
-	}
-	
-	public Matrix4f initPerspective(float fov, float aspectRatio, float zNear, float zFar)
-	{
-		float tanHalfFOV = (float)Math.tan(fov / 2);
-		float zRange = zNear - zFar;
-		
-		m[0][0] = 1.0f / (tanHalfFOV * aspectRatio);	m[0][1] = 0;					m[0][2] = 0;	m[0][3] = 0;
-		m[1][0] = 0;						m[1][1] = 1.0f / tanHalfFOV;	m[1][2] = 0;	m[1][3] = 0;
-		m[2][0] = 0;						m[2][1] = 0;					m[2][2] = (-zNear -zFar)/zRange;	m[2][3] = 2 * zFar * zNear / zRange;
-		m[3][0] = 0;						m[3][1] = 0;					m[3][2] = 1;	m[3][3] = 0;
-		
-		
-		return this;
-	}
+    public static Matrix4f identity()
+    {
+        final Matrix4f a = new Matrix4f();
 
-	public Matrix4f initOrthographic(float left, float right, float bottom, float top, float near, float far)
-	{
-		float width = right - left;
-		float height = top - bottom;
-		float depth = far - near;
+        a.set(0, 0, 1);
+        a.set(1, 1, 1);
+        a.set(2, 2, 1);
+        a.set(3, 3, 1);
 
-		m[0][0] = 2/width;m[0][1] = 0;	m[0][2] = 0;	m[0][3] = -(right + left)/width;
-		m[1][0] = 0;	m[1][1] = 2/height;m[1][2] = 0;	m[1][3] = -(top + bottom)/height;
-		m[2][0] = 0;	m[2][1] = 0;	m[2][2] = -2/depth;m[2][3] = -(far + near)/depth;
-		m[3][0] = 0;	m[3][1] = 0;	m[3][2] = 0;	m[3][3] = 1;
+        return a;
+    }
 
-		return this;
-	}
+    public static Matrix4f orthographic(final float left, final float right, final float bottom, final float top, final float near, final float far)
+    {
+        final float rl = right - left;
+        final float tb = top - bottom;
+        final float fn = far - near;
 
-	public Matrix4f initRotation(Vector3f forward, Vector3f up)
-	{
-		Vector3f f = forward.normalized();
-		
-		Vector3f r = up.normalized();
-		r = r.cross(f);
-		
-		Vector3f u = f.cross(r);
+        final Matrix4f a = Matrix4f.identity();
 
-		return initRotation(f, u, r);
-	}
+        a.set(0, 0, 2 / rl);
+        a.set(0, 3, -(right + left) / rl);
+        a.set(1, 1, 2 / tb);
+        a.set(1, 3, -(top + bottom) / tb);
+        a.set(2, 2, -2 / fn);
+        a.set(2, 3, -(far + near) / fn);
 
-	public Matrix4f initRotation(Vector3f forward, Vector3f up, Vector3f right)
-	{
-		Vector3f f = forward;
-		Vector3f r = right;
-		Vector3f u = up;
+        return a;
+    }
 
-		m[0][0] = r.getX();	m[0][1] = r.getY();	m[0][2] = r.getZ();	m[0][3] = 0;
-		m[1][0] = u.getX();	m[1][1] = u.getY();	m[1][2] = u.getZ();	m[1][3] = 0;
-		m[2][0] = f.getX();	m[2][1] = f.getY();	m[2][2] = f.getZ();	m[2][3] = 0;
-		m[3][0] = 0;		m[3][1] = 0;		m[3][2] = 0;		m[3][3] = 1;
+    public static Matrix4f perspective(final float fov, final float aspectRatio, final float zNear, final float zFar)
+    {
+        final float tanHalfFOV = (float) Math.tan(0.5 * fov);
+        final float fdepth = zFar - zNear;
+        final float odepth = 1 / fdepth;
 
-		return this;
-	}
+        final Matrix4f a = Matrix4f.identity();
 
-	public Vector3f transform(Vector3f r)
-	{
-		return new Vector3f(m[0][0] * r.getX() + m[0][1] * r.getY() + m[0][2] * r.getZ() + m[0][3],
-		                    m[1][0] * r.getX() + m[1][1] * r.getY() + m[1][2] * r.getZ() + m[1][3],
-		                    m[2][0] * r.getX() + m[2][1] * r.getY() + m[2][2] * r.getZ() + m[2][3]);
-	}
-	
-	public Matrix4f mul(Matrix4f r)
-	{
-		Matrix4f res = new Matrix4f();
-		
-		for(int i = 0; i < 4; i++)
-		{
-			for(int j = 0; j < 4; j++)
-			{
-				res.set(i, j, m[i][0] * r.get(0, j) +
-							  m[i][1] * r.get(1, j) +
-							  m[i][2] * r.get(2, j) +
-							  m[i][3] * r.get(3, j));
-			}
-		}
-		
-		return res;
-	}
-	
-	public float[][] getM()
-	{
-		float[][] res = new float[4][4];
-		
-		for(int i = 0; i < 4; i++)
-			for(int j = 0; j < 4; j++)
-				res[i][j] = m[i][j];
-		
-		return res;
-	}
-	
-	public float get(int x, int y)
-	{
-		return m[x][y];
-	}
+        a.set(0, 0, (1.0f / tanHalfFOV) / aspectRatio);
+        a.set(1, 1, 1.0f / tanHalfFOV);
+        a.set(2, 2, zFar * odepth);
+        a.set(2, 3, 1);
+        a.set(3, 2, (-zFar * zNear) * odepth);
+        a.set(3, 3, 0);
 
-	public void setM(float[][] m)
-	{
-		this.m = m;
-	}
-	
-	public void set(int x, int y, float value)
-	{
-		m[x][y] = value;
-	}
+        return a;
+    }
+
+    public static Matrix4f rotation(final float _x, final float _y, final float _z)
+    {
+
+        final float x = (float) Math.toRadians(_x);
+        final float y = (float) Math.toRadians(_y);
+        final float z = (float) Math.toRadians(_z);
+
+        final Matrix4f rx = Matrix4f.identity();
+        final Matrix4f ry = Matrix4f.identity();
+        final Matrix4f rz = Matrix4f.identity();
+
+        rx.set(1, 1, (float) Math.cos(x));
+        rx.set(1, 2, (float) -Math.sin(x));
+        rx.set(2, 1, (float) Math.sin(x));
+        rx.set(2, 2, (float) Math.cos(x));
+
+        ry.set(0, 0, (float) Math.cos(y));
+        ry.set(0, 2, (float) -Math.sin(y));
+        ry.set(2, 0, (float) Math.sin(y));
+        ry.set(2, 2, (float) Math.cos(y));
+
+        rz.set(0, 0, (float) Math.cos(z));
+        rz.set(0, 1, (float) -Math.sin(z));
+        rz.set(1, 0, (float) Math.sin(z));
+        rz.set(1, 1, (float) Math.cos(z));
+
+        final Matrix4f a = rz.mul(rx.mul(ry));
+
+        return a;
+    }
+
+    public static Matrix4f rotation(final Vector3f forward, final Vector3f up)
+    {
+        final Vector3f f = forward.normalized();
+        Vector3f r = up.normalized();
+        r = r.cross(f);
+
+        final Vector3f u = f.cross(r);
+
+        return Matrix4f.rotation(f, u, r);
+    }
+
+    public static Matrix4f rotation(final Vector3f forward, final Vector3f up, final Vector3f right)
+    {
+        final Vector3f f = forward;
+        final Vector3f r = right;
+        final Vector3f u = up;
+
+        final Matrix4f a = Matrix4f.identity();
+
+        a.set(0, 0, r.getX());
+        a.set(0, 1, r.getY());
+        a.set(0, 2, r.getZ());
+
+        a.set(1, 0, u.getX());
+        a.set(1, 1, u.getY());
+        a.set(1, 2, u.getZ());
+
+        a.set(2, 0, f.getX());
+        a.set(2, 1, f.getY());
+        a.set(2, 2, f.getZ());
+
+        return a;
+    }
+
+    public static Matrix4f scale(final float x, final float y, final float z)
+    {
+        final Matrix4f a = Matrix4f.identity();
+
+        a.set(0, 0, x);
+        a.set(1, 1, y);
+        a.set(2, 2, z);
+
+        return a;
+    }
+
+    public static Matrix4f translation(final float x, final float y, final float z)
+    {
+        final Matrix4f a = Matrix4f.identity();
+
+        a.set(0, 3, x);
+        a.set(1, 3, y);
+        a.set(2, 3, z);
+
+        return a;
+    }
+
+    public float get(final int x, final int y)
+    {
+        return this.m[x][y];
+    }
+
+    public float[][] getM()
+    {
+        final float[][] res = new float[4][4];
+
+        for (int i = 0; i < 4; i++)
+        {
+            for (int j = 0; j < 4; j++)
+            {
+                res[i][j] = this.m[i][j];
+            }
+        }
+
+        return res;
+    }
+
+    public Matrix4f mul(final Matrix4f r)
+    {
+        final Matrix4f res = new Matrix4f();
+
+        for (int i = 0; i < 4; i++)
+        {
+            for (int j = 0; j < 4; j++)
+            {
+                res.set(i, j, (this.m[i][0] * r.get(0, j)) + (this.m[i][1] * r.get(1, j)) + (this.m[i][2] * r.get(2, j)) + (this.m[i][3] * r.get(3, j)));
+            }
+        }
+
+        return res;
+    }
+
+    public void set(final int x, final int y, final float value)
+    {
+        this.m[x][y] = value;
+    }
+
+    public void setM(final float[][] m)
+    {
+        this.m = m;
+    }
+
+    public Vector3f transform(final Vector3f r)
+    {
+        return new Vector3f((this.m[0][0] * r.getX()) + (this.m[0][1] * r.getY()) + (this.m[0][2] * r.getZ()) + this.m[0][3], (this.m[1][0] * r.getX()) + (this.m[1][1] * r.getY()) + (this.m[1][2] * r.getZ()) + this.m[1][3], (this.m[2][0] * r.getX()) + (this.m[2][1] * r.getY())
+                + (this.m[2][2] * r.getZ()) + this.m[2][3]);
+    }
 }

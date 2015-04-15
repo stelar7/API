@@ -13,48 +13,48 @@ public class ShiftRegister
         LSB;
     }
 
-    private GpioPinDigitalOutput data;
-    private GpioPinDigitalOutput clock;
-    private int                  bits;
-    private boolean[]            lastOut;
+    private final GpioPinDigitalOutput data;
+    private final GpioPinDigitalOutput clock;
+    private final int                  bits;
+    private final boolean[]            lastOut;
 
-    public ShiftRegister(Pin data, Pin clock, int bits)
+    public ShiftRegister(final Pin data, final Pin clock, final int bits)
     {
         this.data = GpioFactory.getInstance().provisionDigitalOutputPin(data);
         this.clock = GpioFactory.getInstance().provisionDigitalOutputPin(clock);
         this.bits = bits;
-        lastOut = new boolean[bits];
-    }
-
-    public void shiftOut(long value, BitOrder order)
-    {
-        for (int i = 0; i < bits; i++)
-        {
-            if (order == BitOrder.LSB)
-            {
-                data.setState((value & (1 << i)) != 0);
-            } else
-            {
-                data.setState((value & (1 << ((bits - 1) - i))) != 0);
-            }
-            clock.high();
-            clock.low();
-            updateLast();
-        }
+        this.lastOut = new boolean[bits];
     }
 
     public boolean[] getLastShitOut()
     {
-        return lastOut;
+        return this.lastOut;
+    }
+
+    public void shiftOut(final long value, final BitOrder order)
+    {
+        for (int i = 0; i < this.bits; i++)
+        {
+            if (order == BitOrder.LSB)
+            {
+                this.data.setState((value & (1 << i)) != 0);
+            } else
+            {
+                this.data.setState((value & (1 << ((this.bits - 1) - i))) != 0);
+            }
+            this.clock.high();
+            this.clock.low();
+            this.updateLast();
+        }
     }
 
     private void updateLast()
     {
         for (int ii = this.lastOut.length - 1; ii >= 0; ii--)
         {
-            lastOut[ii + 1] = lastOut[ii];
+            this.lastOut[ii + 1] = this.lastOut[ii];
         }
-        lastOut[0] = data.getState().isHigh();
+        this.lastOut[0] = this.data.getState().isHigh();
     }
 
 }

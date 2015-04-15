@@ -7,7 +7,7 @@ public class DBUtils
 {
     public static String parseResultSetToJSON(final ResultSet rs) throws SQLException
     {
-        StringBuilder sb = new StringBuilder();
+        final StringBuilder sb = new StringBuilder();
 
         sb.append("{");
         while (rs.next())

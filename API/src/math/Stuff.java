@@ -3,18 +3,6 @@ package math;
 public class Stuff
 {
 
-    public static double mapToRange(double x, double in_min, double in_max, double out_min, double out_max)
-    {
-        return (x - in_min) * (out_max - out_min) / (in_max - in_min) + out_min;
-    }
-
-    public static double constrain(double x, double min, double max)
-    {
-        if (x < min) return min;
-        if (x > max) return max;
-        return x;
-    }
-
     public static int binaryToDecimal(final String s)
     {
         int i = 0;
@@ -23,6 +11,19 @@ public class Stuff
             i = (i * 2) + (c == '1' ? 1 : 0);
         }
         return i;
+    }
+
+    public static double constrain(final double x, final double min, final double max)
+    {
+        if (x < min)
+        {
+            return min;
+        }
+        if (x > max)
+        {
+            return max;
+        }
+        return x;
     }
 
     public static String decimalToBinary(int i)
@@ -50,6 +51,11 @@ public class Stuff
 
     public static int greatestCommonDivisor(final int a, final int b)
     {
-        return (b == 0) ? a : greatestCommonDivisor(b, a % b);
+        return (b == 0) ? a : Stuff.greatestCommonDivisor(b, a % b);
+    }
+
+    public static double mapToRange(final double x, final double in_min, final double in_max, final double out_min, final double out_max)
+    {
+        return (((x - in_min) * (out_max - out_min)) / (in_max - in_min)) + out_min;
     }
 }

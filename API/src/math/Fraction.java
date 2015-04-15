@@ -13,65 +13,71 @@ public class Fraction
 
     public Fraction add(final Fraction f)
     {
-        return new Fraction((numerator * f.denominator) + (f.numerator * denominator), (denominator * f.denominator));
+        return new Fraction((this.numerator * f.denominator) + (f.numerator * this.denominator), (this.denominator * f.denominator));
     }
 
     public Fraction add(final int f)
     {
-        return add(new Fraction(f, 1));
+        return this.add(new Fraction(f, 1));
     }
 
     public float asDecimal()
     {
-        return numerator / denominator;
+        return this.numerator / this.denominator;
     }
 
     public String asImproperFraction()
     {
-        if ((denominator <= 0) || ((numerator / denominator) == 0) || ((numerator % denominator) == 0)) { return this.toString(); }
-        return (numerator / denominator) + " " + (numerator % denominator) + "/" + denominator;
+        if ((this.denominator <= 0) || ((this.numerator / this.denominator) == 0) || ((this.numerator % this.denominator) == 0))
+        {
+            return this.toString();
+        }
+        return (this.numerator / this.denominator) + " " + (this.numerator % this.denominator) + "/" + this.denominator;
     }
 
     public Fraction divide(final Fraction f)
     {
-        return new Fraction(numerator * f.denominator, denominator * f.numerator);
+        return new Fraction(this.numerator * f.denominator, this.denominator * f.numerator);
     }
 
     public Fraction divide(final int f)
     {
-        return divide(new Fraction(f, 1));
+        return this.divide(new Fraction(f, 1));
     }
 
     public Fraction minimalize()
     {
-        final int gcd = Stuff.greatestCommonDivisor(numerator, denominator);
-        return new Fraction(numerator / gcd, denominator / gcd);
+        final int gcd = Stuff.greatestCommonDivisor(this.numerator, this.denominator);
+        return new Fraction(this.numerator / gcd, this.denominator / gcd);
     }
 
     public Fraction multiply(final Fraction f)
     {
-        return new Fraction(numerator * f.numerator, denominator * f.denominator);
+        return new Fraction(this.numerator * f.numerator, this.denominator * f.denominator);
     }
 
     public Fraction multiply(final int f)
     {
-        return multiply(new Fraction(f, 1));
+        return this.multiply(new Fraction(f, 1));
     }
 
     public Fraction subtract(final Fraction f)
     {
-        return new Fraction((numerator * f.denominator) - (f.numerator * denominator), (denominator * f.denominator));
+        return new Fraction((this.numerator * f.denominator) - (f.numerator * this.denominator), (this.denominator * f.denominator));
     }
 
     public Fraction subtract(final int f)
     {
-        return subtract(new Fraction(f, 1));
+        return this.subtract(new Fraction(f, 1));
     }
 
     @Override
     public String toString()
     {
-        if ((denominator == 1) && (numerator >= 1)) { return String.valueOf(numerator); }
-        return numerator + "/" + denominator;
+        if ((this.denominator == 1) && (this.numerator >= 1))
+        {
+            return String.valueOf(this.numerator);
+        }
+        return this.numerator + "/" + this.denominator;
     }
 }

@@ -21,10 +21,10 @@ public class CalculateStuff
 
         TempreatureCoefficient(final double pva, final double pea, final double pve, final double pee)
         {
-            pvcair = pva;
-            pexair = pea;
-            pvcearth = pve;
-            pexearth = pee;
+            this.pvcair = pva;
+            this.pexair = pea;
+            this.pvcearth = pve;
+            this.pexearth = pee;
         }
     }
 
@@ -58,7 +58,7 @@ public class CalculateStuff
 
         WireMaterial(final double d)
         {
-            resistance = d;
+            this.resistance = d;
         }
 
         @Override
@@ -150,7 +150,7 @@ public class CalculateStuff
 
     public static double voltageDrop3PEngine(final double ampere, final WireMaterial material, final double length, final double area, final double cosphi)
     {
-        return (Math.sqrt(3) * ampere * wireResistance(material, length, area, 1));
+        return (Math.sqrt(3) * ampere * CalculateStuff.wireResistance(material, length, area, 1));
     }
 
     public static double VoltFromResistanceAndAmpere(final double resistance, final double ampere)

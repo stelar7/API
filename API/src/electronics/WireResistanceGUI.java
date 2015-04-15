@@ -5,13 +5,7 @@ import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 
-import javax.swing.JButton;
-import javax.swing.JComboBox;
-import javax.swing.JFrame;
-import javax.swing.JLabel;
-import javax.swing.JOptionPane;
-import javax.swing.JTextField;
-import javax.swing.SwingConstants;
+import javax.swing.*;
 
 import electronics.CalculateStuff.WireMaterial;
 
@@ -37,49 +31,49 @@ public class WireResistanceGUI extends JFrame implements ActionListener, KeyList
     public WireResistanceGUI()
     {
         super("Wire Resistance");
-        setBounds(500, 500, 250, 300);
-        setResizable(false);
-        setLocationRelativeTo(null);
-        setDefaultCloseOperation(EXIT_ON_CLOSE);
-        addKeyListener(this);
-        calc.addKeyListener(this);
-        material.addKeyListener(this);
-        leng.addKeyListener(this);
-        area.addKeyListener(this);
-        wires.addKeyListener(this);
-        add(calc);
-        add(material);
-        add(materiall);
-        add(leng);
-        add(lengl);
-        add(lengll);
-        add(area);
-        add(areal);
-        add(areall);
-        add(wires);
-        add(wiresl);
-        add(dummy);
-        calc.addActionListener(this);
-        calc.setBounds(100, 225, 125, 30);
-        material.setBounds(75, 40, 150, 30);
+        this.setBounds(500, 500, 250, 300);
+        this.setResizable(false);
+        this.setLocationRelativeTo(null);
+        this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        this.addKeyListener(this);
+        this.calc.addKeyListener(this);
+        this.material.addKeyListener(this);
+        this.leng.addKeyListener(this);
+        this.area.addKeyListener(this);
+        this.wires.addKeyListener(this);
+        this.add(this.calc);
+        this.add(this.material);
+        this.add(this.materiall);
+        this.add(this.leng);
+        this.add(this.lengl);
+        this.add(this.lengll);
+        this.add(this.area);
+        this.add(this.areal);
+        this.add(this.areall);
+        this.add(this.wires);
+        this.add(this.wiresl);
+        this.add(this.dummy);
+        this.calc.addActionListener(this);
+        this.calc.setBounds(100, 225, 125, 30);
+        this.material.setBounds(75, 40, 150, 30);
         for (final WireMaterial m : WireMaterial.values())
         {
-            material.addItem(m);
+            this.material.addItem(m);
         }
-        materiall.setBounds(10, 40, 125, 30);
-        leng.setBounds(75, 80, 100, 30);
-        leng.setHorizontalAlignment(SwingConstants.RIGHT);
-        lengl.setBounds(10, 80, 125, 30);
-        lengll.setBounds(180, 80, 100, 30);
-        area.setBounds(75, 120, 100, 30);
-        area.setHorizontalAlignment(SwingConstants.RIGHT);
-        areal.setBounds(10, 120, 100, 30);
-        areall.setBounds(180, 120, 125, 30);
-        wires.setBounds(125, 160, 100, 30);
-        wires.setHorizontalAlignment(SwingConstants.RIGHT);
-        wiresl.setBounds(10, 160, 100, 30);
-        validate();
-        setVisible(true);
+        this.materiall.setBounds(10, 40, 125, 30);
+        this.leng.setBounds(75, 80, 100, 30);
+        this.leng.setHorizontalAlignment(SwingConstants.RIGHT);
+        this.lengl.setBounds(10, 80, 125, 30);
+        this.lengll.setBounds(180, 80, 100, 30);
+        this.area.setBounds(75, 120, 100, 30);
+        this.area.setHorizontalAlignment(SwingConstants.RIGHT);
+        this.areal.setBounds(10, 120, 100, 30);
+        this.areall.setBounds(180, 120, 125, 30);
+        this.wires.setBounds(125, 160, 100, 30);
+        this.wires.setHorizontalAlignment(SwingConstants.RIGHT);
+        this.wiresl.setBounds(10, 160, 100, 30);
+        this.validate();
+        this.setVisible(true);
     }
 
     public static void main(final String[] args)
@@ -90,36 +84,36 @@ public class WireResistanceGUI extends JFrame implements ActionListener, KeyList
     @Override
     public void actionPerformed(final ActionEvent e)
     {
-        if (!leng.getText().isEmpty())
+        if (!this.leng.getText().isEmpty())
         {
-            if (!area.getText().isEmpty())
+            if (!this.area.getText().isEmpty())
             {
-                if (!wires.getText().isEmpty())
+                if (!this.wires.getText().isEmpty())
                 {
-                    final WireMaterial mat = (WireMaterial) material.getSelectedItem();
+                    final WireMaterial mat = (WireMaterial) this.material.getSelectedItem();
                     double len, are, wir;
                     try
                     {
-                        len = Double.parseDouble(leng.getText().replace(",", "."));
+                        len = Double.parseDouble(this.leng.getText().replace(",", "."));
                     } catch (final NumberFormatException ex)
                     {
-                        JOptionPane.showMessageDialog(this, "Invalid entry in 'Length'\nValue: " + leng.getText() + "\nNumerical value expected!", "ERROR", JOptionPane.ERROR_MESSAGE);
+                        JOptionPane.showMessageDialog(this, "Invalid entry in 'Length'\nValue: " + this.leng.getText() + "\nNumerical value expected!", "ERROR", JOptionPane.ERROR_MESSAGE);
                         return;
                     }
                     try
                     {
-                        are = Double.parseDouble(area.getText().replace(",", "."));
+                        are = Double.parseDouble(this.area.getText().replace(",", "."));
                     } catch (final NumberFormatException ex)
                     {
-                        JOptionPane.showMessageDialog(this, "Invalid entry in 'Area'\nValue:  " + area.getText() + "\nNumerical value expected!", "ERROR", JOptionPane.ERROR_MESSAGE);
+                        JOptionPane.showMessageDialog(this, "Invalid entry in 'Area'\nValue:  " + this.area.getText() + "\nNumerical value expected!", "ERROR", JOptionPane.ERROR_MESSAGE);
                         return;
                     }
                     try
                     {
-                        wir = Double.parseDouble(wires.getText().replace(",", "."));
+                        wir = Double.parseDouble(this.wires.getText().replace(",", "."));
                     } catch (final NumberFormatException ex)
                     {
-                        JOptionPane.showMessageDialog(this, "Invalid entry in 'No.of wires'\nValue: " + wires.getText() + "\nNumerical value expected!", "ERROR", JOptionPane.ERROR_MESSAGE);
+                        JOptionPane.showMessageDialog(this, "Invalid entry in 'No.of wires'\nValue: " + this.wires.getText() + "\nNumerical value expected!", "ERROR", JOptionPane.ERROR_MESSAGE);
                         return;
                     }
                     JOptionPane.showMessageDialog(this, "Wire resistance is: " + CalculateStuff.wireResistance(mat, len, are, wir) + "\u2126");
@@ -142,7 +136,7 @@ public class WireResistanceGUI extends JFrame implements ActionListener, KeyList
     {
         if (e.getKeyCode() == KeyEvent.VK_ENTER)
         {
-            calc.doClick();
+            this.calc.doClick();
         }
     }
 

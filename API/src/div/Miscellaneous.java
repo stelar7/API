@@ -11,7 +11,7 @@ public class Miscellaneous
 
     /**
      * Changes an String[] into a String from start to stop
-     * 
+     *
      * @param array
      *            the array to transform
      * @param start
@@ -19,7 +19,7 @@ public class Miscellaneous
      * @param stop
      *            the place to stop in the array
      * @return the array as a string
-     * 
+     *
      **/
     public static String arrayToString(final String[] array, final int start, final int stop)
     {
@@ -34,11 +34,11 @@ public class Miscellaneous
 
     /**
      * Capitalizes the first letter in a string
-     * 
+     *
      * @param string
      *            the string to capitalize
      * @return the string with the first letter capitalized
-     * 
+     *
      **/
     public static String capitalize(final String string)
     {
@@ -47,9 +47,9 @@ public class Miscellaneous
 
     /**
      * Gets the current date in the format Jan 21, 1990 22:48
-     * 
+     *
      * @return Date the current date
-     * 
+     *
      **/
     public static String getDate()
     {
@@ -60,12 +60,12 @@ public class Miscellaneous
 
     /**
      * Gets the current date in the given format
-     * 
+     *
      * @param sdf
      *            the format to get the date in
-     * 
+     *
      * @return Date the current date
-     * 
+     *
      **/
 
     public static String getDate(final SimpleDateFormat sdf)
@@ -76,11 +76,11 @@ public class Miscellaneous
 
     /**
      * Checks if a string can be converted to a int
-     * 
+     *
      * @param string
      *            the string to check
      * @return if the string can be an int
-     * 
+     *
      **/
     public static boolean isInt(final String string)
     {
@@ -88,28 +88,9 @@ public class Miscellaneous
     }
 
     /**
-     * Takes a array, returns the array in reversed order
-     * 
-     * @param input
-     *            the array to reverse
-     * @return the input array in reverse order
-     */
-    public static int[] reverseArray(int[] input)
-    {
-        int[] array = input;
-        for (int i = 0; i < array.length / 2; i++)
-        {
-            int temp = array[i];
-            array[i] = array[array.length - 1 - i];
-            array[array.length - 1 - i] = temp;
-        }
-        return array;
-    }
-
-    /**
-     * 
+     *
      * Finds the longest common subsequence of the arrays
-     * 
+     *
      * @param stringA
      *            first string
      * @param stringB
@@ -152,5 +133,24 @@ public class Miscellaneous
         }
         Collections.reverse(result);
         return result;
+    }
+
+    /**
+     * Takes a array, returns the array in reversed order
+     *
+     * @param input
+     *            the array to reverse
+     * @return the input array in reverse order
+     */
+    public static int[] reverseArray(final int[] input)
+    {
+        final int[] array = input;
+        for (int i = 0; i < (array.length / 2); i++)
+        {
+            final int temp = array[i];
+            array[i] = array[array.length - 1 - i];
+            array[array.length - 1 - i] = temp;
+        }
+        return array;
     }
 }
