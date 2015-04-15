@@ -213,7 +213,7 @@ public class Matrix4f
         {
             for (int j = 0; j < 4; j++)
             {
-                res.set(i, j, (this.m[i][0] * f) + (this.m[i][1] * f) + (this.m[i][2] * f) + (this.m[i][3] * f));
+                res.set(i, j, this.m[i][j] * f);
             }
         }
 
