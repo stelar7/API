@@ -149,7 +149,7 @@ public class Files
     {
         final Path origin = folder.toPath();
         final FileVisitor<Path> visitor = new SimpleFileVisitor<Path>()
-                {
+        {
             @Override
             public FileVisitResult preVisitDirectory(final Path dir, final BasicFileAttributes exc)
             {
@@ -167,14 +167,14 @@ public class Files
                 }
                 return FileVisitResult.CONTINUE;
             }
-                };
-                try
-                {
-                    java.nio.file.Files.walkFileTree(origin, visitor);
-                } catch (final IOException e)
-                {
-                    e.printStackTrace();
-                }
+        };
+        try
+        {
+            java.nio.file.Files.walkFileTree(origin, visitor);
+        } catch (final IOException e)
+        {
+            e.printStackTrace();
+        }
     }
 
     /**

@@ -147,6 +147,11 @@ public class Matrix4f
         return a;
     }
 
+    public float determinant()
+    {
+        return (((((((((((((this.m[3][0] * this.m[2][1] * this.m[1][2] * this.m[0][3]) - (this.m[2][0] * this.m[3][1] * this.m[1][2] * this.m[0][3]) - (this.m[3][0] * this.m[1][1] * this.m[2][2] * this.m[0][3])) + (this.m[1][0] * this.m[3][1] * this.m[2][2] * this.m[0][3]) + (this.m[2][0] * this.m[1][1] * this.m[3][2] * this.m[0][3])) - (this.m[1][0] * this.m[2][1] * this.m[3][2] * this.m[0][3]) - (this.m[3][0] * this.m[2][1] * this.m[0][2] * this.m[1][3])) + (this.m[2][0] * this.m[3][1] * this.m[0][2] * this.m[1][3]) + (this.m[3][0] * this.m[0][1] * this.m[2][2] * this.m[1][3])) - (this.m[0][0] * this.m[3][1] * this.m[2][2] * this.m[1][3]) - (this.m[2][0] * this.m[0][1] * this.m[3][2] * this.m[1][3])) + (this.m[0][0] * this.m[2][1] * this.m[3][2] * this.m[1][3]) + (this.m[3][0] * this.m[1][1] * this.m[0][2] * this.m[2][3])) - (this.m[1][0] * this.m[3][1] * this.m[0][2] * this.m[2][3]) - (this.m[3][0] * this.m[0][1] * this.m[1][2] * this.m[2][3])) + (this.m[0][0] * this.m[3][1] * this.m[1][2] * this.m[2][3]) + (this.m[1][0] * this.m[0][1] * this.m[3][2] * this.m[2][3])) - (this.m[0][0] * this.m[1][1] * this.m[3][2] * this.m[2][3]) - (this.m[2][0] * this.m[1][1] * this.m[0][2] * this.m[3][3])) + (this.m[1][0] * this.m[2][1] * this.m[0][2] * this.m[3][3]) + (this.m[2][0] * this.m[0][1] * this.m[1][2] * this.m[3][3])) - (this.m[0][0] * this.m[2][1] * this.m[1][2] * this.m[3][3]) - (this.m[1][0] * this.m[0][1] * this.m[2][2] * this.m[3][3])) + (this.m[0][0] * this.m[1][1] * this.m[2][2] * this.m[3][3]));
+    }
+
     public float get(final int x, final int y)
     {
         return this.m[x][y];
@@ -161,6 +166,54 @@ public class Matrix4f
             for (int j = 0; j < 4; j++)
             {
                 res[i][j] = this.m[i][j];
+            }
+        }
+
+        return res;
+    }
+
+    public Matrix4f inverse()
+    {
+        final float determinant = this.determinant();
+
+        if (determinant == 0f)
+        {
+            return null;
+        }
+
+        final float inv_det = 1.0f / determinant;
+
+        final Matrix4f a = new Matrix4f();
+
+        a.set(0, 0, ((((this.m[1][2] * this.m[2][3] * this.m[3][1]) - (this.m[1][3] * this.m[2][2] * this.m[3][1])) + (this.m[1][3] * this.m[2][1] * this.m[3][2])) - (this.m[1][1] * this.m[2][3] * this.m[3][2]) - (this.m[1][2] * this.m[2][1] * this.m[3][3])) + (this.m[1][1] * this.m[2][2] * this.m[3][3]));
+        a.set(0, 1, (((this.m[0][3] * this.m[2][2] * this.m[3][1]) - (this.m[0][2] * this.m[2][3] * this.m[3][1]) - (this.m[0][3] * this.m[2][1] * this.m[3][2])) + (this.m[0][1] * this.m[2][3] * this.m[3][2]) + (this.m[0][2] * this.m[2][1] * this.m[3][3])) - (this.m[0][1] * this.m[2][2] * this.m[3][3]));
+        a.set(0, 2, ((((this.m[0][2] * this.m[1][3] * this.m[3][1]) - (this.m[0][3] * this.m[1][2] * this.m[3][1])) + (this.m[0][3] * this.m[1][1] * this.m[3][2])) - (this.m[0][1] * this.m[1][3] * this.m[3][2]) - (this.m[0][2] * this.m[1][1] * this.m[3][3])) + (this.m[0][1] * this.m[1][2] * this.m[3][3]));
+        a.set(0, 3, (((this.m[0][3] * this.m[1][2] * this.m[2][1]) - (this.m[0][2] * this.m[1][3] * this.m[2][1]) - (this.m[0][3] * this.m[1][1] * this.m[2][2])) + (this.m[0][1] * this.m[1][3] * this.m[2][2]) + (this.m[0][2] * this.m[1][1] * this.m[2][3])) - (this.m[0][1] * this.m[1][2] * this.m[2][3]));
+        a.set(1, 0, (((this.m[1][3] * this.m[2][2] * this.m[3][0]) - (this.m[1][2] * this.m[2][3] * this.m[3][0]) - (this.m[1][3] * this.m[2][0] * this.m[3][2])) + (this.m[1][0] * this.m[2][3] * this.m[3][2]) + (this.m[1][2] * this.m[2][0] * this.m[3][3])) - (this.m[1][0] * this.m[2][2] * this.m[3][3]));
+        a.set(1, 1, ((((this.m[0][2] * this.m[2][3] * this.m[3][0]) - (this.m[0][3] * this.m[2][2] * this.m[3][0])) + (this.m[0][3] * this.m[2][0] * this.m[3][2])) - (this.m[0][0] * this.m[2][3] * this.m[3][2]) - (this.m[0][2] * this.m[2][0] * this.m[3][3])) + (this.m[0][0] * this.m[2][2] * this.m[3][3]));
+        a.set(1, 2, (((this.m[0][3] * this.m[1][2] * this.m[3][0]) - (this.m[0][2] * this.m[1][3] * this.m[3][0]) - (this.m[0][3] * this.m[1][0] * this.m[3][2])) + (this.m[0][0] * this.m[1][3] * this.m[3][2]) + (this.m[0][2] * this.m[1][0] * this.m[3][3])) - (this.m[0][0] * this.m[1][2] * this.m[3][3]));
+        a.set(1, 3, ((((this.m[0][2] * this.m[1][3] * this.m[2][0]) - (this.m[0][3] * this.m[1][2] * this.m[2][0])) + (this.m[0][3] * this.m[1][0] * this.m[2][2])) - (this.m[0][0] * this.m[1][3] * this.m[2][2]) - (this.m[0][2] * this.m[1][0] * this.m[2][3])) + (this.m[0][0] * this.m[1][2] * this.m[2][3]));
+        a.set(2, 0, ((((this.m[1][1] * this.m[2][3] * this.m[3][0]) - (this.m[1][3] * this.m[2][1] * this.m[3][0])) + (this.m[1][3] * this.m[2][0] * this.m[3][1])) - (this.m[1][0] * this.m[2][3] * this.m[3][1]) - (this.m[1][1] * this.m[2][0] * this.m[3][3])) + (this.m[1][0] * this.m[2][1] * this.m[3][3]));
+        a.set(2, 1, (((this.m[0][3] * this.m[2][1] * this.m[3][0]) - (this.m[0][1] * this.m[2][3] * this.m[3][0]) - (this.m[0][3] * this.m[2][0] * this.m[3][1])) + (this.m[0][0] * this.m[2][3] * this.m[3][1]) + (this.m[0][1] * this.m[2][0] * this.m[3][3])) - (this.m[0][0] * this.m[2][1] * this.m[3][3]));
+        a.set(2, 2, ((((this.m[0][1] * this.m[1][3] * this.m[3][0]) - (this.m[0][3] * this.m[1][1] * this.m[3][0])) + (this.m[0][3] * this.m[1][0] * this.m[3][1])) - (this.m[0][0] * this.m[1][3] * this.m[3][1]) - (this.m[0][1] * this.m[1][0] * this.m[3][3])) + (this.m[0][0] * this.m[1][1] * this.m[3][3]));
+        a.set(2, 3, (((this.m[0][3] * this.m[1][1] * this.m[2][0]) - (this.m[0][1] * this.m[1][3] * this.m[2][0]) - (this.m[0][3] * this.m[1][0] * this.m[2][1])) + (this.m[0][0] * this.m[1][3] * this.m[2][1]) + (this.m[0][1] * this.m[1][0] * this.m[2][3])) - (this.m[0][0] * this.m[1][1] * this.m[2][3]));
+        a.set(3, 0, (((this.m[1][2] * this.m[2][1] * this.m[3][0]) - (this.m[1][1] * this.m[2][2] * this.m[3][0]) - (this.m[1][2] * this.m[2][0] * this.m[3][1])) + (this.m[1][0] * this.m[2][2] * this.m[3][1]) + (this.m[1][1] * this.m[2][0] * this.m[3][2])) - (this.m[1][0] * this.m[2][1] * this.m[3][2]));
+        a.set(3, 1, ((((this.m[0][1] * this.m[2][2] * this.m[3][0]) - (this.m[0][2] * this.m[2][1] * this.m[3][0])) + (this.m[0][2] * this.m[2][0] * this.m[3][1])) - (this.m[0][0] * this.m[2][2] * this.m[3][1]) - (this.m[0][1] * this.m[2][0] * this.m[3][2])) + (this.m[0][0] * this.m[2][1] * this.m[3][2]));
+        a.set(3, 2, (((this.m[0][2] * this.m[1][1] * this.m[3][0]) - (this.m[0][1] * this.m[1][2] * this.m[3][0]) - (this.m[0][2] * this.m[1][0] * this.m[3][1])) + (this.m[0][0] * this.m[1][2] * this.m[3][1]) + (this.m[0][1] * this.m[1][0] * this.m[3][2])) - (this.m[0][0] * this.m[1][1] * this.m[3][2]));
+        a.set(3, 3, ((((this.m[0][1] * this.m[1][2] * this.m[2][0]) - (this.m[0][2] * this.m[1][1] * this.m[2][0])) + (this.m[0][2] * this.m[1][0] * this.m[2][1])) - (this.m[0][0] * this.m[1][2] * this.m[2][1]) - (this.m[0][1] * this.m[1][0] * this.m[2][2])) + (this.m[0][0] * this.m[1][1] * this.m[2][2]));
+
+        return a.mul(inv_det);
+    }
+
+    public Matrix4f mul(final float f)
+    {
+        final Matrix4f res = new Matrix4f();
+
+        for (int i = 0; i < 4; i++)
+        {
+            for (int j = 0; j < 4; j++)
+            {
+                res.set(i, j, (this.m[i][0] * f) + (this.m[i][1] * f) + (this.m[i][2] * f) + (this.m[i][3] * f));
             }
         }
 
@@ -182,9 +235,9 @@ public class Matrix4f
         return res;
     }
 
-    public void set(final int x, final int y, final float value)
+    public void set(final int x, final int y, final float mue)
     {
-        this.m[x][y] = value;
+        this.m[x][y] = mue;
     }
 
     public void setM(final float[][] m)
@@ -194,7 +247,6 @@ public class Matrix4f
 
     public Vector3f transform(final Vector3f r)
     {
-        return new Vector3f((this.m[0][0] * r.getX()) + (this.m[0][1] * r.getY()) + (this.m[0][2] * r.getZ()) + this.m[0][3], (this.m[1][0] * r.getX()) + (this.m[1][1] * r.getY()) + (this.m[1][2] * r.getZ()) + this.m[1][3], (this.m[2][0] * r.getX()) + (this.m[2][1] * r.getY())
-                + (this.m[2][2] * r.getZ()) + this.m[2][3]);
+        return new Vector3f((this.m[0][0] * r.getX()) + (this.m[0][1] * r.getY()) + (this.m[0][2] * r.getZ()) + this.m[0][3], (this.m[1][0] * r.getX()) + (this.m[1][1] * r.getY()) + (this.m[1][2] * r.getZ()) + this.m[1][3], (this.m[2][0] * r.getX()) + (this.m[2][1] * r.getY()) + (this.m[2][2] * r.getZ()) + this.m[2][3]);
     }
 }
