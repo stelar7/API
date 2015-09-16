@@ -1,6 +1,5 @@
 package math;
 
-import java.util.Arrays;
 
 public class Matrix4f
 {
@@ -9,7 +8,6 @@ public class Matrix4f
     public Matrix4f()
     {
         this.m = new float[4][4];
-        Arrays.fill(this.m, 0);
     }
 
     public static Matrix4f identity()
@@ -24,7 +22,7 @@ public class Matrix4f
         return a;
     }
 
-    public static Matrix4f orthographic(final float left, final float right, final float bottom, final float top, final float near, final float far)
+    public static Matrix4f orthographic(final float left, final float right, final float bottom, final float top, final float far, final float near)
     {
         final float rl = right - left;
         final float tb = top - bottom;

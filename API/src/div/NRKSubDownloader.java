@@ -65,7 +65,7 @@ public class NRKSubDownloader
             System.out.println("starting " + id);
             final File temp = new File(id + ".xml");
             temp.deleteOnExit();
-            final File xml = NRKSubDownloader.download("http://tv.nrk.no/programsubtitles/" + id, temp);
+            final File xml = NRKSubDownloader.download("https://tv.nrk.no/programsubtitles/" + id, temp);
             String lines = new String(Files.readAllBytes(xml.toPath()));
             lines = lines.substring(lines.indexOf("<div>") + 7, lines.indexOf("</div>"));
             final StringBuilder sb = new StringBuilder();

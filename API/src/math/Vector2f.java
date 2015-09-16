@@ -40,6 +40,10 @@ public class Vector2f
     {
         return new Vector2f(this.x / r.getX(), this.y / r.getY());
     }
+    
+    public Vector2f reflect(final Vector2f normal) {
+        return this.sub(normal.mul(this.dot(normal) * 2));
+    }
 
     public float dot(final Vector2f r)
     {

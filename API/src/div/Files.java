@@ -29,7 +29,7 @@ public class Files
      * @return true if action is supported by OS
      * @throws IOException
      *
-     * */
+     */
     public static boolean browse(final File file) throws IOException
     {
         if (!Desktop.isDesktopSupported())
@@ -62,22 +62,16 @@ public class Files
                 try (InputStream inputStream = jar.getInputStream(file))
                 {
                     final File f = new File(destDir + File.separator + file.getName());
-                    FileOutputStream f2;
-                    try (FileOutputStream fileOutputStream = new FileOutputStream(f);)
+                    f.getParentFile().mkdirs();
+                    try (FileOutputStream f2 = new FileOutputStream(f))
                     {
-                        f2 = fileOutputStream;
-                    } catch (final FileNotFoundException e)
-                    {
-                        f.getParentFile().mkdirs();
-                        f2 = new FileOutputStream(f);
+                        final byte[] b = new byte[1024];
+                        int bytes;
+                        while ((bytes = inputStream.read(b)) > 0)
+                        {
+                            f2.write(b, 0, bytes);
+                        }
                     }
-                    final byte[] b = new byte[1024];
-                    int bytes;
-                    while ((bytes = inputStream.read(b)) > 0)
-                    {
-                        f2.write(b, 0, bytes);
-                    }
-                    f2.close();
                     inputStream.close();
                 } catch (final Exception e)
                 {
@@ -100,7 +94,7 @@ public class Files
      *            the package
      * @return List<Class<?>> list of all the classes in that package
      *
-     * */
+     */
 
     public static List<Class<?>> getClassNamesInPackage(final File jarfile, String packageName)
     {
@@ -154,10 +148,6 @@ public class Files
             public FileVisitResult preVisitDirectory(final Path dir, final BasicFileAttributes exc)
             {
                 if (dir.getFileName() == null)
-                {
-                    return FileVisitResult.CONTINUE;
-                }
-                if (dir.getFileName().toString().equals("System Volume Information") || dir.getFileName().toString().equals("$RECYCLE.BIN"))
                 {
                     return FileVisitResult.CONTINUE;
                 }

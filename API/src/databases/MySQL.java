@@ -1,18 +1,16 @@
 package databases;
 
 import java.sql.*;
-import java.util.ArrayList;
 import java.util.Map;
 
 public class MySQL
 {
-    private String       hostname    = "";
-    private String       portnmbr    = "";
-    private String       username    = "";
-    private String       password    = "";
-    private String       database    = "";
-    protected Connection connection  = null;
-    ArrayList<String>    queriesList = new ArrayList<String>();
+    private String       hostname   = "";
+    private String       portnmbr   = "";
+    private String       username   = "";
+    private String       password   = "";
+    private String       database   = "";
+    protected Connection connection = null;
 
     public MySQL(final String hostname, final String portnmbr, final String database, final String username, final String password)
     {
@@ -29,7 +27,7 @@ public class MySQL
      *
      * @return true if still active
      * @throws SQLException
-     * */
+     */
     public boolean checkConnection() throws SQLException
     {
         if (!this.connection.isClosed() && this.connection.isValid(5))
@@ -46,7 +44,7 @@ public class MySQL
      *            the table to empty
      * @return true if data-removal was successful.
      *
-     * */
+     */
     public boolean clearTable(final String table)
     {
         Statement statement = null;
@@ -65,7 +63,7 @@ public class MySQL
 
     /**
      * close database connection
-     * */
+     */
     public void close()
     {
         try
@@ -86,7 +84,7 @@ public class MySQL
      * @param table
      *            the table to delete
      * @return true if deletion was successful.
-     * */
+     */
     public boolean deleteTable(final String table)
     {
         Statement statement = null;
@@ -107,16 +105,11 @@ public class MySQL
      *
      * @return Connection
      *
-     * */
+     */
 
     public Connection getConnection()
     {
         return this.connection;
-    }
-
-    public ArrayList<String> getQueries()
-    {
-        return this.queriesList;
     }
 
     /**
@@ -128,11 +121,16 @@ public class MySQL
      *            a Map<String, Object> of the data to insert
      *
      * @return the insert id if insertion was successful, else -1.
-     * */
-    public int insert(final String table, final Map<String, Object> data)
+     */
+    public int insert(final String table, final Map<String, Object> data, boolean unique)
     {
         Statement statement = null;
-        final StringBuilder sb = new StringBuilder("INSERT INTO ");
+        final StringBuilder sb = new StringBuilder("INSERT ");
+        if (unique)
+        {
+            sb.append("IGNORE ");
+        }
+        sb.append("INTO ");
         sb.append(table);
         sb.append(" (");
         for (final String s : data.keySet())
@@ -165,12 +163,6 @@ public class MySQL
             final String query = sb.toString();
             statement = this.connection.createStatement();
             statement.closeOnCompletion();
-            if (this.queriesList.contains(query))
-            {
-                this.queriesList.add(query);
-                System.err.println(query);
-            }
-            this.queriesList.add(query);
             statement.executeUpdate(query, Statement.RETURN_GENERATED_KEYS);
             try (ResultSet keys = statement.getGeneratedKeys())
             {
@@ -200,7 +192,7 @@ public class MySQL
      *            a String[] of the values to insert into the column (value[0] goes in column[0])
      *
      * @return the insert id if insertion was successful, else -1.
-     * */
+     */
     @Deprecated
     public int insert(final String table, final String[] column, final String[] value)
     {
@@ -232,12 +224,6 @@ public class MySQL
             statement = this.connection.createStatement();
             statement.closeOnCompletion();
             final String query = "INSERT INTO " + table + "(" + columns + ") VALUES (" + values + ")";
-            if (this.queriesList.contains(query))
-            {
-                this.queriesList.add(query);
-                System.err.println(query);
-            }
-            this.queriesList.add(query);
             statement.executeUpdate(query, Statement.RETURN_GENERATED_KEYS);
             try (ResultSet keys = statement.getGeneratedKeys())
             {
@@ -259,13 +245,13 @@ public class MySQL
     /**
      * open database connection
      *
-     * */
+     */
     public Connection open()
     {
         try
         {
             Class.forName("com.mysql.jdbc.Driver");
-            final String url = "jdbc:mysql://" + this.hostname + ":" + this.portnmbr + "/" + this.database;
+            final String url = "jdbc:mysql://" + this.hostname + ":" + this.portnmbr + "/" + this.database + "?useUnicode=true&characterEncoding=UTF-8&useServerPrepStmts=false&rewriteBatchedStatements=true";
             this.connection = DriverManager.getConnection(url, this.username, this.password);
             return this.connection;
         } catch (final SQLException e)
@@ -287,7 +273,7 @@ public class MySQL
      * @return ResultSet of the query
      *
      * @throws SQLException
-     * */
+     */
     public ResultSet query(final String query) throws SQLException
     {
         Statement statement = null;

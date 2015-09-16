@@ -45,7 +45,7 @@ public class NRKFileDownloader
     {
         String returnString = "";
         int x = -1;
-        final URL url = new URL("http://tv.nrk.no/serie/a/" + id);
+        final URL url = new URL("https://tv.nrk.no/serie/a/" + id);
         final URLConnection con = url.openConnection();
         con.connect();
         final Reader r = new InputStreamReader(con.getInputStream());
