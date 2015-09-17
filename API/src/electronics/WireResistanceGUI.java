@@ -5,7 +5,13 @@ import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 
-import javax.swing.*;
+import javax.swing.JButton;
+import javax.swing.JComboBox;
+import javax.swing.JFrame;
+import javax.swing.JLabel;
+import javax.swing.JOptionPane;
+import javax.swing.JTextField;
+import javax.swing.SwingConstants;
 
 import electronics.CalculateStuff.WireMaterial;
 
@@ -14,19 +20,24 @@ public class WireResistanceGUI extends JFrame implements ActionListener, KeyList
 
     private static final long serialVersionUID = 1L;
 
-    JButton                   calc             = new JButton("Calculate");
+    public static void main(final String[] args)
+    {
+        new WireResistanceGUI();
+    }
 
-    JComboBox<WireMaterial>   material         = new JComboBox<WireMaterial>();
-    JLabel                    materiall        = new JLabel("Material:");
-    JTextField                leng             = new JTextField();
-    JLabel                    lengl            = new JLabel("Length:");
-    JLabel                    lengll           = new JLabel("Meters");
-    JTextField                area             = new JTextField();
-    JLabel                    areal            = new JLabel("Area:");
-    JLabel                    areall           = new JLabel("mm\u00B2");
-    JTextField                wires            = new JTextField();
-    JLabel                    wiresl           = new JLabel("No. of wires:");
-    JLabel                    dummy            = new JLabel();
+    JButton                 calc      = new JButton("Calculate");
+    JComboBox<WireMaterial> material  = new JComboBox<WireMaterial>();
+    JLabel                  materiall = new JLabel("Material:");
+    JTextField              leng      = new JTextField();
+    JLabel                  lengl     = new JLabel("Length:");
+    JLabel                  lengll    = new JLabel("Meters");
+    JTextField              area      = new JTextField();
+    JLabel                  areal     = new JLabel("Area:");
+    JLabel                  areall    = new JLabel("mm\u00B2");
+    JTextField              wires     = new JTextField();
+    JLabel                  wiresl    = new JLabel("No. of wires:");
+
+    JLabel dummy = new JLabel();
 
     public WireResistanceGUI()
     {
@@ -74,11 +85,6 @@ public class WireResistanceGUI extends JFrame implements ActionListener, KeyList
         this.wiresl.setBounds(10, 160, 100, 30);
         this.validate();
         this.setVisible(true);
-    }
-
-    public static void main(final String[] args)
-    {
-        new WireResistanceGUI();
     }
 
     @Override

@@ -5,9 +5,9 @@ public class Vector3f
     public static final Vector3f ONE  = new Vector3f(1, 1, 1);
     public static Vector3f       ZERO = new Vector3f(0, 0, 0);
 
-    private float                x;
-    private float                y;
-    private float                z;
+    private float x;
+    private float y;
+    private float z;
 
     public Vector3f(final float v)
     {

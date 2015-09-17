@@ -1,6 +1,10 @@
 package databases;
 
-import java.sql.*;
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.Map;
 
 public class MySQL
@@ -122,7 +126,7 @@ public class MySQL
      *
      * @return the insert id if insertion was successful, else -1.
      */
-    public int insert(final String table, final Map<String, Object> data, boolean unique)
+    public int insert(final String table, final Map<String, Object> data, final boolean unique)
     {
         Statement statement = null;
         final StringBuilder sb = new StringBuilder("INSERT ");

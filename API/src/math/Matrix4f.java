@@ -1,15 +1,7 @@
 package math;
 
-
 public class Matrix4f
 {
-    private float[][] m;
-
-    public Matrix4f()
-    {
-        this.m = new float[4][4];
-    }
-
     public static Matrix4f identity()
     {
         final Matrix4f a = new Matrix4f();
@@ -143,6 +135,13 @@ public class Matrix4f
         a.set(2, 3, z);
 
         return a;
+    }
+
+    private float[][] m;
+
+    public Matrix4f()
+    {
+        this.m = new float[4][4];
     }
 
     public float determinant()

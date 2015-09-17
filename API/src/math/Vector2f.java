@@ -40,10 +40,6 @@ public class Vector2f
     {
         return new Vector2f(this.x / r.getX(), this.y / r.getY());
     }
-    
-    public Vector2f reflect(final Vector2f normal) {
-        return this.sub(normal.mul(this.dot(normal) * 2));
-    }
 
     public float dot(final Vector2f r)
     {
@@ -95,6 +91,11 @@ public class Vector2f
         final float length = this.length();
 
         return new Vector2f(this.x / length, this.y / length);
+    }
+
+    public Vector2f reflect(final Vector2f normal)
+    {
+        return this.sub(normal.mul(this.dot(normal) * 2));
     }
 
     public Vector2f rotate(final float angle)

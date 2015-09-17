@@ -44,6 +44,51 @@ public class Waybill
         }
     }
 
+    public class Hazard
+    {
+        int    id;
+        String type;
+
+        double amount;
+
+        String amountSpec; // kg/ltr
+
+        public Hazard(final int id, final double amount, final String amountSpec)
+        {
+            super();
+            this.id = id;
+            this.amount = amount;
+            this.amountSpec = amountSpec;
+        }
+
+        public double getAmount()
+        {
+            return this.amount;
+        }
+
+        public String getAmountSpec()
+        {
+            return this.amountSpec;
+        }
+
+        public int getId()
+        {
+            return this.id;
+        }
+
+        public String getType()
+        {
+            return this.type;
+        }
+
+        @Override
+        public String toString()
+        {
+            return "Hazard [id=" + this.id + ", type=" + this.type + ", amount=" + this.amount + ", amountSpec=" + this.amountSpec + "]";
+        }
+
+    }
+
     public enum Incoterm
     {
         EXW,
@@ -132,7 +177,7 @@ public class Waybill
             super();
             this.code = code;
             this.name = name;
-            other = code + name;
+            this.other = code + name;
         }
 
         public PostCode(final String other)
@@ -166,6 +211,8 @@ public class Waybill
         Long count;
         Long weight;
 
+        List<Hazard> hazards;
+
         Volume size;
 
         public Product(final String mark, final Long count, final String name, final Long weight, final Volume size)
@@ -176,11 +223,22 @@ public class Waybill
             this.name = name;
             this.weight = weight;
             this.size = size;
+            this.hazards = new ArrayList<Hazard>();
+        }
+
+        public void addHazard(final Hazard p)
+        {
+            this.hazards.add(p);
         }
 
         public Long getCount()
         {
             return this.count;
+        }
+
+        public List<Hazard> getHazards()
+        {
+            return this.hazards;
         }
 
         public String getMark()
@@ -207,7 +265,17 @@ public class Waybill
         @Override
         public String toString()
         {
-            return "Product [mark=" + this.mark + ", name=" + this.name + ", count=" + this.count + ", weight=" + this.weight + ", size=" + this.size + "]";
+            final StringJoiner returnJoiner = new StringJoiner("\n\t\t\t", "Product [\n\t\t\t", "\n\t\t\t]");
+            final StringJoiner productJoiner = new StringJoiner("\n\t\t\t\t", "[\n\t\t\t\t", "\n\t\t\t\t]\t\t\t");
+            this.hazards.forEach(a -> productJoiner.add(a.toString()));
+
+            returnJoiner.add("Mark: " + this.mark.toString());
+            returnJoiner.add("Name: " + this.name.toString());
+            returnJoiner.add("Count: " + this.count.toString());
+            returnJoiner.add("Weight: " + this.weight.toString());
+            returnJoiner.add("Size: " + this.size.toString());
+            returnJoiner.add("Hazards: " + (this.hazards.isEmpty() ? "null" : productJoiner.toString()));
+            return returnJoiner.toString();
         }
 
     }
