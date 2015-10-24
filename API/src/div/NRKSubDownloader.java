@@ -70,8 +70,13 @@ public class NRKSubDownloader
             System.out.println("starting " + id);
             final File temp = new File(id + ".xml");
             temp.deleteOnExit();
-            final File xml = NRKSubDownloader.download("https://tv.nrk.no/programsubtitles/" + id, temp);
+            File xml = NRKSubDownloader.download("https://tv.nrk.no/programsubtitles/" + id, temp);
             String lines = new String(Files.readAllBytes(xml.toPath()));
+            if (lines.isEmpty())
+            {
+                xml = NRKSubDownloader.download("https://tv.nrk.no/programsubtitles/" + id + "AA", temp);
+                lines = new String(Files.readAllBytes(xml.toPath()));
+            }
             lines = lines.substring(lines.indexOf("<div>") + 7, lines.indexOf("</div>"));
             final StringBuilder sb = new StringBuilder();
             final String[] text = lines.split("\n");
@@ -93,6 +98,10 @@ public class NRKSubDownloader
                     final Integer bm = Integer.parseInt(begin.split(":")[1]);
                     final Integer bs = Integer.parseInt(begin.split(":")[2].split("\\.")[0]);
                     final Integer bms = Integer.parseInt(begin.split(":")[2].split("\\.")[1]);
+                    if (bh > 24)
+                    {
+                        continue;
+                    }
                     final LocalTime begining = LocalTime.of(bh, bm, bs, bms);
 
                     final String durs = s.substring(s.indexOf("dur=") + 5, s.indexOf("\"", s.indexOf("dur=") + 6));

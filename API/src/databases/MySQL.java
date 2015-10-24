@@ -149,14 +149,13 @@ public class MySQL
             if (data.get(s) instanceof Boolean)
             {
                 sb.append((Boolean) data.get(s) ? 1 : 0);
-            } else if (data.get(s) instanceof String)
-            {
-                sb.append("'");
-                sb.append(data.get(s));
-                sb.append("'");
-            } else
+            } else if (data.get(s) instanceof Number)
             {
                 sb.append(data.get(s));
+            } else {
+                sb.append("'");
+                sb.append(data.get(s).toString());
+                sb.append("'");
             }
             sb.append(", ");
         }

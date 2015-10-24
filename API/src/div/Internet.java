@@ -1,5 +1,6 @@
 package div;
 
+import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
@@ -7,9 +8,9 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.OutputStream;
-import java.io.Reader;
 import java.net.URL;
 import java.net.URLConnection;
+import java.util.StringJoiner;
 
 public class Internet
 {
@@ -60,14 +61,18 @@ public class Internet
      */
     public static String getPageSource(final String URL) throws IOException
     {
-        String returnString = "";
-        final URL url = new URL(URL);
-        int x = -1;
-        final Reader r = new InputStreamReader(url.openConnection().getInputStream());
-        while ((x = r.read()) > 0)
+        StringJoiner joiner = new StringJoiner("\n");
+        URL Url = new URL(URL);
+        BufferedReader in = new BufferedReader(new InputStreamReader(Url.openStream()));
+
+        String inputLine;
+
+        while ((inputLine = in.readLine()) != null)
         {
-            returnString += (char) x;
+            joiner.add(inputLine);
         }
-        return returnString;
+        in.close();
+
+        return joiner.toString();
     }
 }

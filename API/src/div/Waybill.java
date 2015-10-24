@@ -1,8 +1,13 @@
 package div;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.StringJoiner;
+
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 
 public class Waybill
 {
@@ -44,19 +49,63 @@ public class Waybill
         }
     }
 
+    public static class UnNumber
+    {
+        int    number;
+        String clazz;
+        String desc;
+
+        @Override
+        public String toString()
+        {
+            return "UnNumber [id=" + number + ", class=" + clazz + ", description=" + desc + "]";
+        }
+
+        static Map<Integer, UnNumber> numbers;
+
+        public static UnNumber from(int id)
+        {
+            if (numbers == null)
+            {
+                try
+                {
+                    numbers = new HashMap<>();
+
+                    String numberdata = Internet.getPageSource("https://www.dropbox.com/s/sjl8otk8mz77upg/unnumbers.txt?raw=1");
+
+                    List<UnNumber> numberlist = new Gson().fromJson(numberdata, new TypeToken<List<UnNumber>>()
+                    {}.getType());
+
+                    numberlist.forEach(e -> numbers.put(e.number, e));
+                } catch (Exception e)
+                {
+                    e.printStackTrace();
+                }
+            }
+
+            return numbers.get(id);
+        }
+
+        public UnNumber(int id, String clazz, String desc)
+        {
+            super();
+            this.number = id;
+            this.clazz = clazz;
+            this.desc = desc;
+        }
+    }
+
     public class Hazard
     {
-        int    id;
-        String type;
+        UnNumber unNumber;
 
         double amount;
-
         String amountSpec; // kg/ltr
 
         public Hazard(final int id, final double amount, final String amountSpec)
         {
             super();
-            this.id = id;
+            this.unNumber = UnNumber.from(id);
             this.amount = amount;
             this.amountSpec = amountSpec;
         }
@@ -73,18 +122,23 @@ public class Waybill
 
         public int getId()
         {
-            return this.id;
+            return this.unNumber.number;
         }
 
-        public String getType()
+        public String getDescription()
         {
-            return this.type;
+            return this.unNumber.desc;
+        }
+
+        public String getGroup()
+        {
+            return this.unNumber.clazz;
         }
 
         @Override
         public String toString()
         {
-            return "Hazard [id=" + this.id + ", type=" + this.type + ", amount=" + this.amount + ", amountSpec=" + this.amountSpec + "]";
+            return "Hazard [" + unNumber + ", amount=" + amount + ", amountSpec=" + amountSpec + "]";
         }
 
     }
@@ -241,6 +295,11 @@ public class Waybill
             return this.hazards;
         }
 
+        public boolean isHazardous()
+        {
+            return !this.getHazards().isEmpty();
+        }
+
         public String getMark()
         {
             return this.mark;
@@ -323,13 +382,14 @@ public class Waybill
         @Override
         public String toString()
         {
-            return "Volume [width=" + this.width + ", height=" + this.height + ", depth=" + this.depth + "]";
+            return "Volume [width=" + this.width + ", depth=" + this.depth + ", height=" + this.height + "]";
         }
     }
 
     Location sender;
     Location reciver;
-    Location destination;
+    Location pickup;
+    Location dropoff;
 
     String transporter;
 
@@ -351,11 +411,6 @@ public class Waybill
     public BaseData getData()
     {
         return this.data;
-    }
-
-    public Location getDestination()
-    {
-        return this.destination;
     }
 
     public List<Product> getGoods()
@@ -383,6 +438,26 @@ public class Waybill
         return this.sender;
     }
 
+    public Location getPickup()
+    {
+        return pickup;
+    }
+
+    public void setPickup(Location pickup)
+    {
+        this.pickup = pickup;
+    }
+
+    public Location getDropoff()
+    {
+        return dropoff;
+    }
+
+    public void setDropoff(Location dropoff)
+    {
+        this.dropoff = dropoff;
+    }
+
     public String getTransporter()
     {
         return this.transporter;
@@ -391,11 +466,6 @@ public class Waybill
     public void setData(final BaseData data)
     {
         this.data = data;
-    }
-
-    public void setDestination(final Location destination)
-    {
-        this.destination = destination;
     }
 
     public void setGoods(final List<Product> goods)
@@ -436,8 +506,9 @@ public class Waybill
         this.goods.forEach(a -> productJoiner.add(a.toString()));
 
         returnJoiner.add("Sender: " + this.sender.toString());
+        returnJoiner.add("Pickup: " + this.pickup.toString());
         returnJoiner.add("Reciver: " + this.reciver.toString());
-        returnJoiner.add("Destination: " + this.destination.toString());
+        returnJoiner.add("Dropoff: " + this.dropoff.toString());
         returnJoiner.add("Transporter: " + this.transporter.toString());
         returnJoiner.add("ProductType: " + this.productType.toString());
         returnJoiner.add("Notes: \n\n" + this.notes.toString());
