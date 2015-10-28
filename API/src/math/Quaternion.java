@@ -86,10 +86,40 @@ public class Quaternion
         return (this.x * r.getX()) + (this.y * r.getY()) + (this.z * r.getZ()) + (this.w * r.getW());
     }
 
-    public boolean equals(final Quaternion r)
+    @Override
+    public int hashCode()
     {
-        return (this.x == r.getX()) && (this.y == r.getY()) && (this.z == r.getZ()) && (this.w == r.getW());
+        final int prime = 31;
+        int result = 1;
+        result = prime * result + Float.floatToIntBits(w);
+        result = prime * result + Float.floatToIntBits(x);
+        result = prime * result + Float.floatToIntBits(y);
+        result = prime * result + Float.floatToIntBits(z);
+        return result;
     }
+
+    @Override
+    public boolean equals(Object obj)
+    {
+        if (this == obj)
+            return true;
+        if (obj == null)
+            return false;
+        if (getClass() != obj.getClass())
+            return false;
+        Quaternion other = (Quaternion) obj;
+        if (Float.floatToIntBits(w) != Float.floatToIntBits(other.w))
+            return false;
+        if (Float.floatToIntBits(x) != Float.floatToIntBits(other.x))
+            return false;
+        if (Float.floatToIntBits(y) != Float.floatToIntBits(other.y))
+            return false;
+        if (Float.floatToIntBits(z) != Float.floatToIntBits(other.z))
+            return false;
+        return true;
+    }
+
+ 
 
     public Vector3f getBack()
     {

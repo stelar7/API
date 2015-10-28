@@ -38,32 +38,6 @@ public class SQLite
         }
     }
 
-    public void createTable(final String table, final Map<String, String> fields)
-    {
-
-        final StringBuilder sb = new StringBuilder("CREATE TABLE ");
-        sb.append(table);
-        sb.append(" (");
-        for (final String s : fields.keySet())
-        {
-            sb.append(s);
-            sb.append(" ");
-            sb.append(fields.get(s));
-            sb.append(", ");
-        }
-        sb.reverse().deleteCharAt(0).deleteCharAt(0).reverse();
-        sb.append(");");
-        try
-        {
-            this.db.beginTransaction(SqlJetTransactionMode.WRITE);
-            this.db.createTable(sb.toString());
-            this.db.commit();
-        } catch (final SqlJetException e)
-        {
-            e.printStackTrace();
-        }
-    }
-
     public void deleteTable(final String table)
     {
         try

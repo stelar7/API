@@ -5,6 +5,7 @@ import java.util.Collections;
 import java.util.Date;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Locale;
 
 public class Miscellaneous
 {
@@ -42,7 +43,7 @@ public class Miscellaneous
      **/
     public static String capitalize(final String string)
     {
-        return string.substring(0, 1).toUpperCase() + string.substring(1, string.length()).toLowerCase();
+        return string.substring(0, 1).toUpperCase(Locale.ENGLISH) + string.substring(1, string.length()).toLowerCase(Locale.ENGLISH);
     }
 
     /**

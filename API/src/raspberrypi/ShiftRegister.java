@@ -26,11 +26,6 @@ public class ShiftRegister
         this.lastOut = new boolean[bits];
     }
 
-    public boolean[] getLastShitOut()
-    {
-        return this.lastOut;
-    }
-
     public void shiftOut(final long value, final BitOrder order)
     {
         for (int i = 0; i < this.bits; i++)

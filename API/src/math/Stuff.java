@@ -49,9 +49,9 @@ public class Stuff
         return number % modulo;
     }
 
-    public static int greatestCommonDivisor(final int a, final int b)
+    public static int greatestCommonDivisor(final float numerator, final float denominator)
     {
-        return (b == 0) ? a : Stuff.greatestCommonDivisor(b, a % b);
+        return (int) ((denominator == 0) ? numerator : Stuff.greatestCommonDivisor(denominator, numerator % denominator));
     }
 
     public static double mapToRange(final double x, final double in_min, final double in_max, final double out_min, final double out_max)

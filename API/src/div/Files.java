@@ -5,17 +5,18 @@ import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
-import java.io.FileReader;
-import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
+import java.io.OutputStreamWriter;
 import java.io.UnsupportedEncodingException;
 import java.net.URISyntaxException;
 import java.net.URLDecoder;
 import java.nio.MappedByteBuffer;
 import java.nio.charset.Charset;
+import java.nio.charset.StandardCharsets;
 import java.nio.file.FileVisitResult;
 import java.nio.file.FileVisitor;
 import java.nio.file.Path;
@@ -24,6 +25,7 @@ import java.nio.file.attribute.BasicFileAttributes;
 import java.util.ArrayList;
 import java.util.Enumeration;
 import java.util.List;
+import java.util.StringJoiner;
 import java.util.jar.JarEntry;
 import java.util.jar.JarFile;
 import java.util.jar.JarInputStream;
@@ -72,24 +74,26 @@ public class Files
                 try (InputStream inputStream = jar.getInputStream(file))
                 {
                     final File f = new File(destDir + File.separator + file.getName());
-                    f.getParentFile().mkdirs();
-                    try (FileOutputStream f2 = new FileOutputStream(f))
+                    if (f.getParentFile().mkdirs())
                     {
-                        final byte[] b = new byte[1024];
-                        int bytes;
-                        while ((bytes = inputStream.read(b)) > 0)
+                        try (FileOutputStream f2 = new FileOutputStream(f))
                         {
-                            f2.write(b, 0, bytes);
+                            final byte[] b = new byte[1024];
+                            int bytes;
+                            while ((bytes = inputStream.read(b)) > 0)
+                            {
+                                f2.write(b, 0, bytes);
+                            }
                         }
+                        inputStream.close();
                     }
-                    inputStream.close();
-                } catch (final Exception e)
+                } catch (final IOException e)
                 {
                     e.printStackTrace();
                 }
             }
             jar.close();
-        } catch (final Exception e)
+        } catch (IOException e)
         {
             e.printStackTrace();
         }
@@ -125,7 +129,7 @@ public class Files
                     arrayList.add(jarEntry.getClass());
                 }
                 jarFile.close();
-            } catch (final Exception e)
+            } catch (final IOException e)
             {
                 e.printStackTrace();
             }
@@ -157,11 +161,7 @@ public class Files
             @Override
             public FileVisitResult preVisitDirectory(final Path dir, final BasicFileAttributes exc)
             {
-                if (dir.getFileName() == null)
-                {
-                    return FileVisitResult.CONTINUE;
-                }
-                if ((dir.getParent() == null) || dir.getParent().equals(origin))
+                if (dir != null && dir.getFileName() != null)
                 {
                     System.out.format("%s%n", dir.getFileName());
                 }
@@ -193,11 +193,12 @@ public class Files
         {
             result = ois.readObject();
             ois.close();
-        } catch (final Exception e)
+            return result;
+        } catch (final IOException | ClassNotFoundException e)
         {
             e.printStackTrace();
         }
-        return result;
+        return null;
     }
 
     /**
@@ -222,7 +223,7 @@ public class Files
                 final byte[] data = new byte[datalength];
                 buffer.position(buffer.position() - 1);
                 buffer.get(data, 0, datalength);
-                final String found = new String(data);
+                final String found = new String(data, StandardCharsets.UTF_8);
                 if (!found.equals(search))
                 {
                     continue outer;
@@ -242,36 +243,20 @@ public class Files
      * @throws IOException
      *
      **/
-    public static String read(final File file)
+    public static String read(final File file) throws IOException
     {
-        String returnString = "";
-        try (final BufferedReader br = new BufferedReader(new FileReader(file)))
+        StringJoiner joiner = new StringJoiner("\n");
+        try (BufferedReader in = new BufferedReader(new InputStreamReader(new FileInputStream(file), StandardCharsets.UTF_8)))
         {
-            int x;
-            while ((x = br.read()) != -1)
+            String inputLine;
+            while ((inputLine = in.readLine()) != null)
             {
-                returnString = returnString + (char) x;
+                joiner.add(inputLine);
             }
-            br.close();
-        } catch (final Exception e)
-        {
-            e.printStackTrace();
+            in.close();
         }
-        return returnString;
-    }
 
-    /**
-     * Renames a file to the specified name
-     *
-     * @param file
-     *            the file to rename
-     * @param s
-     *            the new filename
-     *
-     **/
-    public static void rename(final File file, final String s)
-    {
-        file.renameTo(new File(file.getAbsoluteFile().getParent(), s));
+        return joiner.toString();
     }
 
     /**
@@ -290,7 +275,7 @@ public class Files
             oos.writeObject(obj);
             oos.flush();
             oos.close();
-        } catch (final Exception e)
+        } catch (final IOException e)
         {
             e.printStackTrace();
         }
@@ -310,12 +295,12 @@ public class Files
      **/
     public static void write(final File file, final String string, final boolean append)
     {
-        try (final FileWriter br = new FileWriter(file, append))
+        try (final OutputStreamWriter br = new OutputStreamWriter(new FileOutputStream(file), StandardCharsets.UTF_8))  
         {
             br.write(string);
             br.flush();
             br.close();
-        } catch (final Exception e)
+        } catch (final IOException e)
         {
             e.printStackTrace();
         }

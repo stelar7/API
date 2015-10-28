@@ -3,12 +3,12 @@ package math;
 public class Fraction
 {
 
-    private final int numerator, denominator;
+    private final float numerator, denominator;
 
-    public Fraction(final int numerator, final int denominator)
+    public Fraction(final float f, final float g)
     {
-        this.numerator = numerator;
-        this.denominator = denominator;
+        this.numerator = f;
+        this.denominator = g;
     }
 
     public Fraction add(final Fraction f)

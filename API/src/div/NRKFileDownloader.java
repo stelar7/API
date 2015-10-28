@@ -1,10 +1,6 @@
 package div;
 
 import java.io.File;
-import java.io.InputStreamReader;
-import java.io.Reader;
-import java.net.URL;
-import java.net.URLConnection;
 import java.util.List;
 
 public class NRKFileDownloader
@@ -20,7 +16,7 @@ public class NRKFileDownloader
     {
         for (final String id : ids)
         {
-            String s = NRKFileDownloader.getPageSource(id);
+            String s = Internet.getPageSource("https://tv.nrk.no/serie/a/" + id);
             s = s.substring(s.indexOf("data-hls-media") + 16);
             s = s.substring(0, s.indexOf("\""));
             final File temp = File.createTempFile("master", "m3u8");
@@ -39,20 +35,5 @@ public class NRKFileDownloader
                 }
             }
         }
-    }
-
-    private static String getPageSource(final String id) throws Exception
-    {
-        String returnString = "";
-        int x = -1;
-        final URL url = new URL("https://tv.nrk.no/serie/a/" + id);
-        final URLConnection con = url.openConnection();
-        con.connect();
-        final Reader r = new InputStreamReader(con.getInputStream());
-        while ((x = r.read()) > 0)
-        {
-            returnString += (char) x;
-        }
-        return returnString;
     }
 }

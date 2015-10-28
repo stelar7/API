@@ -1,5 +1,6 @@
 package div;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -11,13 +12,11 @@ import com.google.gson.reflect.TypeToken;
 
 public class Waybill
 {
-    public class BaseData
+    public static class BaseData
     {
-        LocationReference sender;
-
-        LocationReference reciver;
-
-        Incoterm type;
+        private LocationReference sender;
+        private LocationReference reciver;
+        private Incoterm          type;
 
         public BaseData(final LocationReference sender, final LocationReference reciver, final Incoterm type)
         {
@@ -51,9 +50,9 @@ public class Waybill
 
     public static class UnNumber
     {
-        int    number;
-        String clazz;
-        String desc;
+        private int    number;
+        private String clazz;
+        private String desc;
 
         @Override
         public String toString()
@@ -61,7 +60,7 @@ public class Waybill
             return "UnNumber [id=" + number + ", class=" + clazz + ", description=" + desc + "]";
         }
 
-        static Map<Integer, UnNumber> numbers;
+        static volatile Map<Integer, UnNumber> numbers;
 
         public static UnNumber from(int id)
         {
@@ -77,7 +76,7 @@ public class Waybill
                     {}.getType());
 
                     numberlist.forEach(e -> numbers.put(e.number, e));
-                } catch (Exception e)
+                } catch (IOException e)
                 {
                     e.printStackTrace();
                 }
@@ -95,12 +94,11 @@ public class Waybill
         }
     }
 
-    public class Hazard
+    public static class Hazard
     {
-        UnNumber unNumber;
-
-        double amount;
-        String amountSpec; // kg/ltr
+        private UnNumber unNumber;
+        private double   amount;
+        private String   amountSpec; // kg/ltr
 
         public Hazard(final int id, final double amount, final String amountSpec)
         {
@@ -162,12 +160,12 @@ public class Waybill
         DDU;
     }
 
-    public class Location
+    public static class Location
     {
-        String name;
-        String address;
+        private String name;
+        private String address;
 
-        PostCode area;
+        private PostCode area;
 
         public Location(final String name, final String address, final PostCode area)
         {
@@ -199,10 +197,10 @@ public class Waybill
         }
     }
 
-    public class LocationReference
+    public static class LocationReference
     {
-        Long transporterId;
-        Long reference;
+        private Long transporterId;
+        private Long reference;
 
         public LocationReference(final Long transporterId, final Long reference)
         {
@@ -218,26 +216,23 @@ public class Waybill
         }
     }
 
-    public class PostCode
+    public static class PostCode
     {
-        Long code;
+        private Long code;
 
-        String name;
-
-        String other;
+        private String name;
 
         public PostCode(final Long code, final String name)
         {
             super();
             this.code = code;
             this.name = name;
-            this.other = code + name;
         }
 
         public PostCode(final String other)
         {
             super();
-            this.other = other;
+            this.name = other;
         }
 
         public Long getCode()
@@ -257,17 +252,17 @@ public class Waybill
         }
     }
 
-    public class Product
+    public static class Product
     {
-        String mark;
-        String name;
+        private String mark;
+        private String name;
 
-        Long count;
-        Long weight;
+        private Long count;
+        private Long weight;
 
-        List<Hazard> hazards;
+        private List<Hazard> hazards;
 
-        Volume size;
+        private Volume size;
 
         public Product(final String mark, final Long count, final String name, final Long weight, final Volume size)
         {
@@ -328,22 +323,22 @@ public class Waybill
             final StringJoiner productJoiner = new StringJoiner("\n\t\t\t\t", "[\n\t\t\t\t", "\n\t\t\t\t]\t\t\t");
             this.hazards.forEach(a -> productJoiner.add(a.toString()));
 
-            returnJoiner.add("Mark: " + this.mark.toString());
-            returnJoiner.add("Name: " + this.name.toString());
-            returnJoiner.add("Count: " + this.count.toString());
-            returnJoiner.add("Weight: " + this.weight.toString());
-            returnJoiner.add("Size: " + this.size.toString());
-            returnJoiner.add("Hazards: " + (this.hazards.isEmpty() ? "null" : productJoiner.toString()));
+            returnJoiner.add("Mark: " + this.mark);
+            returnJoiner.add("Name: " + this.name);
+            returnJoiner.add("Count: " + this.count);
+            returnJoiner.add("Weight: " + this.weight);
+            returnJoiner.add("Size: " + this.size);
+            returnJoiner.add("Hazards: " + (this.hazards.isEmpty() ? "null" : productJoiner));
             return returnJoiner.toString();
         }
 
     }
 
-    public class Volume
+    public static class Volume
     {
-        Long width;
-        Long height;
-        Long depth;
+        private Long width;
+        private Long height;
+        private Long depth;
 
         // IN CM!!
         public Volume(final Long width, final Long depth, final Long height)
@@ -386,25 +381,21 @@ public class Waybill
         }
     }
 
-    Location sender;
-    Location reciver;
-    Location pickup;
-    Location dropoff;
+    private Location sender;
+    private Location reciver;
+    private Location pickup;
+    private Location dropoff;
 
-    String transporter;
+    private String transporter;
 
-    String   productType;
-    String   notes;
-    BaseData data;
+    private String   productType;
+    private String   notes;
+    private BaseData data;
 
-    List<Product> goods;
+    private List<Product> goods = new ArrayList<Product>();
 
     public void addProduct(final Product p)
     {
-        if (this.goods == null)
-        {
-            this.goods = new ArrayList<Product>();
-        }
         this.goods.add(p);
     }
 
@@ -505,15 +496,15 @@ public class Waybill
         final StringJoiner productJoiner = new StringJoiner("\n\t\t", "[\n\t\t", "\n\t\t]\n\t");
         this.goods.forEach(a -> productJoiner.add(a.toString()));
 
-        returnJoiner.add("Sender: " + this.sender.toString());
-        returnJoiner.add("Pickup: " + this.pickup.toString());
-        returnJoiner.add("Reciver: " + this.reciver.toString());
-        returnJoiner.add("Dropoff: " + this.dropoff.toString());
-        returnJoiner.add("Transporter: " + this.transporter.toString());
-        returnJoiner.add("ProductType: " + this.productType.toString());
-        returnJoiner.add("Notes: \n\n" + this.notes.toString());
-        returnJoiner.add("\n\tData: " + this.data.toString());
-        returnJoiner.add("Goods: \t" + productJoiner.toString());
+        returnJoiner.add("Sender: " + this.sender);
+        returnJoiner.add("Pickup: " + this.pickup);
+        returnJoiner.add("Reciver: " + this.reciver);
+        returnJoiner.add("Dropoff: " + this.dropoff);
+        returnJoiner.add("Transporter: " + this.transporter);
+        returnJoiner.add("ProductType: " + this.productType);
+        returnJoiner.add("Notes: \n\n" + this.notes);
+        returnJoiner.add("\n\tData: " + this.data);
+        returnJoiner.add("Goods: \t" + productJoiner);
 
         return returnJoiner.toString();
     }

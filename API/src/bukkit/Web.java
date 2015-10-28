@@ -5,6 +5,7 @@ import java.io.File;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.URL;
+import java.nio.charset.StandardCharsets;
 
 import div.Internet;
 
@@ -38,13 +39,14 @@ public class Web extends Internet
      */
     public static boolean isPremium(final String player)
     {
-        try
+        final String url = "http://www.minecraft.net/haspaid.jsp?user=";
+        final String checkurl = url + player;
+        try (BufferedReader br = new BufferedReader(new InputStreamReader(new URL(checkurl).openStream(), StandardCharsets.UTF_8)))
         {
-            final URL url = new URL("http://www.minecraft.net/haspaid.jsp?user=");
-            final String checkurl = url + player;
-            return Boolean.parseBoolean(new BufferedReader(new InputStreamReader(new URL(checkurl).openStream())).readLine());
-        } catch (final Exception e)
+            return Boolean.parseBoolean(br.readLine());
+        } catch (IOException e)
         {
+            e.printStackTrace();
             return false;
         }
     }

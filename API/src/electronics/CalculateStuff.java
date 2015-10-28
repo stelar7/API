@@ -1,5 +1,7 @@
 package electronics;
 
+import java.util.Locale;
+
 public class CalculateStuff
 {
 
@@ -64,26 +66,26 @@ public class CalculateStuff
         @Override
         public String toString()
         {
-            return this.name().substring(0, 1) + this.name().replace("_", " ").substring(1).toLowerCase();
+            return this.name().substring(0, 1) + this.name().replace("_", " ").substring(1).toLowerCase(Locale.ENGLISH);
         }
     }
 
-    public static double AmpereFromVoltAndResistance(final double volt, final double resistance)
+    public static double getAmpereFromVoltAndResistance(final double volt, final double resistance)
     {
         return volt / resistance;
     }
 
-    public static double AmpereFromWattAndResistance(final double watt, final double resistance)
+    public static double getAmpereFromWattAndResistance(final double watt, final double resistance)
     {
         return Math.sqrt(watt / resistance);
     }
 
-    public static double AmpereFromWattAndVolt(final double watt, final double volt)
+    public static double getAmpereFromWattAndVolt(final double watt, final double volt)
     {
         return watt / volt;
     }
 
-    public static double capasitanceInParallel(final double... capasitors)
+    public static double getCapasitanceInParallel(final double... capasitors)
     {
         double i = 0;
         for (final double d : capasitors)
@@ -93,7 +95,7 @@ public class CalculateStuff
         return i;
     }
 
-    public static double capasitanceInSeries(final double... capasitors)
+    public static double getCapasitanceInSeries(final double... capasitors)
     {
         double i = 0;
         for (final double ii : capasitors)
@@ -103,27 +105,27 @@ public class CalculateStuff
         return 1 / i;
     }
 
-    public static double EnergyConversionEfficiency(final double input, final double output)
+    public static double getEnergyConversionEfficiency(final double input, final double output)
     {
         return (output / input);
     }
 
-    public static double ResistanceFromVoltAndAmpere(final double volt, final double ampere)
+    public static double getResistanceFromVoltAndAmpere(final double volt, final double ampere)
     {
         return volt / ampere;
     }
 
-    public static double ResistanceFromVoltAndWatt(final double volt, final double watt)
+    public static double getResistanceFromVoltAndWatt(final double volt, final double watt)
     {
         return Math.pow(volt, 2) / watt;
     }
 
-    public static double ResistanceFromWattAndAmpere(final double watt, final double ampere)
+    public static double getResistanceFromWattAndAmpere(final double watt, final double ampere)
     {
         return (watt / Math.pow(ampere, 2));
     }
 
-    public static double resistanceInParallel(final double... resistances)
+    public static double getResistanceInParallel(final double... resistances)
     {
         double i = 0;
         for (final double ii : resistances)
@@ -133,7 +135,7 @@ public class CalculateStuff
         return 1 / i;
     }
 
-    public static double resistanceInSeries(final double... resistances)
+    public static double getResistanceInSeries(final double... resistances)
     {
         double i = 0;
         for (final double ii : resistances)
@@ -143,47 +145,47 @@ public class CalculateStuff
         return i;
     }
 
-    public static double voltageDrop(final double ampere, final WireMaterial material, final double length, final double area)
+    public static double getVoltageDrop(final double ampere, final WireMaterial material, final double length, final double area)
     {
         return ((ampere * material.resistance * length) / area);
     }
 
-    public static double voltageDrop3PEngine(final double ampere, final WireMaterial material, final double length, final double area, final double cosphi)
+    public static double getVoltageDrop3PEngine(final double ampere, final WireMaterial material, final double length, final double area, final double cosphi)
     {
-        return (Math.sqrt(3) * ampere * CalculateStuff.wireResistance(material, length, area, 1));
+        return (Math.sqrt(3) * ampere * CalculateStuff.getWireResistance(material, length, area, 1));
     }
 
-    public static double VoltFromResistanceAndAmpere(final double resistance, final double ampere)
+    public static double getVoltFromResistanceAndAmpere(final double resistance, final double ampere)
     {
         return resistance * ampere;
     }
 
-    public static double VoltFromWattAndAmpere(final double watt, final double ampere)
+    public static double getVoltFromWattAndAmpere(final double watt, final double ampere)
     {
         return watt / ampere;
     }
 
-    public static double VoltFromWattAndResistance(final double watt, final double resistance)
+    public static double getVoltFromWattAndResistance(final double watt, final double resistance)
     {
         return Math.sqrt(watt * resistance);
     }
 
-    public static double WattFromAmpereAndResistance(final double ampere, final double resistance)
+    public static double getWattFromAmpereAndResistance(final double ampere, final double resistance)
     {
         return Math.pow(ampere, 2) * resistance;
     }
 
-    public static double WattFromVoltAndAmpere(final double volt, final double ampere)
+    public static double getWattFromVoltAndAmpere(final double volt, final double ampere)
     {
         return volt * ampere;
     }
 
-    public static double WattFromVoltAndResistance(final double volt, final double resistance)
+    public static double getWattFromVoltAndResistance(final double volt, final double resistance)
     {
         return Math.pow(volt, 2) / resistance;
     }
 
-    public static double wireResistance(final WireMaterial mat, final double length, final double area, final double wires)
+    public static double getWireResistance(final WireMaterial mat, final double length, final double area, final double wires)
     {
         return ((mat.resistance * length) / area) * wires;
     }

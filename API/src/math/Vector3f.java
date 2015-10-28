@@ -3,7 +3,7 @@ package math;
 public class Vector3f
 {
     public static final Vector3f ONE  = new Vector3f(1, 1, 1);
-    public static Vector3f       ZERO = new Vector3f(0, 0, 0);
+    public static final Vector3f       ZERO = new Vector3f(0, 0, 0);
 
     private float x;
     private float y;
@@ -74,9 +74,35 @@ public class Vector3f
         return (this.x * r.getX()) + (this.y * r.getY()) + (this.z * r.getZ());
     }
 
-    public boolean equals(final Vector3f r)
+
+    @Override
+    public int hashCode()
     {
-        return (this.x == r.getX()) && (this.y == r.getY()) && (this.z == r.getZ());
+        final int prime = 31;
+        int result = 1;
+        result = prime * result + Float.floatToIntBits(x);
+        result = prime * result + Float.floatToIntBits(y);
+        result = prime * result + Float.floatToIntBits(z);
+        return result;
+    }
+
+    @Override
+    public boolean equals(Object obj)
+    {
+        if (this == obj)
+            return true;
+        if (obj == null)
+            return false;
+        if (getClass() != obj.getClass())
+            return false;
+        Vector3f other = (Vector3f) obj;
+        if (Float.floatToIntBits(x) != Float.floatToIntBits(other.x))
+            return false;
+        if (Float.floatToIntBits(y) != Float.floatToIntBits(other.y))
+            return false;
+        if (Float.floatToIntBits(z) != Float.floatToIntBits(other.z))
+            return false;
+        return true;
     }
 
     public float getX()

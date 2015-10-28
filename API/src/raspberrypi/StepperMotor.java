@@ -110,9 +110,11 @@ public class StepperMotor
                     this.pin2.low();
                     break;
                 }
+                default:
+                    break;
             }
         }
-        if ((this.pinCount == 4) && this.halfstep)
+        if ((this.pinCount == 4) && !this.halfstep)
         {
             switch (pos)
             {
@@ -148,6 +150,8 @@ public class StepperMotor
                     this.pin4.high();
                     break;
                 }
+                default:
+                    break;
             }
         }
         if ((this.pinCount == 4) && this.halfstep)
@@ -174,8 +178,8 @@ public class StepperMotor
                 {
                     this.pin1.low();
                     this.pin2.high();
-                    this.pin3.low();
                     this.pin4.high();
+                    this.pin3.low();
                     break;
                 }
                 case 3:
@@ -218,6 +222,8 @@ public class StepperMotor
                     this.pin4.low();
                     break;
                 }
+                default:
+                    break;
             }
         }
     }

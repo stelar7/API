@@ -122,7 +122,7 @@ public class WireResistanceGUI extends JFrame implements ActionListener, KeyList
                         JOptionPane.showMessageDialog(this, "Invalid entry in 'No.of wires'\nValue: " + this.wires.getText() + "\nNumerical value expected!", "ERROR", JOptionPane.ERROR_MESSAGE);
                         return;
                     }
-                    JOptionPane.showMessageDialog(this, "Wire resistance is: " + CalculateStuff.wireResistance(mat, len, are, wir) + "\u2126");
+                    JOptionPane.showMessageDialog(this, "Wire resistance is: " + CalculateStuff.getWireResistance(mat, len, are, wir) + "\u2126");
                 } else
                 {
                     JOptionPane.showMessageDialog(this, "Missing value: No. of wires");

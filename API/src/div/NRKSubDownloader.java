@@ -8,6 +8,7 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.net.URL;
 import java.net.URLConnection;
+import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.StandardOpenOption;
 import java.text.DecimalFormat;
@@ -71,11 +72,11 @@ public class NRKSubDownloader
             final File temp = new File(id + ".xml");
             temp.deleteOnExit();
             File xml = NRKSubDownloader.download("https://tv.nrk.no/programsubtitles/" + id, temp);
-            String lines = new String(Files.readAllBytes(xml.toPath()));
+            String lines = new String(Files.readAllBytes(xml.toPath()), StandardCharsets.UTF_8);
             if (lines.isEmpty())
             {
                 xml = NRKSubDownloader.download("https://tv.nrk.no/programsubtitles/" + id + "AA", temp);
-                lines = new String(Files.readAllBytes(xml.toPath()));
+                lines = new String(Files.readAllBytes(xml.toPath()), StandardCharsets.UTF_8);
             }
             lines = lines.substring(lines.indexOf("<div>") + 7, lines.indexOf("</div>"));
             final StringBuilder sb = new StringBuilder();
@@ -123,7 +124,7 @@ public class NRKSubDownloader
                 }
             }
             final File sub = new File(id + ".srt");
-            Files.write(sub.toPath(), sb.toString().getBytes(), StandardOpenOption.WRITE, StandardOpenOption.CREATE, StandardOpenOption.TRUNCATE_EXISTING);
+            Files.write(sub.toPath(), sb.toString().getBytes(StandardCharsets.UTF_8), StandardOpenOption.WRITE, StandardOpenOption.CREATE, StandardOpenOption.TRUNCATE_EXISTING);
         }
     }
 }
