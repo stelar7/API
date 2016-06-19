@@ -1,13 +1,10 @@
 package databases;
 
-import java.io.File;
-import java.util.Map;
+import java.io.*;
+import java.util.*;
 
-import org.tmatesoft.sqljet.core.SqlJetException;
-import org.tmatesoft.sqljet.core.SqlJetTransactionMode;
-import org.tmatesoft.sqljet.core.table.ISqlJetCursor;
-import org.tmatesoft.sqljet.core.table.ISqlJetTable;
-import org.tmatesoft.sqljet.core.table.SqlJetDb;
+import org.tmatesoft.sqljet.core.*;
+import org.tmatesoft.sqljet.core.table.*;
 
 public class SQLite
 {

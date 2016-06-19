@@ -1,6 +1,6 @@
 package electronics;
 
-import java.util.Locale;
+import java.util.*;
 
 public class CalculateStuff
 {

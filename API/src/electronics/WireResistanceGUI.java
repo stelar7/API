@@ -1,19 +1,10 @@
 package electronics;
 
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.awt.event.KeyEvent;
-import java.awt.event.KeyListener;
+import java.awt.event.*;
 
-import javax.swing.JButton;
-import javax.swing.JComboBox;
-import javax.swing.JFrame;
-import javax.swing.JLabel;
-import javax.swing.JOptionPane;
-import javax.swing.JTextField;
-import javax.swing.SwingConstants;
+import javax.swing.*;
 
-import electronics.CalculateStuff.WireMaterial;
+import electronics.CalculateStuff.*;
 
 public class WireResistanceGUI extends JFrame implements ActionListener, KeyListener
 {
@@ -37,7 +28,7 @@ public class WireResistanceGUI extends JFrame implements ActionListener, KeyList
     JTextField              wires     = new JTextField();
     JLabel                  wiresl    = new JLabel("No. of wires:");
 
-    JLabel dummy = new JLabel();
+    JLabel                  dummy     = new JLabel();
 
     public WireResistanceGUI()
     {

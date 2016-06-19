@@ -1,37 +1,68 @@
 package div;
 
-import java.awt.Desktop;
-import java.io.BufferedReader;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.io.ObjectInputStream;
-import java.io.ObjectOutputStream;
-import java.io.OutputStreamWriter;
-import java.io.UnsupportedEncodingException;
-import java.net.URISyntaxException;
-import java.net.URLDecoder;
-import java.nio.MappedByteBuffer;
-import java.nio.charset.Charset;
-import java.nio.charset.StandardCharsets;
-import java.nio.file.FileVisitResult;
-import java.nio.file.FileVisitor;
-import java.nio.file.Path;
-import java.nio.file.SimpleFileVisitor;
-import java.nio.file.attribute.BasicFileAttributes;
-import java.util.ArrayList;
-import java.util.Enumeration;
+import java.awt.*;
+import java.io.*;
+import java.net.*;
+import java.nio.*;
+import java.nio.charset.*;
+import java.nio.file.*;
+import java.nio.file.attribute.*;
+import java.util.*;
 import java.util.List;
-import java.util.StringJoiner;
-import java.util.jar.JarEntry;
-import java.util.jar.JarFile;
-import java.util.jar.JarInputStream;
+import java.util.jar.*;
 
 public class Files
 {
+
+    /**
+     * Deletes Folder with all of its content
+     *
+     * @param folder
+     *            path to folder which should be deleted
+     */
+    public static void deleteFolderAndItsContent(final Path folder) throws IOException
+    {
+        java.nio.file.Files.walkFileTree(folder, new SimpleFileVisitor<Path>()
+        {
+            @Override
+            public FileVisitResult visitFile(Path file, BasicFileAttributes attrs) throws IOException
+            {
+                java.nio.file.Files.delete(file);
+                return FileVisitResult.CONTINUE;
+            }
+
+            @Override
+            public FileVisitResult postVisitDirectory(Path dir, IOException exc) throws IOException
+            {
+                if (exc != null)
+                {
+                    throw exc;
+                }
+                java.nio.file.Files.delete(dir);
+                return FileVisitResult.CONTINUE;
+            }
+        });
+    }
+
+    /**
+     * Deletes Folder with all of its content
+     *
+     * @param folder
+     *            path to folder which should be deleted
+     */
+    @Deprecated
+    private static void deleteDir(File file)
+    {
+        File[] contents = file.listFiles();
+        if (contents != null)
+        {
+            for (File f : contents)
+            {
+                deleteDir(f);
+            }
+        }
+        file.delete();
+    }
 
     /**
      * Browse to a file on the system
@@ -93,7 +124,7 @@ public class Files
                 }
             }
             jar.close();
-        } catch (IOException e)
+        } catch (final IOException e)
         {
             e.printStackTrace();
         }
@@ -153,6 +184,34 @@ public class Files
         return URLDecoder.decode(temp, "UTF-8");
     }
 
+    public static boolean isRunning(final String string)
+    {
+        boolean found = false;
+        try
+        {
+            final Process proc = Runtime.getRuntime().exec("wmic.exe");
+            final BufferedReader input = new BufferedReader(new InputStreamReader(proc.getInputStream()));
+            final OutputStreamWriter oStream = new OutputStreamWriter(proc.getOutputStream());
+            oStream.write(String.format("process where name='%s'", string));
+            oStream.flush();
+            oStream.close();
+            while (input.readLine() != null)
+            {
+                if (found)
+                {
+                    // return if more than 2 lines
+                    return true;
+                }
+                found = true;
+            }
+            input.close();
+        } catch (final IOException ioe)
+        {
+            ioe.printStackTrace();
+        }
+        return false;
+    }
+
     public static void listFilesInFolderAndSubFolders(final File folder)
     {
         final Path origin = folder.toPath();
@@ -161,7 +220,7 @@ public class Files
             @Override
             public FileVisitResult preVisitDirectory(final Path dir, final BasicFileAttributes exc)
             {
-                if (dir != null && dir.getFileName() != null)
+                if ((dir != null) && (dir.getFileName() != null))
                 {
                     System.out.format("%s%n", dir.getFileName());
                 }
@@ -245,7 +304,7 @@ public class Files
      **/
     public static String read(final File file) throws IOException
     {
-        StringJoiner joiner = new StringJoiner("\n");
+        final StringJoiner joiner = new StringJoiner("\n");
         try (BufferedReader in = new BufferedReader(new InputStreamReader(new FileInputStream(file), StandardCharsets.UTF_8)))
         {
             String inputLine;
@@ -295,7 +354,7 @@ public class Files
      **/
     public static void write(final File file, final String string, final boolean append)
     {
-        try (final OutputStreamWriter br = new OutputStreamWriter(new FileOutputStream(file), StandardCharsets.UTF_8))  
+        try (final OutputStreamWriter br = new OutputStreamWriter(new FileOutputStream(file), StandardCharsets.UTF_8))
         {
             br.write(string);
             br.flush();

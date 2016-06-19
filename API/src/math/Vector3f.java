@@ -3,11 +3,11 @@ package math;
 public class Vector3f
 {
     public static final Vector3f ONE  = new Vector3f(1, 1, 1);
-    public static final Vector3f       ZERO = new Vector3f(0, 0, 0);
+    public static final Vector3f ZERO = new Vector3f(0, 0, 0);
 
-    private float x;
-    private float y;
-    private float z;
+    private float                x;
+    private float                y;
+    private float                z;
 
     public Vector3f(final float v)
     {
@@ -74,34 +74,34 @@ public class Vector3f
         return (this.x * r.getX()) + (this.y * r.getY()) + (this.z * r.getZ());
     }
 
-
     @Override
-    public int hashCode()
-    {
-        final int prime = 31;
-        int result = 1;
-        result = prime * result + Float.floatToIntBits(x);
-        result = prime * result + Float.floatToIntBits(y);
-        result = prime * result + Float.floatToIntBits(z);
-        return result;
-    }
-
-    @Override
-    public boolean equals(Object obj)
+    public boolean equals(final Object obj)
     {
         if (this == obj)
+        {
             return true;
+        }
         if (obj == null)
+        {
             return false;
-        if (getClass() != obj.getClass())
+        }
+        if (this.getClass() != obj.getClass())
+        {
             return false;
-        Vector3f other = (Vector3f) obj;
-        if (Float.floatToIntBits(x) != Float.floatToIntBits(other.x))
+        }
+        final Vector3f other = (Vector3f) obj;
+        if (Float.floatToIntBits(this.x) != Float.floatToIntBits(other.x))
+        {
             return false;
-        if (Float.floatToIntBits(y) != Float.floatToIntBits(other.y))
+        }
+        if (Float.floatToIntBits(this.y) != Float.floatToIntBits(other.y))
+        {
             return false;
-        if (Float.floatToIntBits(z) != Float.floatToIntBits(other.z))
+        }
+        if (Float.floatToIntBits(this.z) != Float.floatToIntBits(other.z))
+        {
             return false;
+        }
         return true;
     }
 
@@ -148,6 +148,17 @@ public class Vector3f
     public Vector2f getZY()
     {
         return new Vector2f(this.z, this.y);
+    }
+
+    @Override
+    public int hashCode()
+    {
+        final int prime = 31;
+        int result = 1;
+        result = (prime * result) + Float.floatToIntBits(this.x);
+        result = (prime * result) + Float.floatToIntBits(this.y);
+        result = (prime * result) + Float.floatToIntBits(this.z);
+        return result;
     }
 
     public float length()
@@ -208,7 +219,10 @@ public class Vector3f
 
         return this.cross(axis.mul(sinAngle)).add( // Rotation on local X
                 (this.mul(cosAngle)).add( // Rotation on local Z
-                        axis.mul(this.dot(axis.mul(1 - cosAngle))))); // Rotation on local Y
+                        axis.mul(this.dot(axis.mul(1 - cosAngle))))); // Rotation
+                                                                      // on
+                                                                      // local
+                                                                      // Y
     }
 
     public Vector3f set(final float v)

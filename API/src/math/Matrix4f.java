@@ -137,7 +137,7 @@ public class Matrix4f
         return a;
     }
 
-    private float[][] m;
+    private final float[][] m;
 
     public Matrix4f()
     {

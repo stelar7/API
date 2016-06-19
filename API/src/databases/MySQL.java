@@ -1,9 +1,6 @@
 package databases;
 
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.PreparedStatement;
-import java.sql.SQLException;
+import java.sql.*;
 
 public class MySQL
 {
@@ -22,7 +19,7 @@ public class MySQL
         this.database = database;
         this.username = username;
         this.password = password;
-        open();
+        this.open();
     }
 
     /**

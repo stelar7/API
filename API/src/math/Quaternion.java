@@ -87,39 +87,39 @@ public class Quaternion
     }
 
     @Override
-    public int hashCode()
-    {
-        final int prime = 31;
-        int result = 1;
-        result = prime * result + Float.floatToIntBits(w);
-        result = prime * result + Float.floatToIntBits(x);
-        result = prime * result + Float.floatToIntBits(y);
-        result = prime * result + Float.floatToIntBits(z);
-        return result;
-    }
-
-    @Override
-    public boolean equals(Object obj)
+    public boolean equals(final Object obj)
     {
         if (this == obj)
+        {
             return true;
+        }
         if (obj == null)
+        {
             return false;
-        if (getClass() != obj.getClass())
+        }
+        if (this.getClass() != obj.getClass())
+        {
             return false;
-        Quaternion other = (Quaternion) obj;
-        if (Float.floatToIntBits(w) != Float.floatToIntBits(other.w))
+        }
+        final Quaternion other = (Quaternion) obj;
+        if (Float.floatToIntBits(this.w) != Float.floatToIntBits(other.w))
+        {
             return false;
-        if (Float.floatToIntBits(x) != Float.floatToIntBits(other.x))
+        }
+        if (Float.floatToIntBits(this.x) != Float.floatToIntBits(other.x))
+        {
             return false;
-        if (Float.floatToIntBits(y) != Float.floatToIntBits(other.y))
+        }
+        if (Float.floatToIntBits(this.y) != Float.floatToIntBits(other.y))
+        {
             return false;
-        if (Float.floatToIntBits(z) != Float.floatToIntBits(other.z))
+        }
+        if (Float.floatToIntBits(this.z) != Float.floatToIntBits(other.z))
+        {
             return false;
+        }
         return true;
     }
-
- 
 
     public Vector3f getBack()
     {
@@ -169,6 +169,18 @@ public class Quaternion
     public float getZ()
     {
         return this.z;
+    }
+
+    @Override
+    public int hashCode()
+    {
+        final int prime = 31;
+        int result = 1;
+        result = (prime * result) + Float.floatToIntBits(this.w);
+        result = (prime * result) + Float.floatToIntBits(this.x);
+        result = (prime * result) + Float.floatToIntBits(this.y);
+        result = (prime * result) + Float.floatToIntBits(this.z);
+        return result;
     }
 
     public float length()

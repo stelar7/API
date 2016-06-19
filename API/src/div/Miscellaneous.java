@@ -1,70 +1,10 @@
 package div;
 
-import java.text.SimpleDateFormat;
-import java.util.Collections;
-import java.util.Date;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Locale;
+import java.text.*;
+import java.util.*;
 
 public class Miscellaneous
 {
-
-    /**
-     * Computes the Levenshtein distance between two strings
-     * 
-     * @param s
-     *            String A
-     * @param t
-     *            String b
-     * 
-     * @return the amount of operations needed to turn A into B
-     */
-    public static int itterativeLevenshtein(String s, String t)
-    {
-        if (s.equals(t))
-        {
-            return 0;
-        }
-
-        if (s.length() == 0)
-        {
-            return t.length();
-        }
-
-        if (t.length() == 0)
-        {
-            return s.length();
-        }
-
-        int[] v0 = new int[t.length() + 1];
-        int[] v1 = new int[t.length() + 1];
-
-        for (int i = 0; i < v0.length; i++)
-        {
-            v0[i] = i;
-        }
-
-        for (int i = 0; i < s.length(); i++)
-        {
-            v1[0] = i + 1;
-
-            for (int j = 0; j < t.length(); j++)
-            {
-                int cost = (s.charAt(i) == t.charAt(j) ? 0 : 1);
-
-                v1[j + 1] = Math.min(Math.min(v1[j] + 1, v0[j + 1] + 1), v0[j] + cost);
-            }
-
-            for (int j = 0; j < v0.length; j++)
-            {
-                v0[j] = v1[j];
-            }
-        }
-
-        return v1[t.length()];
-
-    }
 
     /**
      * Changes an String[] into a String from start to stop
@@ -87,6 +27,26 @@ public class Miscellaneous
             sb.append(array[i] + " ");
         }
         return sb.toString().trim();
+    }
+
+    /**
+     * Transforms a byte[] into a String of "bytes"
+     * 
+     * @param bytes
+     *            the bytes to transform
+     * @return the string with the "bytes"
+     */
+    public static String bytesToHexString(final byte[] bytes)
+    {
+        final char[] hexArray = "0123456789ABCDEF".toCharArray();
+        final char[] hexChars = new char[bytes.length * 2];
+        for (int j = 0; j < bytes.length; j++)
+        {
+            final int v = bytes[j] & 0xFF;
+            hexChars[j * 2] = hexArray[v >>> 4];
+            hexChars[(j * 2) + 1] = hexArray[v & 0x0F];
+        }
+        return new String(hexChars);
     }
 
     /**
@@ -132,6 +92,24 @@ public class Miscellaneous
     }
 
     /**
+     * Transforms a string of "bytes" into an array of bytes
+     * 
+     * @param s
+     *            the string
+     * @return a byte[] of the "bytes" in s
+     */
+    public static byte[] hexStringToByteArray(final String s)
+    {
+        final int len = s.length();
+        final byte[] data = new byte[len / 2];
+        for (int i = 0; i < len; i += 2)
+        {
+            data[i / 2] = (byte) ((Character.digit(s.charAt(i), 16) << 4) + Character.digit(s.charAt(i + 1), 16));
+        }
+        return data;
+    }
+
+    /**
      * Checks if a string can be converted to a int
      *
      * @param string
@@ -145,41 +123,59 @@ public class Miscellaneous
     }
 
     /**
-     * Transforms a byte[] into a String of "bytes"
-     * 
-     * @param bytes
-     *            the bytes to transform
-     * @return the string with the "bytes"
-     */
-    public static String bytesToHexString(byte[] bytes)
-    {
-        final char[] hexArray = "0123456789ABCDEF".toCharArray();
-        char[] hexChars = new char[bytes.length * 2];
-        for (int j = 0; j < bytes.length; j++)
-        {
-            int v = bytes[j] & 0xFF;
-            hexChars[j * 2] = hexArray[v >>> 4];
-            hexChars[j * 2 + 1] = hexArray[v & 0x0F];
-        }
-        return new String(hexChars);
-    }
-
-    /**
-     * Transforms a string of "bytes" into an array of bytes
+     * Computes the Levenshtein distance between two strings
      * 
      * @param s
-     *            the string
-     * @return a byte[] of the "bytes" in s
+     *            String A
+     * @param t
+     *            String b
+     * 
+     * @return the amount of operations needed to turn A into B
      */
-    public static byte[] hexStringToByteArray(String s)
+    public static int itterativeLevenshtein(final String s, final String t)
     {
-        int len = s.length();
-        byte[] data = new byte[len / 2];
-        for (int i = 0; i < len; i += 2)
+        if (s.equals(t))
         {
-            data[i / 2] = (byte) ((Character.digit(s.charAt(i), 16) << 4) + Character.digit(s.charAt(i + 1), 16));
+            return 0;
         }
-        return data;
+
+        if (s.length() == 0)
+        {
+            return t.length();
+        }
+
+        if (t.length() == 0)
+        {
+            return s.length();
+        }
+
+        final int[] v0 = new int[t.length() + 1];
+        final int[] v1 = new int[t.length() + 1];
+
+        for (int i = 0; i < v0.length; i++)
+        {
+            v0[i] = i;
+        }
+
+        for (int i = 0; i < s.length(); i++)
+        {
+            v1[0] = i + 1;
+
+            for (int j = 0; j < t.length(); j++)
+            {
+                final int cost = (s.charAt(i) == t.charAt(j) ? 0 : 1);
+
+                v1[j + 1] = Math.min(Math.min(v1[j] + 1, v0[j + 1] + 1), v0[j] + cost);
+            }
+
+            for (int j = 0; j < v0.length; j++)
+            {
+                v0[j] = v1[j];
+            }
+        }
+
+        return v1[t.length()];
+
     }
 
     /**

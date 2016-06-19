@@ -1,10 +1,6 @@
 package raspberrypi;
 
-import com.pi4j.io.gpio.GpioFactory;
-import com.pi4j.io.gpio.GpioPin;
-import com.pi4j.io.gpio.GpioPinDigitalOutput;
-import com.pi4j.io.gpio.Pin;
-import com.pi4j.io.gpio.PinMode;
+import com.pi4j.io.gpio.*;
 
 public class StepperMotor
 {

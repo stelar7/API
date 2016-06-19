@@ -1,7 +1,6 @@
 package databases;
 
-import java.sql.ResultSet;
-import java.sql.SQLException;
+import java.sql.*;
 
 public class DBUtils
 {

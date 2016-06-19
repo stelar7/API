@@ -1,13 +1,10 @@
 package bukkit;
 
-import java.io.BufferedReader;
-import java.io.File;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.net.URL;
-import java.nio.charset.StandardCharsets;
+import java.io.*;
+import java.net.*;
+import java.nio.charset.*;
 
-import div.Internet;
+import div.*;
 
 public class Web extends Internet
 {
@@ -44,7 +41,7 @@ public class Web extends Internet
         try (BufferedReader br = new BufferedReader(new InputStreamReader(new URL(checkurl).openStream(), StandardCharsets.UTF_8)))
         {
             return Boolean.parseBoolean(br.readLine());
-        } catch (IOException e)
+        } catch (final IOException e)
         {
             e.printStackTrace();
             return false;
