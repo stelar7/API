@@ -2,13 +2,11 @@ package div;
 
 import java.awt.*;
 import java.io.*;
-import java.net.URISyntaxException;
-import java.net.URLDecoder;
-import java.nio.MappedByteBuffer;
-import java.nio.charset.Charset;
-import java.nio.charset.StandardCharsets;
+import java.net.*;
+import java.nio.*;
+import java.nio.charset.*;
 import java.nio.file.*;
-import java.nio.file.attribute.BasicFileAttributes;
+import java.nio.file.attribute.*;
 import java.util.*;
 import java.util.List;
 import java.util.jar.*;
@@ -39,6 +37,17 @@ public class Files
 				{
 					throw exc;
 				}
+				// Somehow  the visitFile doesnt find all the files...?
+				java.nio.file.Files.list(dir).forEach(f ->
+				                                      {
+					                                      try
+					                                      {
+						                                      java.nio.file.Files.delete(f);
+					                                      } catch (IOException e)
+					                                      {
+						                                      e.printStackTrace();
+					                                      }
+				                                      });
 				java.nio.file.Files.delete(dir);
 				return FileVisitResult.CONTINUE;
 			}

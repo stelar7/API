@@ -1,15 +1,13 @@
 package div;
 
-import com.google.gson.JsonObject;
-import com.google.gson.JsonParser;
+import com.google.gson.*;
 
 import java.io.*;
-import java.net.URL;
-import java.net.URLConnection;
-import java.nio.charset.StandardCharsets;
-import java.nio.file.Paths;
+import java.net.*;
+import java.nio.charset.*;
+import java.nio.file.*;
 import java.util.*;
-import java.util.stream.Collectors;
+import java.util.stream.*;
 
 public class NRKFileDownloader
 {
@@ -104,26 +102,31 @@ public class NRKFileDownloader
 		List<File> files   = Arrays.asList(outFile.getParentFile().listFiles());
 		
 		System.out.println("merging parts...");
-		DataOutputStream out = new DataOutputStream(new BufferedOutputStream(new FileOutputStream(outFile, true)));
-		files.stream().sorted(new NaturalOrderComparator()).forEach(file ->
-		                                                            {
-			                                                            try
+		try (DataOutputStream out = new DataOutputStream(new BufferedOutputStream(new FileOutputStream(outFile, true))))
+		{
+			files.stream().sorted(new NaturalOrderComparator()).forEach(file ->
 			                                                            {
-				                                                            // System.out.println(file.getName());
-				                                                            DataInputStream in  = new DataInputStream(new BufferedInputStream(new FileInputStream(file)));
-				                                                            int             inb = 0;
-				                                                            while ((inb = in.read()) != -1)
+				                                                            try
 				                                                            {
-					                                                            out.write(inb);
+					                                                            // System.out.println(file.getName());
+					                                                            DataInputStream in  = new DataInputStream(new BufferedInputStream(new FileInputStream(file)));
+					                                                            int             inb = 0;
+					                                                            while ((inb = in.read()) != -1)
+					                                                            {
+						                                                            out.write(inb);
+					                                                            }
+					                                                            in.close();
+				                                                            } catch (Exception e)
+				                                                            {
+					                                                            e.printStackTrace();
 				                                                            }
-				                                                            in.close();
-			                                                            } catch (Exception e)
-			                                                            {
-				                                                            e.printStackTrace();
-			                                                            }
-		                                                            });
-		out.flush();
-		out.close();
+			                                                            });
+			out.flush();
+			out.close();
+		} catch (Exception e)
+		{
+			e.printStackTrace();
+		}
 		
 		File seasonFile = new File("output", season);
 		if (seasonFile.mkdirs() || seasonFile.exists())
