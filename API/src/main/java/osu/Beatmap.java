@@ -233,7 +233,7 @@ public class Beatmap
             public String toString()
             {
                 return "Break [startTime=" + this.startTime + ", endTime=" + this.endTime + "]";
-            }
+        }
         }
     
         EZ,
