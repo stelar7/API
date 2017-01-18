@@ -22,11 +22,11 @@ public class Invoice
 	private String    invoiceId;
 	private LocalDate invoiceDate;
 	private LocalDate paymentDue;
-	private String sellerRef;
-	private String buyerRef;
-	private String payToAccount;
-	private Business seller;
-	private Customer buyer;
+	private String    sellerRef;
+	private String    buyerRef;
+	private String    payToAccount;
+	private Business  seller;
+	private Customer  buyer;
 	
 	public void addItem(final InvoiceItem item)
 	{

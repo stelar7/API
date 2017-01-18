@@ -2,7 +2,7 @@ package osu;
 
 public class DatabaseBeatmapTimingPoint
 {
-	double  bpm;
-	double  offset;
-	boolean inherited;
+    double  bpm;
+    double  offset;
+    boolean inherited;
 }

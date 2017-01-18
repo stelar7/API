@@ -18,7 +18,10 @@ public enum OsuMode
 	{
 		for (OsuMode s : values())
 		{
-			if (s.value == b) { return s; }
+			if (s.value == b)
+			{
+				return s;
+			}
 		}
 		throw new RuntimeException("MODE NOT FOUND FOR BYTE " + b);
 	}

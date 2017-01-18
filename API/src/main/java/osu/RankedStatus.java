@@ -21,7 +21,10 @@ public enum RankedStatus
 	{
 		for (RankedStatus s : values())
 		{
-			if (s.value == b) { return s; }
+			if (s.value == b)
+			{
+				return s;
+			}
 		}
 		throw new RuntimeException("STATUS NOT FOUND FOR BYTE " + b);
 	}

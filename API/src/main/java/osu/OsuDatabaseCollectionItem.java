@@ -1,10 +1,9 @@
 package osu;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
 
 public class OsuDatabaseCollectionItem
 {
-	String name;
-	List<String> maps = new ArrayList<>();
+    String name;
+    List<String> maps = new ArrayList<>();
 }

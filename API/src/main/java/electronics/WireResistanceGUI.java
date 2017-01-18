@@ -1,6 +1,6 @@
 package electronics;
 
-import electronics.CalculateStuff.WireMaterial;
+import electronics.CalculateStuff.*;
 
 import javax.swing.*;
 import java.awt.event.*;
@@ -8,26 +8,19 @@ import java.awt.event.*;
 public class WireResistanceGUI extends JFrame implements ActionListener, KeyListener
 {
 	
-	private static final long serialVersionUID = 1L;
-	
-	public static void main(final String[] args)
-	{
-		new WireResistanceGUI();
-	}
-	
-	final JButton                 calc      = new JButton("Calculate");
-	final JComboBox<WireMaterial> material  = new JComboBox<>();
-	final JLabel                  materiall = new JLabel("Material:");
-	final JTextField              leng      = new JTextField();
-	final JLabel                  lengl     = new JLabel("Length:");
-	final JLabel                  lengll    = new JLabel("Meters");
-	final JTextField              area      = new JTextField();
-	final JLabel                  areal     = new JLabel("Area:");
-	final JLabel                  areall    = new JLabel("mm\u00B2");
-	final JTextField              wires     = new JTextField();
-	final JLabel                  wiresl    = new JLabel("No. of wires:");
-	
-	final JLabel dummy = new JLabel();
+	private static final long                    serialVersionUID = 1L;
+	final                JButton                 calc             = new JButton("Calculate");
+	final                JComboBox<WireMaterial> material         = new JComboBox<>();
+	final                JLabel                  materiall        = new JLabel("Material:");
+	final                JTextField              leng             = new JTextField();
+	final                JLabel                  lengl            = new JLabel("Length:");
+	final                JLabel                  lengll           = new JLabel("Meters");
+	final                JTextField              area             = new JTextField();
+	final                JLabel                  areal            = new JLabel("Area:");
+	final                JLabel                  areall           = new JLabel("mm\u00B2");
+	final                JTextField              wires            = new JTextField();
+	final                JLabel                  wiresl           = new JLabel("No. of wires:");
+	final                JLabel                  dummy            = new JLabel();
 	
 	public WireResistanceGUI()
 	{
@@ -75,6 +68,11 @@ public class WireResistanceGUI extends JFrame implements ActionListener, KeyList
 		this.wiresl.setBounds(10, 160, 100, 30);
 		this.validate();
 		this.setVisible(true);
+	}
+	
+	public static void main(final String[] args)
+	{
+		new WireResistanceGUI();
 	}
 	
 	@Override
@@ -138,10 +136,12 @@ public class WireResistanceGUI extends JFrame implements ActionListener, KeyList
 	
 	@Override
 	public void keyReleased(final KeyEvent arg0)
-	{}
+	{
+	}
 	
 	@Override
 	public void keyTyped(final KeyEvent arg0)
-	{}
+	{
+	}
 	
 }

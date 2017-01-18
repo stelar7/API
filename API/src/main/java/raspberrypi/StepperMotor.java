@@ -4,78 +4,78 @@ import com.pi4j.io.gpio.*;
 
 public class StepperMotor
 {
-
+	
 	private final int                  stepCount;
-	private       int                  currentStep;
 	private final int                  pinCount;
+	private final GpioPinDigitalOutput pin1;
+	private final GpioPinDigitalOutput pin2;
+	private       int                  currentStep;
 	private       long                 lastStepTime;
 	private       long                 stepDelay;
 	private       boolean              direction;
 	private       boolean              halfstep;
-	private final GpioPinDigitalOutput pin1;
-	private final GpioPinDigitalOutput pin2;
 	private       GpioPinDigitalOutput pin3;
 	private       GpioPinDigitalOutput pin4;
-
+	
 	public StepperMotor(final int stepsPerRotation, final GpioPin pin1, final GpioPin pin2, final GpioPin pin3, final GpioPin pin4)
 	{
 		this.currentStep = 0;
 		this.direction = false;
 		this.lastStepTime = 0;
 		this.stepCount = stepsPerRotation;
-
+		
 		this.pin1 = GpioFactory.getInstance().provisionDigitalOutputPin(pin1.getPin());
 		this.pin2 = GpioFactory.getInstance().provisionDigitalOutputPin(pin2.getPin());
 		this.pin3 = GpioFactory.getInstance().provisionDigitalOutputPin(pin3.getPin());
 		this.pin4 = GpioFactory.getInstance().provisionDigitalOutputPin(pin4.getPin());
-
+		
 		this.pin1.setMode(PinMode.DIGITAL_OUTPUT);
 		this.pin2.setMode(PinMode.DIGITAL_OUTPUT);
 		this.pin3.setMode(PinMode.DIGITAL_OUTPUT);
 		this.pin4.setMode(PinMode.DIGITAL_OUTPUT);
-
+		
 		this.pinCount = 4;
 	}
-
+	
 	public StepperMotor(final int stepsPerRotation, final GpioPin pin1, final GpioPin pin2, final GpioPin pin3, final GpioPin pin4, final boolean halfstep)
 	{
 		this.halfstep = halfstep;
-
+		
 		this.currentStep = 0;
 		this.direction = false;
 		this.lastStepTime = 0;
 		this.stepCount = stepsPerRotation;
-
+		
 		this.pin1 = GpioFactory.getInstance().provisionDigitalOutputPin(pin1.getPin());
 		this.pin2 = GpioFactory.getInstance().provisionDigitalOutputPin(pin2.getPin());
 		this.pin3 = GpioFactory.getInstance().provisionDigitalOutputPin(pin3.getPin());
 		this.pin4 = GpioFactory.getInstance().provisionDigitalOutputPin(pin4.getPin());
-
+		
 		this.pin1.setMode(PinMode.DIGITAL_OUTPUT);
 		this.pin2.setMode(PinMode.DIGITAL_OUTPUT);
 		this.pin3.setMode(PinMode.DIGITAL_OUTPUT);
 		this.pin4.setMode(PinMode.DIGITAL_OUTPUT);
-
+		
 		this.pinCount = 4;
 	}
-
+	
 	public StepperMotor(final int stepsPerRotation, final Pin pin1, final Pin pin2)
 	{
-
+		
 		this.currentStep = 0;
 		this.direction = false;
 		this.lastStepTime = 0;
 		this.stepCount = stepsPerRotation;
-
+		
 		this.pin1 = GpioFactory.getInstance().provisionDigitalOutputPin(pin1);
 		this.pin2 = GpioFactory.getInstance().provisionDigitalOutputPin(pin2);
-
+		
 		this.pin1.setMode(PinMode.DIGITAL_OUTPUT);
 		this.pin2.setMode(PinMode.DIGITAL_OUTPUT);
-
+		
 		this.pinCount = 2;
 	}
-
+	
 	private void moveMotor(final int pos)
 	{
 		if (this.pinCount == 2)
@@ -223,7 +223,7 @@ public class StepperMotor
 			}
 		}
 	}
-
+	
 	/**
 	 * Sets the speed of the motor (100 steps on a 100 step motor will take 1 minute)
 	 *
@@ -233,7 +233,7 @@ public class StepperMotor
 	{
 		this.stepDelay = (60L * 1000L) / this.stepCount / speed;
 	}
-
+	
 	/**
 	 * Moves the motor
 	 *
