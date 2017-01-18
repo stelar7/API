@@ -38,13 +38,13 @@ public class Beatmap
     
     Mode mode;
     
-    float arMod = 0;
-    float odMod = 0;
-    float csMod = 0;
+    double arMod = 0;
+    double odMod = 0;
+    double csMod = 0;
     
-    float od;
-    float ar;
-    float cs;
+    double od;
+    double ar;
+    double cs;
     final float od0_ms = 79.5f,
         od10_ms        = 19.5f,
         ar0_ms         = 1800f,
@@ -81,17 +81,17 @@ public class Beatmap
         return Float.valueOf(keys.get("HPDrainRate"));
     }
     
-    public float getCs()
+    public double getCs()
     {
         return cs;
     }
     
-    public float getOd()
+    public double getOd()
     {
         return od;
     }
     
-    public float getAr()
+    public double getAr()
     {
         return ar;
     }
@@ -176,9 +176,9 @@ public class Beatmap
             csMod *= .5d;
         }
         double cs = Double.valueOf(keys.get("CircleSize")) * csMod;
-        
-        float arms = getAr() <= 5 ? (ar0_ms - ar_ms_step1 * getAr()) : (ar5_ms - ar_ms_step2 * (getAr() - 5));
-        float odms = (float) (od0_ms - Math.ceil(od_ms_step * getOd()));
+    
+        double arms = getAr() <= 5 ? (ar0_ms - ar_ms_step1 * getAr()) : (ar5_ms - ar_ms_step2 * (getAr() - 5));
+        double odms = (od0_ms - Math.ceil(od_ms_step * getOd()));
         
         odms = Math.min(od0_ms, Math.max(od10_ms, odms));
         arms = Math.min(ar0_ms, Math.max(ar10_ms, arms));
@@ -190,8 +190,8 @@ public class Beatmap
         this.ar = ar <= 5.0f ? ((ar0_ms - arms) / ar_ms_step1) : (5.0f + (ar5_ms - arms) / ar_ms_step2);
         
         this.cs *= csMod;
-        
-        this.cs = Math.max(0.0f, Math.min(10.0f, cs));
+    
+        this.cs = Math.max(0.0d, Math.min(10.0d, cs));
         
         for (TimingPoint tp : this.timingPoints)
         {
@@ -217,54 +217,54 @@ public class Beatmap
         OSU,
         TAIKO,
         C
-        
+    
         public static class Break
         {
             final long startTime;
             final long endTime;
-            
+        
             public Break(final long start, final long end)
             {
                 this.startTime = start;
                 this.endTime = end;
             }
-            
+        
             @Override
             public String toString()
             {
                 return "Break [startTime=" + this.startTime + ", endTime=" + this.endTime + "]";
             }
         }
-        
+    
         EZ,
-        
+    
         public static class HitObject
         {
-            
+        
             newCombo;
-            
-            
+        
+        
             r2 position;
-            
-            
+        
+        
             type;
-            
+        
             Li NORpe>soundTypes =
             ntends HitOst<>();
-            
+        
             Map<String, String> additions;
-            
+        
             CIRCLE(1@Override
             public Strin  boolean
                               ()
             {
                 return "HitObject [startTime=" + this.startTime + ", newCombo=" + this.newCombo + ", soundTypes=" + this.soundTypes + ", position=" + this.position + ", type=" + this.type + ", additions=" + this.additions + "]";
             }
-            
+        
         }
-        
+    
         public static class Tim     Vecto
-        
+    
         enum CurveType
         {
             CATMULL("C"),
@@ -292,17 +292,17 @@ public class Beatmap
                 return null;
             }
         }
-        
+    
         Type MAL(0),
-        
+    
         WHISTLE(2),
-        
+    
         FINISH(4),
-        
+    
         CLAP(8);
-        
+    
         final int bitFlag;
-        
+    
         SoundType(final int t)
         {
             this.bitFlag = t;
