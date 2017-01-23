@@ -4,8 +4,13 @@ import java.text.*;
 import java.util.*;
 
 
-public class Miscellaneous
+public final class Miscellaneous
 {
+    
+    private Miscellaneous()
+    {
+        
+    }
     
     /**
      * Changes an String[] into a String from start to stop
@@ -147,7 +152,7 @@ public class Miscellaneous
             
             for (int j = 0; j < t.length(); j++)
             {
-                final int cost = (s.charAt(i) == t.charAt(j) ? 0 : 1);
+                final int cost = s.charAt(i) == t.charAt(j) ? 0 : 1;
                 
                 v1[j + 1] = Math.min(Math.min(v1[j] + 1, v0[j + 1] + 1), v0[j] + cost);
             }
@@ -166,7 +171,7 @@ public class Miscellaneous
      * @param sequenceTwo second string
      * @return the longest common subsequence of the two strings
      */
-    public static <E> List<Character> longestCommonSubsequence(final char[] sequenceOne, final char[] sequenceTwo)
+    public static List<Character> longestCommonSubsequence(final char[] sequenceOne, final char[] sequenceTwo)
     {
         final int[][] num = new int[sequenceOne.length + 1][sequenceTwo.length + 1];
         for (int i = 1; i <= sequenceOne.length; i++)

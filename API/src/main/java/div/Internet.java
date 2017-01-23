@@ -6,8 +6,15 @@ import java.net.*;
 import java.nio.charset.*;
 import java.util.*;
 
-public class Internet
+public final class Internet
 {
+    private static final String USER_AGENT       = "User-Agent";
+    private static final String USER_AGENT_VALUE = "Mozilla/5.0 (Windows NT 5.1) AppleWebKit/535.11 (KHTML, like Gecko) Chrome/17.0.963.56 Safari/535.11";
+    
+    private Internet()
+    {
+        
+    }
     
     /**
      * Downloads a file from the internet
@@ -18,12 +25,12 @@ public class Internet
      **/
     public static void download(final String url, final File output) throws IOException
     {
-        final byte          buffer[] = new byte[1024];
+        final byte[]        buffer = new byte[1024];
         int                 read;
-        final URLConnection uc       = new URL(url).openConnection();
+        final URLConnection uc     = new URL(url).openConnection();
         uc.setRequestProperty("Content-Type", "application/x-www-form-urlencoded");
         uc.setRequestProperty("Content-Language", "en-US");
-        uc.setRequestProperty("User-Agent", "Mozilla/5.0 (Windows NT 5.1) AppleWebKit/535.11 (KHTML, like Gecko) Chrome/17.0.963.56 Safari/535.11");
+        uc.setRequestProperty(USER_AGENT, USER_AGENT_VALUE);
         uc.setUseCaches(false);
         uc.setDoInput(true);
         uc.setDoOutput(true);
@@ -43,18 +50,18 @@ public class Internet
     /**
      * Returns the source in the form of a string
      *
-     * @param URL the page to get the source from
+     * @param inUrl the page to get the source from
      * @return String the source
      * @throws IOException if the reading failes at some point
      */
-    public static String getPageSource(final String URL) throws IOException
+    public static String getPageSource(final String inUrl) throws IOException
     {
         final StringJoiner  joiner = new StringJoiner("\n");
-        final URL           Url    = new URL(URL);
-        final URLConnection uc     = Url.openConnection();
+        final URL           outUrl = new URL(inUrl);
+        final URLConnection uc     = outUrl.openConnection();
         uc.setRequestProperty("Content-Type", "application/x-www-form-urlencoded");
         uc.setRequestProperty("Content-Language", "en-US");
-        uc.setRequestProperty("User-Agent", "Mozilla/5.0 (Windows NT 5.1) AppleWebKit/535.11 (KHTML, like Gecko) Chrome/17.0.963.56 Safari/535.11");
+        uc.setRequestProperty(USER_AGENT, USER_AGENT_VALUE);
         uc.setUseCaches(false);
         uc.setDoInput(true);
         uc.setDoOutput(true);
@@ -77,7 +84,7 @@ public class Internet
         HttpsURLConnection con = (HttpsURLConnection) obj.openConnection();
         
         con.setRequestMethod("POST");
-        con.setRequestProperty("User-Agent", "Mozilla/5.0 (Windows NT 5.1) AppleWebKit/535.11 (KHTML, like Gecko) Chrome/17.0.963.56 Safari/535.11");
+        con.setRequestProperty(USER_AGENT, USER_AGENT_VALUE);
         con.setRequestProperty("Accept-Language", "en-US,en;q=0.5");
         
         con.setDoOutput(true);
@@ -85,8 +92,8 @@ public class Internet
         wr.writeBytes(data);
         wr.flush();
         wr.close();
-        
-        BufferedReader in       = new BufferedReader(new InputStreamReader(con.getInputStream()));
+    
+        BufferedReader in       = new BufferedReader(new InputStreamReader(con.getInputStream(), StandardCharsets.UTF_8));
         String         inputLine;
         StringBuilder  response = new StringBuilder();
         

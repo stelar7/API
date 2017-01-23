@@ -108,7 +108,7 @@ public class Waybill
             private final LocationReference sender;
             private final LocationReference reciver;
             private final Incoterm          type;
-            
+        
             public BaseData(final LocationReference sender, final LocationReference reciver, final Incoterm type)
             {
                 super();
@@ -116,40 +116,40 @@ public class Waybill
                 this.reciver = reciver;
                 this.type = type;
             }
-            
+        
             public LocationReference getReciver()
             {
                 return this.reciver;
             }
-            
+        
             public LocationReference getSender()
             {
                 return this.sender;
             }
-            
+        
             public Incoterm getType()
             {
                 return this.type;
             }
-            
+        
             @Override
             public String toString()
             {
                 return "BaseData [sender=" + this.sender + ", reciver=" + this.reciver + ", type=" + this.type + "]";
             }
         }
-        this.goods = goods;
+        this.goods = new ArrayList<>(goods);
     }
     
     public void setNotes(final String notes)
     {
-        
+    
         public static class Hazard
         {
             private final UnNumber unNumber;
             private final double   amount;
             private final String   amountSpec; // kg/ltr
-            
+        
             public Hazard(final int id, final double amount, final String amountSpec)
             {
                 super();
@@ -157,52 +157,52 @@ public class Waybill
                 this.amount = amount;
                 this.amountSpec = amountSpec;
             }
-            
+        
             public double getAmount()
             {
                 return this.amount;
             }
-            
+        
             public String getAmountSpec()
             {
                 return this.amountSpec;
             }
-            
+        
             public String getDescription()
             {
                 return this.unNumber.desc;
             }
-            
+        
             public String getGroup()
             {
                 return this.unNumber.clazz;
             }
-            
+        
             public int getId()
             {
                 return this.unNumber.number;
             }
-            
+        
             @Override
             public String toString()
             {
                 return "Hazard [" + this.unNumber + ", amount=" + this.amount + ", amountSpec=" + this.amountSpec + "]";
             }
-            
+        
         }
         this.notes = notes;
     }
     
     public void setPickup(final Location pickup)
     {
-        
+    
         public static class Location
         {
             private final String name;
             private final String address;
-            
+        
             private final PostCode area;
-            
+        
             public Location(final String name, final String address, final PostCode area)
             {
                 super();
@@ -210,33 +210,33 @@ public class Waybill
                 this.address = address;
                 this.area = area;
             }
-            
+        
             public String getAddress()
             {
                 return this.address;
             }
-            
+        
             public PostCode getArea()
             {
                 return this.area;
             }
-            
+        
             public String getName()
             {
                 return this.name;
             }
-            
+        
             @Override
             public String toString()
             {
                 return "Location [name=" + this.name + ", address=" + this.address + ", area=" + this.area + "]";
-            }
+        }
         }
         this.pickup = pickup;
     }
     
     public void setProductType(final String productType)
-    
+
     public static class LocationReference
     {
         private final Long transporterId;
@@ -262,48 +262,48 @@ public class Waybill
     
     public void setReciver(final Location reciver)
     {
-        
+    
         public static class PostCode
         {
             private final String name;
             private       Long   code;
-            
+        
             public PostCode(final Long code, final String name)
             {
                 super();
                 this.code = code;
                 this.name = name;
             }
-            
+        
             public PostCode(final String other)
             {
                 super();
                 this.name = other;
             }
-            
+        
             public Long getCode()
             {
                 return this.code;
             }
-            
+        
             public String getName()
             {
                 return this.name;
             }
-            
+        
             @Override
             public String toString()
             {
                 return "PostCode [code=" + this.code + ", name=" + this.name + "]";
             }
         }
-        
+    
         this.reciver = reciver;
     }
     
     public void setSender(final Location sender)
     {
-        
+    
         ic static class Product
     {
         private final String mark;
@@ -385,7 +385,7 @@ public class Waybill
         }
         
     }
-        
+    
         this.sender = sender;
     }
     
@@ -395,8 +395,8 @@ public class Waybill
     
     static class UnNumber
     {
-        static volatile Map<Integer, UnNumber> numbers;
-        private final   int                    number;
+        private static volatile Map<Integer, UnNumber> numbers;
+        private final           int                    number;
         privatefinal String
         clazz;
         final String desc;
@@ -442,19 +442,19 @@ public class Waybill
     public static class Volume
     {
         privat
-        
+    
         {
             this.transporter = transporter;
         }
-        
+    
         @Override
         public String toString()
         {
-            
+        
             l Long width;
             private final Long height;
             private final Long depth;
-            
+        
             // IN CM!!
         public Volume( final Long width, final Long depth, final Long height)
             {
@@ -476,7 +476,7 @@ public class Waybill
         
         public double getLM()
         {
-            return ((((double) this.width / 100D) * (((double) this.depth) / 100D))) / 2.4D;
+            return (((double) this.width / 100D) * (((double) this.depth) / 100D)) / 2.4D;
         }
         
         public double getVolume()

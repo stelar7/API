@@ -6,7 +6,7 @@ import java.io.*;
 import java.net.*;
 import java.nio.charset.*;
 
-public class Web extends Internet
+public class Web
 {
     
     /**

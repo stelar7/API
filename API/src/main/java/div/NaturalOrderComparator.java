@@ -1,9 +1,12 @@
 package div;
 
+import java.io.*;
 import java.util.*;
 
-public class NaturalOrderComparator implements Comparator<Object>
+public class NaturalOrderComparator implements Comparator<Object>, Serializable
 {
+    private static final long serialVersionUID = -1;
+    
     static char charAt(final String s, final int i)
     {
         if (i >= s.length())
@@ -20,10 +23,13 @@ public class NaturalOrderComparator implements Comparator<Object>
     {
         final String a = o1.toString();
         final String b = o2.toString();
-        
-        int  ia = 0, ib = 0;
-        int  nza, nzb;
-        char ca, cb;
+    
+        int  ia = 0;
+        int  ib = 0;
+        int  nza;
+        int  nzb;
+        char ca;
+        char cb;
         int  result;
         
         while (true)
@@ -69,8 +75,8 @@ public class NaturalOrderComparator implements Comparator<Object>
         {
             final char ca = NaturalOrderComparator.charAt(a, ia);
             final char cb = NaturalOrderComparator.charAt(b, ib);
-            
-            if (!Character.isDigit(ca) && !Character.isDigit(cb))
+    
+            if ((!Character.isDigit(ca) && !Character.isDigit(cb)) || ((ca == 0) && (cb == 0)))
             {
                 return bias;
             } else if (!Character.isDigit(ca))
@@ -91,11 +97,7 @@ public class NaturalOrderComparator implements Comparator<Object>
                 {
                     bias = +1;
                 }
-            } else if ((ca == 0) && (cb == 0))
-            {
-                return bias;
             }
         }
     }
-    
 }

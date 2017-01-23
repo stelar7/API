@@ -11,8 +11,13 @@ import java.util.*;
 import java.util.List;
 import java.util.jar.*;
 
-public class Files
+public final class Files
 {
+    
+    private Files()
+    {
+        
+    }
     
     /**
      * Deletes Folder with all of its content
@@ -69,6 +74,7 @@ public class Files
                 deleteDir(f);
             }
         }
+    
         file.delete();
     }
     
@@ -140,12 +146,12 @@ public class Files
      * @param packageName the package
      * @return {@code List<Class<?>>} list of all the classes in that package
      */
-    
-    public static List<Class<?>> getClassNamesInPackage(final File jarfile, String packageName)
+
+    public static List<Class<?>> getClassNamesInPackage(final File jarfile, String oldPackageName)
     {
-        final List<Class<?>> arrayList = new ArrayList<>();
-        packageName = packageName.replaceAll("\\.", "/");
-        JarEntry jarEntry;
+        final List<Class<?>> arrayList      = new ArrayList<>();
+        String               newPackageName = oldPackageName.replaceAll("\\.", "/");
+        JarEntry             jarEntry;
         while (true)
         {
             try (JarInputStream jarFile = new JarInputStream(new FileInputStream(jarfile)))
@@ -155,7 +161,7 @@ public class Files
                 {
                     break;
                 }
-                if ((jarEntry.getName().startsWith(packageName)) && (jarEntry.getName().endsWith(".class")))
+                if ((jarEntry.getName().startsWith(newPackageName)) && (jarEntry.getName().endsWith(".class")))
                 {
                     arrayList.add(jarEntry.getClass());
                 }
@@ -182,25 +188,28 @@ public class Files
     
     public static boolean isRunning(final String string)
     {
-        boolean found = false;
         try
         {
-            final Process            proc    = Runtime.getRuntime().exec("wmic.exe");
-            final BufferedReader     input   = new BufferedReader(new InputStreamReader(proc.getInputStream()));
-            final OutputStreamWriter oStream = new OutputStreamWriter(proc.getOutputStream());
-            oStream.write(String.format("process where name='%s'", string));
-            oStream.flush();
-            oStream.close();
-            while (input.readLine() != null)
+            final Process proc = Runtime.getRuntime().exec("wmic.exe");
+            try (final OutputStreamWriter oStream = new OutputStreamWriter(proc.getOutputStream(), StandardCharsets.UTF_8))
             {
-                if (found)
+                oStream.write(String.format("process where name='%s'", string));
+                oStream.flush();
+                oStream.close();
+                try (final BufferedReader input = new BufferedReader(new InputStreamReader(proc.getInputStream(), StandardCharsets.UTF_8)))
                 {
-                    // return if more than 2 lines
-                    return true;
+                    if (input.readLine() != null)
+                    {
+                        return input.readLine() != null;
+                    }
+                } catch (final IOException ioe)
+                {
+                    ioe.printStackTrace();
                 }
-                found = true;
+            } catch (final IOException ioe)
+            {
+                ioe.printStackTrace();
             }
-            input.close();
         } catch (final IOException ioe)
         {
             ioe.printStackTrace();
@@ -210,7 +219,6 @@ public class Files
     
     public static void listFilesInFolderAndSubFolders(final File folder)
     {
-        final Path origin = folder.toPath();
         final FileVisitor<Path> visitor = new SimpleFileVisitor<Path>()
         {
             @Override
@@ -225,6 +233,7 @@ public class Files
         };
         try
         {
+            final Path origin = folder.toPath();
             java.nio.file.Files.walkFileTree(origin, visitor);
         } catch (final IOException e)
         {
