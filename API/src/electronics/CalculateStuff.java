@@ -4,7 +4,7 @@ import java.util.Locale;
 
 public class CalculateStuff
 {
-
+    
     public enum TempreatureCoefficient
     {
         TEN(1.22, 1.15, 1.1, 1.07),
@@ -18,9 +18,12 @@ public class CalculateStuff
         FIFTY(.71, .82, .63, .76),
         FIFTYFIVE(.61, .76, .55, .71),
         SIXTY(.5, .71, .45, .65);
-
-        final double pvcair, pexair, pvcearth, pexearth;
-
+        
+        private final double pvcair;
+        private final double pexair;
+        private final double pvcearth;
+        private final double pexearth;
+        
         TempreatureCoefficient(final double pva, final double pea, final double pve, final double pee)
         {
             this.pvcair = pva;
@@ -29,7 +32,7 @@ public class CalculateStuff
             this.pexearth = pee;
         }
     }
-
+    
     public enum WireMaterial
     {
         ALUMINIUM(0.265),
@@ -55,36 +58,36 @@ public class CalculateStuff
         TIN_BRONZE(0.105),
         ZINC(0.06),
         WOLFRAM(0.0555);
-
-        final double resistance;
-
+        
+        private final double resistance;
+        
         WireMaterial(final double d)
         {
             this.resistance = d;
         }
-
+        
         @Override
         public String toString()
         {
             return this.name().substring(0, 1) + this.name().replace("_", " ").substring(1).toLowerCase(Locale.ENGLISH);
         }
     }
-
+    
     public static double getAmpereFromVoltAndResistance(final double volt, final double resistance)
     {
         return volt / resistance;
     }
-
+    
     public static double getAmpereFromWattAndResistance(final double watt, final double resistance)
     {
         return Math.sqrt(watt / resistance);
     }
-
+    
     public static double getAmpereFromWattAndVolt(final double watt, final double volt)
     {
         return watt / volt;
     }
-
+    
     public static double getCapasitanceInParallel(final double... capasitors)
     {
         double i = 0;
@@ -94,7 +97,7 @@ public class CalculateStuff
         }
         return i;
     }
-
+    
     public static double getCapasitanceInSeries(final double... capasitors)
     {
         double i = 0;
@@ -102,29 +105,36 @@ public class CalculateStuff
         {
             i += 1 / ii;
         }
-        return 1 / i;
+        
+        if (i > 0)
+        {
+            return 1 / i;
+        } else
+        {
+            return 0;
+        }
     }
-
+    
     public static double getEnergyConversionEfficiency(final double input, final double output)
     {
-        return (output / input);
+        return output / input;
     }
-
+    
     public static double getResistanceFromVoltAndAmpere(final double volt, final double ampere)
     {
         return volt / ampere;
     }
-
+    
     public static double getResistanceFromVoltAndWatt(final double volt, final double watt)
     {
         return Math.pow(volt, 2) / watt;
     }
-
+    
     public static double getResistanceFromWattAndAmpere(final double watt, final double ampere)
     {
-        return (watt / Math.pow(ampere, 2));
+        return watt / Math.pow(ampere, 2);
     }
-
+    
     public static double getResistanceInParallel(final double... resistances)
     {
         double i = 0;
@@ -132,9 +142,16 @@ public class CalculateStuff
         {
             i += 1 / ii;
         }
-        return 1 / i;
+        
+        if (i > 0)
+        {
+            return 1 / i;
+        } else
+        {
+            return 0;
+        }
     }
-
+    
     public static double getResistanceInSeries(final double... resistances)
     {
         double i = 0;
@@ -144,47 +161,47 @@ public class CalculateStuff
         }
         return i;
     }
-
+    
     public static double getVoltageDrop(final double ampere, final WireMaterial material, final double length, final double area)
     {
-        return ((ampere * material.resistance * length) / area);
+        return ampere * material.resistance * length / area;
     }
-
+    
     public static double getVoltageDrop3PEngine(final double ampere, final WireMaterial material, final double length, final double area, final double cosphi)
     {
-        return (Math.sqrt(3) * ampere * CalculateStuff.getWireResistance(material, length, area, 1));
+        return Math.sqrt(3) * ampere * CalculateStuff.getWireResistance(material, length, area, 1) / cosphi;
     }
-
+    
     public static double getVoltFromResistanceAndAmpere(final double resistance, final double ampere)
     {
         return resistance * ampere;
     }
-
+    
     public static double getVoltFromWattAndAmpere(final double watt, final double ampere)
     {
         return watt / ampere;
     }
-
+    
     public static double getVoltFromWattAndResistance(final double watt, final double resistance)
     {
         return Math.sqrt(watt * resistance);
     }
-
+    
     public static double getWattFromAmpereAndResistance(final double ampere, final double resistance)
     {
         return Math.pow(ampere, 2) * resistance;
     }
-
+    
     public static double getWattFromVoltAndAmpere(final double volt, final double ampere)
     {
         return volt * ampere;
     }
-
+    
     public static double getWattFromVoltAndResistance(final double volt, final double resistance)
     {
         return Math.pow(volt, 2) / resistance;
     }
-
+    
     public static double getWireResistance(final WireMaterial mat, final double length, final double area, final double wires)
     {
         return ((mat.resistance * length) / area) * wires;

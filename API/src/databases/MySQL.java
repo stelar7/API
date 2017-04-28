@@ -7,13 +7,13 @@ import java.sql.SQLException;
 
 public class MySQL
 {
-    private String       hostname   = "";
-    private String       portnmbr   = "";
-    private String       username   = "";
-    private String       password   = "";
-    private String       database   = "";
+    private   String     hostname   = "";
+    private   String     portnmbr   = "";
+    private   String     username   = "";
+    private   String     password   = "";
+    private   String     database   = "";
     protected Connection connection = null;
-
+    
     public MySQL(final String hostname, final String portnmbr, final String database, final String username, final String password)
     {
         super();
@@ -24,7 +24,7 @@ public class MySQL
         this.password = password;
         open();
     }
-
+    
     /**
      * checks if the connection is still active
      *
@@ -39,13 +39,11 @@ public class MySQL
         }
         return false;
     }
-
+    
     /**
      * Empties a table
      *
-     * @param table
-     *            the table to empty
-     *
+     * @param table the table to empty
      */
     public void clearTable(final String table)
     {
@@ -62,7 +60,7 @@ public class MySQL
             e.printStackTrace();
         }
     }
-
+    
     /**
      * close database connection
      */
@@ -74,17 +72,16 @@ public class MySQL
             {
                 this.connection.close();
             }
-        } catch (final Exception e)
+        } catch (final IOException e)
         {
             e.printStackTrace();
         }
     }
-
+    
     /**
      * Delete a table
      *
-     * @param table
-     *            the table to delete
+     * @param table the table to delete
      */
     public void deleteTable(final String table)
     {
@@ -98,22 +95,20 @@ public class MySQL
             e.printStackTrace();
         }
     }
-
+    
     /**
      * returns the active connection
      *
      * @return Connection
-     *
      */
-
+    
     public Connection getConnection()
     {
         return this.connection;
     }
-
+    
     /**
      * open database connection
-     *
      */
     public Connection open()
     {

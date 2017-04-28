@@ -17,28 +17,28 @@ import electronics.CalculateStuff.WireMaterial;
 
 public class WireResistanceGUI extends JFrame implements ActionListener, KeyListener
 {
-
+    
     private static final long serialVersionUID = 1L;
-
+    
     public static void main(final String[] args)
     {
         new WireResistanceGUI();
     }
-
-    JButton                 calc      = new JButton("Calculate");
-    JComboBox<WireMaterial> material  = new JComboBox<WireMaterial>();
-    JLabel                  materiall = new JLabel("Material:");
-    JTextField              leng      = new JTextField();
-    JLabel                  lengl     = new JLabel("Length:");
-    JLabel                  lengll    = new JLabel("Meters");
-    JTextField              area      = new JTextField();
-    JLabel                  areal     = new JLabel("Area:");
-    JLabel                  areall    = new JLabel("mm\u00B2");
-    JTextField              wires     = new JTextField();
-    JLabel                  wiresl    = new JLabel("No. of wires:");
-
-    JLabel dummy = new JLabel();
-
+    
+    private JButton                 calc      = new JButton("Calculate");
+    private JComboBox<WireMaterial> material  = new JComboBox<>();
+    private JLabel                  materiall = new JLabel("Material:");
+    private JTextField              leng      = new JTextField();
+    private JLabel                  lengl     = new JLabel("Length:");
+    private JLabel                  lengll    = new JLabel("Meters");
+    private JTextField              area      = new JTextField();
+    private JLabel                  areal     = new JLabel("Area:");
+    private JLabel                  areall    = new JLabel("mm²");
+    private JTextField              wires     = new JTextField();
+    private JLabel                  wiresl    = new JLabel("No. of wires:");
+    
+    private JLabel dummy = new JLabel();
+    
     public WireResistanceGUI()
     {
         super("Wire Resistance");
@@ -86,7 +86,7 @@ public class WireResistanceGUI extends JFrame implements ActionListener, KeyList
         this.validate();
         this.setVisible(true);
     }
-
+    
     @Override
     public void actionPerformed(final ActionEvent e)
     {
@@ -97,7 +97,9 @@ public class WireResistanceGUI extends JFrame implements ActionListener, KeyList
                 if (!this.wires.getText().isEmpty())
                 {
                     final WireMaterial mat = (WireMaterial) this.material.getSelectedItem();
-                    double len, are, wir;
+                    double             len;
+                    double             are;
+                    double             wir;
                     try
                     {
                         len = Double.parseDouble(this.leng.getText().replace(",", "."));
@@ -136,7 +138,7 @@ public class WireResistanceGUI extends JFrame implements ActionListener, KeyList
             JOptionPane.showMessageDialog(this, "Missing value: Length");
         }
     }
-
+    
     @Override
     public void keyPressed(final KeyEvent e)
     {
@@ -145,13 +147,17 @@ public class WireResistanceGUI extends JFrame implements ActionListener, KeyList
             this.calc.doClick();
         }
     }
-
+    
     @Override
     public void keyReleased(final KeyEvent arg0)
-    {}
-
+    {
+        // not used
+    }
+    
     @Override
     public void keyTyped(final KeyEvent arg0)
-    {}
-
+    {
+        // not used
+        
+    }
 }

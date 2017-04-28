@@ -2,27 +2,25 @@ package math;
 
 import java.util.Arrays;
 import java.util.List;
-import java.util.Stack;
 
-public class Notation
+public final class Notation
 {
-
-    private static final List<Character> operators = Arrays.asList('+', '-', '*', '/');
-
-    public static String fromPostfix(final String input, final boolean verbose)
+    private Notation()
     {
-        final Stack<Float> stack = new Stack<Float>();
-        final char[] items = input.toCharArray();
+    }
+    
+    private static final List<Character> operators = Arrays.asList('+', '-', '*', '/');
+    
+    public static String fromPostfix(final String input)
+    {
+        final DeQueue<Float> stack = new DeQueue<>();
+        final char[]         items = input.toCharArray();
         for (int i = 0; i < items.length; i++)
         {
             final char c = items[i];
             if (!Notation.isValidChar(c))
             {
                 return "INVALID INPUT " + c;
-            }
-            if (verbose)
-            {
-                System.out.println("REMAINING INPUT:" + input.substring(i) + "\tSTACK: " + stack + "\tNEXT ACTION: " + (Notation.operators.contains(c) ? stack.get(0) + Character.toString(c) + stack.get(1) : "PUSH " + c));
             }
             if (Notation.operators.contains(c))
             {
@@ -61,16 +59,16 @@ public class Notation
         }
         return stack.pop().toString();
     }
-
-    public static String fromPrefix(final String input, final boolean verbose)
+    
+    public static String fromPrefix(final String input)
     {
         final StringBuilder sb = new StringBuilder(input).reverse();
-        return Notation.fromPostfix(sb.toString(), verbose);
+        return Notation.fromPostfix(sb.toString());
     }
-
+    
     private static boolean isValidChar(final char c)
     {
         return Notation.operators.contains(c) || Character.toString(c).matches("[0-9]");
     }
-
+    
 }

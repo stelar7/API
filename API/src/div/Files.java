@@ -11,7 +11,6 @@ import java.io.InputStreamReader;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.io.OutputStreamWriter;
-import java.io.UnsupportedEncodingException;
 import java.net.URISyntaxException;
 import java.net.URLDecoder;
 import java.nio.MappedByteBuffer;
@@ -30,17 +29,19 @@ import java.util.jar.JarEntry;
 import java.util.jar.JarFile;
 import java.util.jar.JarInputStream;
 
-public class Files
+public final class Files
 {
-
+    
+    private Files()
+    {
+    }
+    
     /**
      * Browse to a file on the system
      *
-     * @param file
-     *            the file to browse to
+     * @param file the file to browse to
      * @return true if action is supported by OS
      * @throws IOException
-     *
      */
     public static boolean browse(final File file) throws IOException
     {
@@ -53,14 +54,12 @@ public class Files
         }
         return true;
     }
-
+    
     /**
      * Extracts all files from a .jar
      *
-     * @param jarFile
-     *            the file to extract from
-     * @param destDir
-     *            the dir to save files to
+     * @param jarFile the file to extract from
+     * @param destDir the dir to save files to
      * @throws Exception
      */
     public static void extractJar(final File jarFile, final File destDir)
@@ -79,7 +78,7 @@ public class Files
                         try (FileOutputStream f2 = new FileOutputStream(f))
                         {
                             final byte[] b = new byte[1024];
-                            int bytes;
+                            int          bytes;
                             while ((bytes = inputStream.read(b)) > 0)
                             {
                                 f2.write(b, 0, bytes);
@@ -98,23 +97,20 @@ public class Files
             e.printStackTrace();
         }
     }
-
+    
     /**
      * Gets all classes in the given package
      *
-     * @param jarfile
-     *            the .jar-file
-     * @param packageName
-     *            the package
+     * @param jarfile     the .jar-file
+     * @param packageName the package
      * @return List<Class<?>> list of all the classes in that package
-     *
      */
-
-    public static List<Class<?>> getClassNamesInPackage(final File jarfile, String packageName)
+    
+    public static List<Class<?>> getClassNamesInPackage(final File jarfile, final String packageName)
     {
-        final List<Class<?>> arrayList = new ArrayList<Class<?>>();
-        packageName = packageName.replaceAll("\\.", "/");
-        JarEntry jarEntry;
+        final List<Class<?>> arrayList        = new ArrayList<>();
+        String               localPackageName = packageName.replaceAll("\\.", "/");
+        JarEntry             jarEntry;
         while (true)
         {
             try (JarInputStream jarFile = new JarInputStream(new FileInputStream(jarfile)))
@@ -124,7 +120,7 @@ public class Files
                 {
                     break;
                 }
-                if ((jarEntry.getName().startsWith(packageName)) && (jarEntry.getName().endsWith(".class")))
+                if ((jarEntry.getName().startsWith(localPackageName)) && (jarEntry.getName().endsWith(".class")))
                 {
                     arrayList.add(jarEntry.getClass());
                 }
@@ -136,23 +132,21 @@ public class Files
         }
         return arrayList;
     }
-
+    
     /**
      * Gets the location of a Jar
      *
-     * @param c
-     *            a class in the Jar to get the location from
+     * @param c a class in the Jar to get the location from
      * @return the location of the Jar
      * @throws URISyntaxException
      * @throws Exception
-     *
      **/
-    public static String getJarLocation(final Class<?> c) throws URISyntaxException, UnsupportedEncodingException
+    public static String getJarLocation(final Class<?> c) throws IOException
     {
         final String temp = c.getProtectionDomain().getCodeSource().getLocation().toURI().getPath();
         return URLDecoder.decode(temp, "UTF-8");
     }
-
+    
     public static void listFilesInFolderAndSubFolders(final File folder)
     {
         final Path origin = folder.toPath();
@@ -176,12 +170,11 @@ public class Files
             e.printStackTrace();
         }
     }
-
+    
     /**
      * Loads a Object from the specified path
      *
-     * @param file
-     *            the path to load from
+     * @param file the path to load from
      * @return the object that has been loaded
      * @throws IOException
      * @throws ClassNotFoundException
@@ -200,22 +193,20 @@ public class Files
         }
         return null;
     }
-
+    
     /**
      * Searches a MappedByteBuffer for a string
      *
-     * @param buffer
-     *            the buffer to seach
-     * @param search
-     *            the string to seach
+     * @param buffer the buffer to seach
+     * @param search the string to seach
      * @return if the string was found
      */
     public static boolean lookFor(final MappedByteBuffer buffer, final String search)
     {
-        final byte[] lookup = search.getBytes(Charset.defaultCharset());
-        final int datalength = lookup.length;
+        final byte[] lookup     = search.getBytes(Charset.defaultCharset());
+        final int    datalength = lookup.length;
         buffer.rewind();
-        outer: while (buffer.hasRemaining())
+        while (buffer.hasRemaining())
         {
             final byte b = buffer.get();
             if (b == lookup[0])
@@ -226,22 +217,20 @@ public class Files
                 final String found = new String(data, StandardCharsets.UTF_8);
                 if (!found.equals(search))
                 {
-                    continue outer;
+                    continue;
                 }
                 return true;
             }
         }
         return false;
     }
-
+    
     /**
      * Reads from the given file
      *
-     * @param file
-     *            the file to read from
+     * @param file the file to read from
      * @return the read string
      * @throws IOException
-     *
      **/
     public static String read(final File file) throws IOException
     {
@@ -255,17 +244,15 @@ public class Files
             }
             in.close();
         }
-
+        
         return joiner.toString();
     }
-
+    
     /**
      * Saves a object to the specified path
      *
-     * @param obj
-     *            the object to save
-     * @param file
-     *            the path to save to
+     * @param obj  the object to save
+     * @param file the path to save to
      * @throws IOException
      **/
     public static void save(final Object obj, final File file) throws IOException
@@ -280,22 +267,18 @@ public class Files
             e.printStackTrace();
         }
     }
-
+    
     /**
      * Writes to the given file
      *
-     * @param file
-     *            the file to write to
-     * @param string
-     *            the string to write
-     * @param append
-     *            whether to append or rewrite the file
+     * @param file   the file to write to
+     * @param string the string to write
+     * @param append whether to append or rewrite the file
      * @throws IOException
-     *
      **/
     public static void write(final File file, final String string, final boolean append)
     {
-        try (final OutputStreamWriter br = new OutputStreamWriter(new FileOutputStream(file), StandardCharsets.UTF_8))  
+        try (final OutputStreamWriter br = new OutputStreamWriter(new FileOutputStream(file, append), StandardCharsets.UTF_8))
         {
             br.write(string);
             br.flush();

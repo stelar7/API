@@ -13,25 +13,26 @@ import java.net.URLConnection;
 import java.nio.charset.StandardCharsets;
 import java.util.StringJoiner;
 
-public class Internet
+public final class Internet
 {
-
+    
+    private Internet()
+    {
+    }
+    
     /**
      * Downloads a file from the internet
      *
-     * @param url
-     *            the url to download from
-     * @param output
-     *            the path to save the file to
-     *
+     * @param url    the url to download from
+     * @param output the path to save the file to
      * @return true if writing was successful.
      * @throws IOException
      **/
     public static boolean download(final String url, final File output) throws IOException
     {
-        final byte buffer[] = new byte[1024];
-        int read = -1;
-        final URLConnection uc = new URL(url).openConnection();
+        final byte[]        buffer = new byte[1024];
+        int                 read   = -1;
+        final URLConnection uc     = new URL(url).openConnection();
         uc.setRequestProperty("Content-Type", "application/x-www-form-urlencoded");
         uc.setRequestProperty("Content-Language", "en-US");
         uc.setRequestProperty("User-Agent", "Mozilla/5.0 (Windows NT 5.1) AppleWebKit/535.11 (KHTML, like Gecko) Chrome/17.0.963.56 Safari/535.11");
@@ -51,20 +52,19 @@ public class Internet
         }
         return true;
     }
-
+    
     /**
      * Returns the source in the form of a string
      *
-     * @param URL
-     *            the page to get the source from
+     * @param url the page to get the source from
      * @return String the source
      * @throws IOException
      */
-    public static String getPageSource(final String URL) throws IOException
+    public static String getPageSource(final String url) throws IOException
     {
-        StringJoiner joiner = new StringJoiner("\n");
-        URL Url = new URL(URL);
-        try (BufferedReader in = new BufferedReader(new InputStreamReader(Url.openStream(), StandardCharsets.UTF_8)))
+        StringJoiner joiner  = new StringJoiner("\n");
+        url          dataUrl = new url(url);
+        try (BufferedReader in = new BufferedReader(new InputStreamReader(dataUrl.openStream(), StandardCharsets.UTF_8)))
         {
             String inputLine;
             while ((inputLine = in.readLine()) != null)
@@ -73,7 +73,7 @@ public class Internet
             }
             in.close();
         }
-
+        
         return joiner.toString();
     }
 }
