@@ -3,7 +3,7 @@ package math;
 public class Fraction
 {
     
-    private final int numerator
+    private final int numerator;
     private final int denominator;
     
     public Fraction(final int f, final int g)

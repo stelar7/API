@@ -153,7 +153,7 @@ public class Invoice
             stream.showText(sdf.format(getPaymentDue()));
             stream.newLineAtOffset(-50, font8Skip);
             stream.showText("Deres ref.:");
-            stream.newLineAtOffset(50, 0); 
+            stream.newLineAtOffset(50, 0);
             if (getBuyerRef() != null)
             {
                 stream.showText(getBuyerRef());

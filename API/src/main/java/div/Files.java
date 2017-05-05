@@ -141,7 +141,7 @@ public final class Files
      * @throws URISyntaxException
      * @throws Exception
      **/
-    public static String getJarLocation(final Class<?> c) throws IOException
+    public static String getJarLocation(final Class<?> c) throws IOException, URISyntaxException
     {
         final String temp = c.getProtectionDomain().getCodeSource().getLocation().toURI().getPath();
         return URLDecoder.decode(temp, "UTF-8");
@@ -287,5 +287,62 @@ public final class Files
         {
             e.printStackTrace();
         }
+    }
+    
+    /**
+     * Deletes Folder with all of its content
+     *
+     * @param folder path to folder which should be deleted
+     */
+    public static void deleteFolderAndItsContent(final Path folder) throws IOException
+    {
+        java.nio.file.Files.walkFileTree(folder, new SimpleFileVisitor<Path>()
+        {
+            @Override
+            public FileVisitResult visitFile(Path file, BasicFileAttributes attrs) throws IOException
+            {
+                java.nio.file.Files.delete(file);
+                return FileVisitResult.CONTINUE;
+            }
+            
+            @Override
+            public FileVisitResult postVisitDirectory(Path dir, IOException exc) throws IOException
+            {
+                if (exc != null)
+                {
+                    throw exc;
+                }
+                java.nio.file.Files.delete(dir);
+                return FileVisitResult.CONTINUE;
+            }
+        });
+    }
+    
+    public static boolean isRunning(final String string)
+    {
+        boolean found = false;
+        try
+        {
+            final Process            proc    = Runtime.getRuntime().exec("wmic.exe");
+            final BufferedReader     input   = new BufferedReader(new InputStreamReader(proc.getInputStream()));
+            final OutputStreamWriter oStream = new OutputStreamWriter(proc.getOutputStream());
+            oStream.write(String.format("process where name='%s'", string));
+            oStream.flush();
+            oStream.close();
+            while (input.readLine() != null)
+            {
+                if (found)
+                {
+                    // return if more than 2 lines
+                    return true;
+                }
+                found = true;
+            }
+            input.close();
+        } catch (final IOException ioe)
+        {
+            ioe.printStackTrace();
+        }
+        return false;
     }
 }
