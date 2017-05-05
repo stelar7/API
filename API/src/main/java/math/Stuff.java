@@ -1,7 +1,11 @@
 package math;
 
-public class Stuff
+public final class Stuff
 {
+    
+    private Stuff()
+    {
+    }
     
     public static int binaryToDecimal(final String s)
     {
@@ -13,13 +17,27 @@ public class Stuff
         return i;
     }
     
+    public static double constrain(final double x, final double min, final double max)
+    {
+        if (x < min)
+        {
+            return min;
+        }
+        if (x > max)
+        {
+            return max;
+        }
+        return x;
+    }
+    
     public static String decimalToBinary(int i)
     {
-        final StringBuilder sb = new StringBuilder();
-        while (i > 0)
+        int                 local = i;
+        final StringBuilder sb    = new StringBuilder();
+        while (local > 0)
         {
-            sb.append((((i % 2) == 0) ? "0" : "1"));
-            i = i / 2;
+            sb.append(local % 2 == 0 ? "0" : "1");
+            local = local / 2;
         }
         return sb.reverse().toString();
     }
@@ -41,21 +59,8 @@ public class Stuff
         return (int) ((denominator == 0) ? numerator : Stuff.greatestCommonDivisor(denominator, numerator % denominator));
     }
     
-    public static double limit(final double x, final double min, final double max)
+    public static double mapToRange(final double x, final double inMin, final double inMax, final double outMin, final double outMax)
     {
-        if (x < min)
-        {
-            return min;
-        }
-        if (x > max)
-        {
-            return max;
-        }
-        return x;
-    }
-    
-    public static double mapToRange(final double x, final double in_min, final double in_max, final double out_min, final double out_max)
-    {
-        return (((x - in_min) * (out_max - out_min)) / (in_max - in_min)) + out_min;
+        return (((x - inMin) * (outMax - outMin)) / (inMax - inMin)) + outMin;
     }
 }

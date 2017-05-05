@@ -1,81 +1,39 @@
 package div;
 
-import java.awt.*;
-import java.io.*;
-import java.net.*;
-import java.nio.*;
-import java.nio.charset.*;
-import java.nio.file.*;
-import java.nio.file.attribute.*;
-import java.util.*;
+import java.awt.Desktop;
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
+import java.io.OutputStreamWriter;
+import java.net.URISyntaxException;
+import java.net.URLDecoder;
+import java.nio.MappedByteBuffer;
+import java.nio.charset.Charset;
+import java.nio.charset.StandardCharsets;
+import java.nio.file.FileVisitResult;
+import java.nio.file.FileVisitor;
+import java.nio.file.Path;
+import java.nio.file.SimpleFileVisitor;
+import java.nio.file.attribute.BasicFileAttributes;
+import java.util.ArrayList;
+import java.util.Enumeration;
 import java.util.List;
-import java.util.jar.*;
+import java.util.StringJoiner;
+import java.util.jar.JarEntry;
+import java.util.jar.JarFile;
+import java.util.jar.JarInputStream;
 
 public final class Files
 {
     
     private Files()
     {
-        
-    }
-    
-    /**
-     * Deletes Folder with all of its content
-     *
-     * @param folder path to folder which should be deleted
-     */
-    public static void deleteFolderAndItsContent(final Path folder) throws IOException
-    {
-        java.nio.file.Files.walkFileTree(folder, new SimpleFileVisitor<Path>()
-        {
-            @Override
-            public FileVisitResult visitFile(Path file, BasicFileAttributes attrs) throws IOException
-            {
-                java.nio.file.Files.delete(file);
-                return FileVisitResult.CONTINUE;
-            }
-            
-            @Override
-            public FileVisitResult postVisitDirectory(Path dir, IOException exc) throws IOException
-            {
-                if (exc != null)
-                {
-                    throw exc;
-                }
-                // Somehow  the visitFile doesnt find all the files...?
-                java.nio.file.Files.list(dir).forEach(f ->
-                                                      {
-                                                          try
-                                                          {
-                                                              java.nio.file.Files.delete(f);
-                                                          } catch (IOException e)
-                                                          {
-                                                              e.printStackTrace();
-                                                          }
-                                                      });
-                java.nio.file.Files.delete(dir);
-                return FileVisitResult.CONTINUE;
-            }
-        });
-    }
-    
-    /**
-     * Deletes Folder with all of its content
-     *
-     * @param file path to folder which should be deleted
-     */
-    public static void deleteDir(File file)
-    {
-        File[] contents = file.listFiles();
-        if (contents != null)
-        {
-            for (File f : contents)
-            {
-                deleteDir(f);
-            }
-        }
-    
-        file.delete();
     }
     
     /**
@@ -83,7 +41,7 @@ public final class Files
      *
      * @param file the file to browse to
      * @return true if action is supported by OS
-     * @throws IOException if the file is null?
+     * @throws IOException
      */
     public static boolean browse(final File file) throws IOException
     {
@@ -102,6 +60,7 @@ public final class Files
      *
      * @param jarFile the file to extract from
      * @param destDir the dir to save files to
+     * @throws Exception
      */
     public static void extractJar(final File jarFile, final File destDir)
     {
@@ -133,7 +92,7 @@ public final class Files
                 }
             }
             jar.close();
-        } catch (final IOException e)
+        } catch (IOException e)
         {
             e.printStackTrace();
         }
@@ -144,13 +103,13 @@ public final class Files
      *
      * @param jarfile     the .jar-file
      * @param packageName the package
-     * @return {@code List<Class<?>>} list of all the classes in that package
+     * @return List<Class<?>> list of all the classes in that package
      */
-
-    public static List<Class<?>> getClassNamesInPackage(final File jarfile, String oldPackageName)
+    
+    public static List<Class<?>> getClassNamesInPackage(final File jarfile, final String packageName)
     {
-        final List<Class<?>> arrayList      = new ArrayList<>();
-        String               newPackageName = oldPackageName.replaceAll("\\.", "/");
+        final List<Class<?>> arrayList        = new ArrayList<>();
+        String               localPackageName = packageName.replaceAll("\\.", "/");
         JarEntry             jarEntry;
         while (true)
         {
@@ -161,7 +120,7 @@ public final class Files
                 {
                     break;
                 }
-                if ((jarEntry.getName().startsWith(newPackageName)) && (jarEntry.getName().endsWith(".class")))
+                if ((jarEntry.getName().startsWith(localPackageName)) && (jarEntry.getName().endsWith(".class")))
                 {
                     arrayList.add(jarEntry.getClass());
                 }
@@ -179,52 +138,24 @@ public final class Files
      *
      * @param c a class in the Jar to get the location from
      * @return the location of the Jar
+     * @throws URISyntaxException
+     * @throws Exception
      **/
-    public static String getJarLocation(final Class<?> c) throws URISyntaxException, UnsupportedEncodingException
+    public static String getJarLocation(final Class<?> c) throws IOException
     {
         final String temp = c.getProtectionDomain().getCodeSource().getLocation().toURI().getPath();
         return URLDecoder.decode(temp, "UTF-8");
     }
     
-    public static boolean isRunning(final String string)
-    {
-        try
-        {
-            final Process proc = Runtime.getRuntime().exec("wmic.exe");
-            try (final OutputStreamWriter oStream = new OutputStreamWriter(proc.getOutputStream(), StandardCharsets.UTF_8))
-            {
-                oStream.write(String.format("process where name='%s'", string));
-                oStream.flush();
-                oStream.close();
-                try (final BufferedReader input = new BufferedReader(new InputStreamReader(proc.getInputStream(), StandardCharsets.UTF_8)))
-                {
-                    if (input.readLine() != null)
-                    {
-                        return input.readLine() != null;
-                    }
-                } catch (final IOException ioe)
-                {
-                    ioe.printStackTrace();
-                }
-            } catch (final IOException ioe)
-            {
-                ioe.printStackTrace();
-            }
-        } catch (final IOException ioe)
-        {
-            ioe.printStackTrace();
-        }
-        return false;
-    }
-    
     public static void listFilesInFolderAndSubFolders(final File folder)
     {
+        final Path origin = folder.toPath();
         final FileVisitor<Path> visitor = new SimpleFileVisitor<Path>()
         {
             @Override
             public FileVisitResult preVisitDirectory(final Path dir, final BasicFileAttributes exc)
             {
-                if (dir.getFileName() != null)
+                if (dir != null && dir.getFileName() != null)
                 {
                     System.out.format("%s%n", dir.getFileName());
                 }
@@ -233,7 +164,6 @@ public final class Files
         };
         try
         {
-            final Path origin = folder.toPath();
             java.nio.file.Files.walkFileTree(origin, visitor);
         } catch (final IOException e)
         {
@@ -246,10 +176,12 @@ public final class Files
      *
      * @param file the path to load from
      * @return the object that has been loaded
+     * @throws IOException
+     * @throws ClassNotFoundException
      **/
     public static Object load(final File file)
     {
-        Object result;
+        Object result = null;
         try (ObjectInputStream ois = new ObjectInputStream(new FileInputStream(file)))
         {
             result = ois.readObject();
@@ -298,10 +230,11 @@ public final class Files
      *
      * @param file the file to read from
      * @return the read string
+     * @throws IOException
      **/
     public static String read(final File file) throws IOException
     {
-        final StringJoiner joiner = new StringJoiner("\n");
+        StringJoiner joiner = new StringJoiner("\n");
         try (BufferedReader in = new BufferedReader(new InputStreamReader(new FileInputStream(file), StandardCharsets.UTF_8)))
         {
             String inputLine;
@@ -320,8 +253,9 @@ public final class Files
      *
      * @param obj  the object to save
      * @param file the path to save to
+     * @throws IOException
      **/
-    public static void save(final Object obj, final File file)
+    public static void save(final Object obj, final File file) throws IOException
     {
         try (ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream(file)))
         {
@@ -340,6 +274,7 @@ public final class Files
      * @param file   the file to write to
      * @param string the string to write
      * @param append whether to append or rewrite the file
+     * @throws IOException
      **/
     public static void write(final File file, final String string, final boolean append)
     {

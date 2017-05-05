@@ -3,9 +3,10 @@ package math;
 public class Fraction
 {
     
-    private final float numerator, denominator;
+    private final int numerator
+    private final int denominator;
     
-    public Fraction(final float f, final float g)
+    public Fraction(final int f, final int g)
     {
         this.numerator = f;
         this.denominator = g;
@@ -13,7 +14,7 @@ public class Fraction
     
     public Fraction add(final Fraction f)
     {
-        return new Fraction((this.numerator * f.denominator) + (f.numerator * this.denominator), (this.denominator * f.denominator));
+        return new Fraction((this.numerator * f.denominator) + (f.numerator * this.denominator), this.denominator * f.denominator);
     }
     
     public Fraction add(final int f)
@@ -63,7 +64,7 @@ public class Fraction
     
     public Fraction subtract(final Fraction f)
     {
-        return new Fraction((this.numerator * f.denominator) - (f.numerator * this.denominator), (this.denominator * f.denominator));
+        return new Fraction((this.numerator * f.denominator) - (f.numerator * this.denominator), this.denominator * f.denominator);
     }
     
     public Fraction subtract(final int f)

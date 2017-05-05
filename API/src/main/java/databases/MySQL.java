@@ -1,16 +1,18 @@
 package databases;
 
-import java.sql.*;
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.PreparedStatement;
+import java.sql.SQLException;
 
 public class MySQL
 {
-    private static final int TIMEOUT = 5;
-    protected Connection connection;
-    private   String     hostname;
-    private   String     portnmbr;
-    private   String     username;
-    private   String     password;
-    private   String     database;
+    private   String     hostname   = "";
+    private   String     portnmbr   = "";
+    private   String     username   = "";
+    private   String     password   = "";
+    private   String     database   = "";
+    protected Connection connection = null;
     
     public MySQL(final String hostname, final String portnmbr, final String database, final String username, final String password)
     {
@@ -27,11 +29,15 @@ public class MySQL
      * checks if the connection is still active
      *
      * @return true if still active
-     * @throws SQLException ignored
+     * @throws SQLException
      */
     public boolean checkConnection() throws SQLException
     {
-        return !this.connection.isClosed() && this.connection.isValid(TIMEOUT);
+        if (!this.connection.isClosed() && this.connection.isValid(5))
+        {
+            return true;
+        }
+        return false;
     }
     
     /**
@@ -66,7 +72,7 @@ public class MySQL
             {
                 this.connection.close();
             }
-        } catch (final SQLException e)
+        } catch (final IOException e)
         {
             e.printStackTrace();
         }
@@ -79,7 +85,7 @@ public class MySQL
      */
     public void deleteTable(final String table)
     {
-        try (PreparedStatement statement = this.connection.prepareStatement("DROP TABLE ?"))
+        try (PreparedStatement statement = this.connection.prepareStatement("DROP TALBE ?"))
         {
             statement.setString(1, table);
             statement.executeUpdate();
@@ -104,25 +110,14 @@ public class MySQL
     /**
      * open database connection
      */
-    public final void open()
+    public Connection open()
     {
         try
         {
-            Class.forName("com.mysql.cj.jdbc.Driver");
-            final StringBuilder sb = new StringBuilder();
-            sb.append("jdbc:mysql://");
-            sb.append(this.hostname);
-            sb.append(":");
-            sb.append(this.portnmbr);
-            sb.append("/");
-            sb.append(this.database);
-            sb.append("?useUnicode=true");
-            sb.append("&characterEncoding=UTF-8");
-            sb.append("&useServerPrepStmts=false");
-            sb.append("&rewriteBatchedStatements=true");
-            sb.append("&serverTimezone=UTC");
-            final String url = sb.toString();
+            Class.forName("com.mysql.jdbc.Driver");
+            final String url = "jdbc:mysql://" + this.hostname + ":" + this.portnmbr + "/" + this.database + "?useUnicode=true&characterEncoding=UTF-8&useServerPrepStmts=false&rewriteBatchedStatements=true";
             this.connection = DriverManager.getConnection(url, this.username, this.password);
+            return this.connection;
         } catch (final SQLException e)
         {
             System.out.print("Could not connect to MySQL server! ");
@@ -131,5 +126,6 @@ public class MySQL
         {
             System.out.println("JDBC Driver not found!");
         }
+        return null;
     }
 }
