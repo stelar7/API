@@ -18,7 +18,8 @@ public class InvoiceTest
         seller.setPhone("+47 12 34 56 78");
         seller.setEmail("service@stelar7.no");
         seller.setWebsite("stelar7.no");
-        seller.setOrgNr("987654321");
+        seller.setOrgNr(987654321L);
+        seller.setMva(true);
         
         Customer buyer = new Customer();
         buyer.setName("Ola Nordman");
@@ -35,28 +36,17 @@ public class InvoiceTest
         invoice.setInvoiceDate(LocalDate.now());
         invoice.setPaymentDue(LocalDate.now().plusDays(14).with(TemporalAdjusters.nextOrSame(DayOfWeek.MONDAY)));
         
-        invoice.setSellerRef("Seller Ref");
-        invoice.setBuyerRef("Buyer Ref");
+        //invoice.setSellerRef("Seller Ref");
+        //invoice.setBuyerRef("Buyer Ref");
         invoice.setPayToAccount("1234.56.78901");
         
         
         invoice.setSeller(seller);
         invoice.setBuyer(buyer);
-        invoice.addItem(seller.getInvoiceTestItem());
-        invoice.addItem(seller.getInvoiceTestItem());
-        invoice.addItem(seller.getInvoiceTestItem());
-        invoice.addItem(seller.getInvoiceTestItem());
-        invoice.addItem(seller.getInvoiceTestItem());
-        invoice.addItem(seller.getInvoiceTestItem());
-        invoice.addItem(seller.getInvoiceTestItem());
-        invoice.addItem(seller.getInvoiceTestItem());
-        invoice.addItem(seller.getInvoiceTestItem());
-        invoice.addItem(seller.getInvoiceTestItem());
-        invoice.addItem(seller.getInvoiceTestItem());
-        invoice.addItem(seller.getInvoiceTestItem());
-        invoice.addItem(seller.getInvoiceTestItem());
-        invoice.addItem(seller.getInvoiceTestItem());
-        invoice.addItem(seller.getInvoiceTestItem());
+        for (int i = 0; i < 14; i++)
+        {
+            invoice.addItem(seller.getInvoiceTestItem());
+        }
         
         
         invoice.save("test");
