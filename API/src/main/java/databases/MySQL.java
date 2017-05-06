@@ -72,7 +72,7 @@ public class MySQL
             {
                 this.connection.close();
             }
-        } catch (final IOException e)
+        } catch (final SQLException e)
         {
             e.printStackTrace();
         }
@@ -115,7 +115,7 @@ public class MySQL
         try
         {
             Class.forName("com.mysql.jdbc.Driver");
-            final String url = "jdbc:mysql://" + this.hostname + ":" + this.portnmbr + "/" + this.database + "?useUnicode=true&characterEncoding=UTF-8&useServerPrepStmts=false&rewriteBatchedStatements=true";
+            final String url = String.format("jdbc:mysql://%s:%s/%s?useUnicode=true&characterEncoding=UTF-8&useServerPrepStmts=false&rewriteBatchedStatements=true", this.hostname, this.portnmbr, this.database);
             this.connection = DriverManager.getConnection(url, this.username, this.password);
             return this.connection;
         } catch (final SQLException e)

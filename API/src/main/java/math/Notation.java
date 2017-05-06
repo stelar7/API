@@ -1,7 +1,6 @@
 package math;
 
-import java.util.Arrays;
-import java.util.List;
+import java.util.*;
 
 public final class Notation
 {
@@ -13,8 +12,8 @@ public final class Notation
     
     public static String fromPostfix(final String input)
     {
-        final DeQueue<Float> stack = new DeQueue<>();
-        final char[]         items = input.toCharArray();
+        final ArrayDeque<Float> stack = new ArrayDeque<>();
+        final char[]            items = input.toCharArray();
         for (int i = 0; i < items.length; i++)
         {
             final char c = items[i];
