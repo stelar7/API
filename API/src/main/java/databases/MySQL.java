@@ -115,7 +115,7 @@ public class MySQL
         try
         {
             Class.forName("com.mysql.jdbc.Driver");
-            final String url = String.format("jdbc:mysql://%s:%s/%s?useUnicode=true&characterEncoding=UTF-8&useServerPrepStmts=false&rewriteBatchedStatements=true", this.hostname, this.portnmbr, this.database);
+            final String url = String.format("jdbc:mysql://%s:%s/%s?useUnicode=true&characterEncoding=UTF-8&useServerPrepStmts=false&rewriteBatchedStatements=true&serverTimezone=UTC", this.hostname, this.portnmbr, this.database);
             this.connection = DriverManager.getConnection(url, this.username, this.password);
             return this.connection;
         } catch (final SQLException e)
