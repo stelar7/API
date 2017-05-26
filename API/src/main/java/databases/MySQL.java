@@ -121,10 +121,7 @@ public class MySQL
         {
             System.out.print("Could not connect to MySQL server! ");
             System.out.println(e.getMessage());
-        } catch (final ClassNotFoundException e)
-        {
-            System.out.println("JDBC Driver not found!");
+            return null;
         }
-        return null;
     }
 }
