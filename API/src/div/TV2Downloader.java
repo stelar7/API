@@ -196,8 +196,8 @@ public class TV2Downloader
             
             return true;
         } catch (
-            
-              final Exception e)
+                
+                final Exception e)
         {
             System.err.println(e.getMessage());
             e.printStackTrace();
@@ -385,7 +385,7 @@ public class TV2Downloader
             {
                 final Element segelem = (Element) segnode;
                 final Segment last    = segments.get(segments.size() - 1);
-                final Segment addme   = new Segment(mediaPropper.replace("$Time$", "" + (Long.parseLong(segelem.getAttribute("d")) + last.start)));
+                final Segment addme   = new Segment(mediaPropper.replace("$Time$", "" + Long.toString(Long.parseLong(segelem.getAttribute("d")) + last.start)));
                 addme.start = Long.parseLong(segelem.getAttribute("d")) + last.start;
                 segments.add(addme);
             }
