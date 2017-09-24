@@ -1,33 +1,15 @@
 package div;
 
-import java.awt.Desktop;
-import java.io.BufferedReader;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.io.ObjectInputStream;
-import java.io.ObjectOutputStream;
-import java.io.OutputStreamWriter;
-import java.net.URISyntaxException;
-import java.net.URLDecoder;
+import java.awt.*;
+import java.io.*;
+import java.net.*;
 import java.nio.MappedByteBuffer;
-import java.nio.charset.Charset;
-import java.nio.charset.StandardCharsets;
-import java.nio.file.FileVisitResult;
-import java.nio.file.FileVisitor;
-import java.nio.file.Path;
-import java.nio.file.SimpleFileVisitor;
+import java.nio.charset.*;
+import java.nio.file.*;
 import java.nio.file.attribute.BasicFileAttributes;
-import java.util.ArrayList;
-import java.util.Enumeration;
+import java.util.*;
 import java.util.List;
-import java.util.StringJoiner;
-import java.util.jar.JarEntry;
-import java.util.jar.JarFile;
-import java.util.jar.JarInputStream;
+import java.util.jar.*;
 
 public final class Files
 {
@@ -53,6 +35,46 @@ public final class Files
             Desktop.getDesktop().browse(file.toURI());
         }
         return true;
+    }
+    
+    /**
+     * returns the used space on all HDDs, in GB
+     */
+    public Map<Path, Long> getUsedSpace()
+    {
+        Map<Path, Long> usedSpace = new HashMap<>();
+        for (Path root : FileSystems.getDefault().getRootDirectories())
+        {
+            try
+            {
+                FileStore store = java.nio.file.Files.getFileStore(root);
+                long      size  = (store.getTotalSpace() - store.getUsableSpace()) / 1024 / 1024 / 1024;
+                usedSpace.put(root, size);
+            } catch (IOException e)
+            {
+            }
+        }
+        return usedSpace;
+    }
+    
+    /**
+     * returns the free space on all HDDs, in GB
+     */
+    public Map<Path, Long> getFreeSpace()
+    {
+        Map<Path, Long> freeSpace = new HashMap<>();
+        for (Path root : FileSystems.getDefault().getRootDirectories())
+        {
+            try
+            {
+                FileStore store = java.nio.file.Files.getFileStore(root);
+                long      size  = store.getUsableSpace() / 1024 / 1024 / 1024;
+                freeSpace.put(root, size);
+            } catch (IOException e)
+            {
+            }
+        }
+        return freeSpace;
     }
     
     /**
