@@ -7,11 +7,12 @@ import java.sql.SQLException;
 
 public class MySQL
 {
-    private   String     hostname   = "";
-    private   String     portnmbr   = "";
-    private   String     username   = "";
-    private   String     password   = "";
-    private   String     database   = "";
+    private   String     hostname;
+    private   String     portnmbr;
+    private   String     username;
+    private   String     password;
+    private   String     database;
+    
     protected Connection connection = null;
     
     public MySQL(final String hostname, final String portnmbr, final String database, final String username, final String password)
@@ -29,15 +30,10 @@ public class MySQL
      * checks if the connection is still active
      *
      * @return true if still active
-     * @throws SQLException
      */
     public boolean checkConnection() throws SQLException
     {
-        if (!this.connection.isClosed() && this.connection.isValid(5))
-        {
-            return true;
-        }
-        return false;
+        return !this.connection.isClosed() && this.connection.isValid(5);
     }
     
     /**
@@ -85,7 +81,7 @@ public class MySQL
      */
     public void deleteTable(final String table)
     {
-        try (PreparedStatement statement = this.connection.prepareStatement("DROP TALBE ?"))
+        try (PreparedStatement statement = this.connection.prepareStatement("DROP TABLE ?"))
         {
             statement.setString(1, table);
             statement.executeUpdate();
@@ -110,18 +106,16 @@ public class MySQL
     /**
      * open database connection
      */
-    public Connection open()
+    public void open()
     {
         try
         {
             final String url = String.format("jdbc:mysql://%s:%s/%s?useUnicode=true&characterEncoding=UTF-8&useServerPrepStmts=false&rewriteBatchedStatements=true&serverTimezone=UTC", this.hostname, this.portnmbr, this.database);
             this.connection = DriverManager.getConnection(url, this.username, this.password);
-            return this.connection;
         } catch (final SQLException e)
         {
             System.out.print("Could not connect to MySQL server! ");
             System.out.println(e.getMessage());
-            return null;
         }
     }
 }
