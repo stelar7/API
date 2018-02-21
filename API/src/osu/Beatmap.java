@@ -1,7 +1,5 @@
 package osu;
 
-import com.badlogic.gdx.math.*;
-
 import java.util.*;
 
 

@@ -1,17 +1,15 @@
 package osu;
 
-import com.badlogic.gdx.math.*;
 import javafx.scene.shape.Circle;
 import osu.Beatmap.*;
 import osu.Beatmap.HitObject.*;
-import osu.Beatmap.HitObject.Slider.*;
+import osu.Beatmap.HitObject.Slider.Edge;
 
-import java.io.*;
+import java.io.IOException;
 import java.nio.file.*;
-import java.nio.file.Path;
 import java.util.*;
 import java.util.regex.*;
-import java.util.stream.*;
+import java.util.stream.Collectors;
 
 public class OsuParser
 {
@@ -569,7 +567,8 @@ public class OsuParser
                 case LINEAR:
                     return CurveCalc.pointOnLine(points.get(0), points.get(1), sliderLength);
                 case CATMULL:
-                    return null; // not supported
+                    // not supported
+                    return null;
                 case BEZIER:
                 {
                     if (points.size() < 2)
@@ -589,10 +588,8 @@ public class OsuParser
                     useme.remove(useme.size() - 1);
                     useme.add(pts.get(pts.size() - 1));
                     
-                    final Bezier<Vector2> bezier = new Bezier<>(useme.toArray(new Vector2[useme.size()]));
-                    final Vector2         out    = Vector2.Zero;
-                    bezier.valueAt(out, sliderLength);
-                    return out;
+                    final Bezier  bezier = new Bezier(useme);
+                    return bezier.valueAt(sliderLength);
                 }
                 
                 case PASS_THROUGH:
