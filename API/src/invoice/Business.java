@@ -1,9 +1,7 @@
 package invoice;
 
-import lombok.*;
 import org.javamoney.moneta.*;
 
-@Data
 public class Business
 {
     private static int id = 0;
@@ -43,5 +41,96 @@ public class Business
     public String getNextInvoiceId()
     {
         return "2016_11_27_01";
+    }
+    
+    
+    public static int getId()
+    {
+        return id;
+    }
+    
+    public static void setId(int id)
+    {
+        Business.id = id;
+    }
+    
+    public String getName()
+    {
+        return name;
+    }
+    
+    public void setName(String name)
+    {
+        this.name = name;
+    }
+    
+    public String getPostAddress()
+    {
+        return postAddress;
+    }
+    
+    public void setPostAddress(String postAddress)
+    {
+        this.postAddress = postAddress;
+    }
+    
+    public String getPostCode()
+    {
+        return postCode;
+    }
+    
+    public void setPostCode(String postCode)
+    {
+        this.postCode = postCode;
+    }
+    
+    public Long getOrgNr()
+    {
+        return orgNr;
+    }
+    
+    public void setOrgNr(Long orgNr)
+    {
+        this.orgNr = orgNr;
+    }
+    
+    public String getPhone()
+    {
+        return phone;
+    }
+    
+    public void setPhone(String phone)
+    {
+        this.phone = phone;
+    }
+    
+    public String getEmail()
+    {
+        return email;
+    }
+    
+    public void setEmail(String email)
+    {
+        this.email = email;
+    }
+    
+    public String getWebsite()
+    {
+        return website;
+    }
+    
+    public void setWebsite(String website)
+    {
+        this.website = website;
+    }
+    
+    public boolean isMva()
+    {
+        return mva;
+    }
+    
+    public void setMva(boolean mva)
+    {
+        this.mva = mva;
     }
 }

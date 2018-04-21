@@ -1,6 +1,5 @@
 package invoice;
 
-import lombok.Data;
 import org.apache.pdfbox.pdmodel.*;
 import org.apache.pdfbox.pdmodel.common.PDRectangle;
 import org.apache.pdfbox.pdmodel.font.PDType1Font;
@@ -13,7 +12,6 @@ import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.*;
 
-@Data
 public class Invoice
 {
     private DateTimeFormatter sdf = DateTimeFormatter.ofPattern("uuuu.MM.dd");
@@ -28,6 +26,111 @@ public class Invoice
     private String    payToAccount;
     private Business  seller;
     private Customer  buyer;
+    
+    public DateTimeFormatter getSdf()
+    {
+        return sdf;
+    }
+    
+    public void setSdf(DateTimeFormatter sdf)
+    {
+        this.sdf = sdf;
+    }
+    
+    public List<InvoiceItem> getItems()
+    {
+        return items;
+    }
+    
+    public String getCustomerId()
+    {
+        return customerId;
+    }
+    
+    public void setCustomerId(String customerId)
+    {
+        this.customerId = customerId;
+    }
+    
+    public String getInvoiceId()
+    {
+        return invoiceId;
+    }
+    
+    public void setInvoiceId(String invoiceId)
+    {
+        this.invoiceId = invoiceId;
+    }
+    
+    public LocalDate getInvoiceDate()
+    {
+        return invoiceDate;
+    }
+    
+    public void setInvoiceDate(LocalDate invoiceDate)
+    {
+        this.invoiceDate = invoiceDate;
+    }
+    
+    public LocalDate getPaymentDue()
+    {
+        return paymentDue;
+    }
+    
+    public void setPaymentDue(LocalDate paymentDue)
+    {
+        this.paymentDue = paymentDue;
+    }
+    
+    public String getSellerRef()
+    {
+        return sellerRef;
+    }
+    
+    public void setSellerRef(String sellerRef)
+    {
+        this.sellerRef = sellerRef;
+    }
+    
+    public String getBuyerRef()
+    {
+        return buyerRef;
+    }
+    
+    public void setBuyerRef(String buyerRef)
+    {
+        this.buyerRef = buyerRef;
+    }
+    
+    public String getPayToAccount()
+    {
+        return payToAccount;
+    }
+    
+    public void setPayToAccount(String payToAccount)
+    {
+        this.payToAccount = payToAccount;
+    }
+    
+    public Business getSeller()
+    {
+        return seller;
+    }
+    
+    public void setSeller(Business seller)
+    {
+        this.seller = seller;
+    }
+    
+    public Customer getBuyer()
+    {
+        return buyer;
+    }
+    
+    public void setBuyer(Customer buyer)
+    {
+        this.buyer = buyer;
+    }
     
     public void addItem(final InvoiceItem item)
     {
