@@ -8,6 +8,7 @@ import java.util.Map;
 import java.util.StringJoiner;
 
 import com.google.gson.Gson;
+import com.google.gson.annotations.SerializedName;
 import com.google.gson.reflect.TypeToken;
 
 public class Waybill
@@ -44,13 +45,14 @@ public class Waybill
         @Override
         public String toString()
         {
-            return "BaseData [sender=" + this.sender + ", reciver=" + this.reciver + ", type=" + this.type + "]";
+            return "[sender=" + this.sender + ", reciver=" + this.reciver + ", type=" + this.type + "]";
         }
     }
     
     public static class UnNumber
     {
         private int    number;
+        @SerializedName("class")
         private String clazz;
         private String desc;
         
@@ -70,7 +72,7 @@ public class Waybill
                 {
                     numbers = new HashMap<>();
                     
-                    String numberdata = Internet.getPageSource("https://www.dropbox.com/s/sjl8otk8mz77upg/unnumbers.txt?raw=1");
+                    String numberdata = Internet.getPageSource("https://www.dropbox.com/s/uiwav8t3vl3v7p1/unnumbers.json?raw=1");
                     
                     List<UnNumber> numberlist = new Gson().fromJson(numberdata, new TypeToken<List<UnNumber>>()
                     {}.getType());
@@ -157,7 +159,7 @@ public class Waybill
         DAF,
         DES,
         DEQ,
-        DDU;
+        DDU
     }
     
     public static class Location
@@ -173,6 +175,12 @@ public class Waybill
             this.name = name;
             this.address = address;
             this.area = area;
+        }
+        
+        public static Location from(Long locationId)
+        {
+            // database lookup..?
+            return new Location("test", "location", PostCode.from(5337L));
         }
         
         public String getAddress()
@@ -200,39 +208,65 @@ public class Waybill
     public static class LocationReference
     {
         private Long transporterId;
-        private Long reference;
+        private Long locationId;
         
-        public LocationReference(final Long transporterId, final Long reference)
+        public LocationReference(final Long transporterId, final Long locationId)
         {
             super();
             this.transporterId = transporterId;
-            this.reference = reference;
+            this.locationId = locationId;
         }
         
         @Override
         public String toString()
         {
-            return "LocationReference [transporterId=" + this.transporterId + ", reference=" + this.reference + "]";
+            return "[transporterId=" + this.transporterId + ", reference=" + this.locationId + "]";
         }
     }
     
     public static class PostCode
     {
-        private Long code;
-        
+        private Long   code;
         private String name;
         
         public PostCode(final Long code, final String name)
         {
-            super();
             this.code = code;
             this.name = name;
         }
         
-        public PostCode(final String other)
+        public PostCode(final Long code)
         {
-            super();
-            this.name = other;
+            PostCode self = from(code);
+            this.code = self.code;
+            this.name = self.name;
+        }
+        
+        private static volatile Map<Long, PostCode> numbers;
+        
+        public static PostCode from(Long id)
+        {
+            if (numbers == null)
+            {
+                try
+                {
+                    numbers = new HashMap<>();
+                    
+                    String   numberdata = Internet.getPageSource("https://www.dropbox.com/s/dq8s40yhs7q6dc1/postcode.txt?raw=1");
+                    String[] lines      = numberdata.split("\n");
+                    for (String line : lines)
+                    {
+                        String[] fields = line.split("\t");
+                        Long     ids    = Long.valueOf(fields[0]);
+                        numbers.put(ids, new PostCode(ids, fields[1]));
+                    }
+                } catch (IOException e)
+                {
+                    e.printStackTrace();
+                }
+            }
+            
+            return numbers.get(id);
         }
         
         public Long getCode()
@@ -319,8 +353,8 @@ public class Waybill
         @Override
         public String toString()
         {
-            final StringJoiner returnJoiner  = new StringJoiner("\n\t\t\t", "Product [\n\t\t\t", "\n\t\t\t]");
-            final StringJoiner productJoiner = new StringJoiner("\n\t\t\t\t", "[\n\t\t\t\t", "\n\t\t\t\t]\t\t\t");
+            final StringJoiner returnJoiner  = new StringJoiner("\n\t\t\t", "Product \n\t\t[\n\t\t\t", "\n\t\t]");
+            final StringJoiner productJoiner = new StringJoiner("\n\t\t\t\t", "\n\t\t\t[\n\t\t\t\t", "\n\t\t\t]\t\t\t");
             this.hazards.forEach(a -> productJoiner.add(a.toString()));
             
             returnJoiner.add("Mark: " + this.mark);
@@ -338,20 +372,20 @@ public class Waybill
     {
         private Long width;
         private Long height;
-        private Long depth;
+        private Long length;
         
         // IN CM!!
-        public Volume(final Long width, final Long depth, final Long height)
+        public Volume(final Long length, final Long width, final Long height)
         {
             super();
+            this.length = length;
             this.width = width;
             this.height = height;
-            this.depth = depth;
         }
         
-        public Long getDepth()
+        public Long getLength()
         {
-            return this.depth;
+            return this.length;
         }
         
         public Long getHeight()
@@ -361,12 +395,12 @@ public class Waybill
         
         public double getLM()
         {
-            return (double) this.width / 100D * (double) this.depth / 100D / 2.4D;
+            return (double) this.width / 100D * (double) this.length / 100D / 2.4D;
         }
         
         public double getVolume()
         {
-            return (double) this.width * (double) this.height * (double) this.depth;
+            return (double) this.width * (double) this.height * (double) this.length;
         }
         
         public Long getWidth()
@@ -377,7 +411,7 @@ public class Waybill
         @Override
         public String toString()
         {
-            return "Volume [width=" + this.width + ", depth=" + this.depth + ", height=" + this.height + "]";
+            return "[volume=" + getVolume() + "cm\u00B3, LM=" + getLM() + ", width=" + this.width + ", length=" + this.length + ", height=" + this.height + "]";
         }
     }
     
@@ -388,7 +422,6 @@ public class Waybill
     
     private String transporter;
     
-    private String   productType;
     private String   notes;
     private BaseData data;
     
@@ -412,11 +445,6 @@ public class Waybill
     public String getNotes()
     {
         return this.notes;
-    }
-    
-    public String getProductType()
-    {
-        return this.productType;
     }
     
     public Location getReciver()
@@ -469,11 +497,6 @@ public class Waybill
         this.notes = notes;
     }
     
-    public void setProductType(final String productType)
-    {
-        this.productType = productType;
-    }
-    
     public void setReciver(final Location reciver)
     {
         this.reciver = reciver;
@@ -492,8 +515,8 @@ public class Waybill
     @Override
     public String toString()
     {
-        final StringJoiner returnJoiner  = new StringJoiner("\n\t", "Waybill [\n\t", "]");
-        final StringJoiner productJoiner = new StringJoiner("\n\t\t", "[\n\t\t", "\n\t\t]\n\t");
+        final StringJoiner returnJoiner  = new StringJoiner("\n\t", "Waybill \n[\n\t", "]");
+        final StringJoiner productJoiner = new StringJoiner("\n\t\t", "\n\t[\n\t\t", "\n\t]\n");
         this.goods.forEach(a -> productJoiner.add(a.toString()));
         
         returnJoiner.add("Sender: " + this.sender);
@@ -501,12 +524,35 @@ public class Waybill
         returnJoiner.add("Reciver: " + this.reciver);
         returnJoiner.add("Dropoff: " + this.dropoff);
         returnJoiner.add("Transporter: " + this.transporter);
-        returnJoiner.add("ProductType: " + this.productType);
-        returnJoiner.add("Notes: \n\n" + this.notes);
-        returnJoiner.add("\n\tData: " + this.data);
+        returnJoiner.add("Notes: \"" + this.notes + "\"");
+        returnJoiner.add("Data: " + this.data);
         returnJoiner.add("Goods: \t" + productJoiner);
         
         return returnJoiner.toString();
+    }
+    
+    public static void main(String[] args)
+    {
+        LocationReference sender   = new LocationReference(1L, 1L);
+        LocationReference reciever = new LocationReference(1L, 2L);
+        
+        Volume  v  = new Volume(120L, 120L, 120L);
+        Product p1 = new Product("Q16-1", 1L, "Tomt Gassrack", 1600L, v);
+        Product p2 = new Product("Q16-2", 1L, "Gassrack", 16000L, v);
+        p2.addHazard(new Hazard(1066, 100, "L"));
+        
+        Waybill w = new Waybill();
+        w.data = new BaseData(sender, reciever, Incoterm.DAP);
+        w.sender = Location.from(reciever.locationId);
+        w.dropoff = w.sender;
+        w.reciver = Location.from(sender.locationId);
+        w.pickup = w.reciver;
+        w.transporter = "Bring Cargo";
+        w.notes = "";
+        w.addProduct(p1);
+        w.addProduct(p2);
+        
+        System.out.println(w);
     }
     
 }
