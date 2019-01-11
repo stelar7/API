@@ -137,7 +137,7 @@
   {
     "number": 28,
     "clazz": "1",
-    "desc": "Black powder, compressed or Gunpowder, compressed or Black powder, in pellets or Gunpowder, in pellets"
+    "desc": "Black powder, Compressed or Gunpowder, Compressed or Black powder, in pellets or Gunpowder, in pellets"
   },
   {
     "number": 29,
@@ -5017,7 +5017,7 @@
   {
     "number": 1002,
     "clazz": "2",
-    "desc": "Air, compressed"
+    "desc": "Air, Compressed"
   },
   {
     "number": 1003,
@@ -5037,7 +5037,7 @@
   {
     "number": 1006,
     "clazz": "2",
-    "desc": "Argon, compressed"
+    "desc": "Argon, Compressed"
   },
   {
     "number": 1007,
@@ -5047,7 +5047,7 @@
   {
     "number": 1008,
     "clazz": "2",
-    "desc": "Boron trifluoride, compressed"
+    "desc": "Boron trifluoride, Compressed"
   },
   {
     "number": 1009,
@@ -5077,7 +5077,7 @@
   {
     "number": 1014,
     "clazz": "2",
-    "desc": "(UN No. no longer in use) Carbon dioxide and oxygen mixtures, compressed (UN No. no longer in use)[1]"
+    "desc": "(UN No. no longer in use) Carbon dioxide and oxygen mixtures, Compressed (UN No. no longer in use)[1]"
   },
   {
     "number": 1015,
@@ -5087,7 +5087,7 @@
   {
     "number": 1016,
     "clazz": "2",
-    "desc": "Carbon monoxide, compressed"
+    "desc": "Carbon monoxide, Compressed"
   },
   {
     "number": 1017,
@@ -5122,7 +5122,7 @@
   {
     "number": 1023,
     "clazz": "2",
-    "desc": "Coal gas, compressed"
+    "desc": "Coal gas, Compressed"
   },
   {
     "number": 1024,
@@ -5227,17 +5227,17 @@
   {
     "number": 1044,
     "clazz": "2",
-    "desc": "Fire extinguishers containing compressed or liquefied gas"
+    "desc": "Fire extinguishers containing Compressed or liquefied gas"
   },
   {
     "number": 1045,
     "clazz": "2",
-    "desc": "Fluorine, compressed"
+    "desc": "Fluorine, Compressed"
   },
   {
     "number": 1046,
     "clazz": "2",
-    "desc": "Helium, compressed"
+    "desc": "Helium, Compressed"
   },
   {
     "number": 1047,
@@ -5252,7 +5252,7 @@
   {
     "number": 1049,
     "clazz": "2",
-    "desc": "Hydrogen, compressed"
+    "desc": "Hydrogen, Compressed"
   },
   {
     "number": 1050,
@@ -5287,7 +5287,7 @@
   {
     "number": 1056,
     "clazz": "2",
-    "desc": "Krypton, compressed"
+    "desc": "Krypton, Compressed"
   },
   {
     "number": 1057,
@@ -5332,12 +5332,12 @@
   {
     "number": 1065,
     "clazz": "2",
-    "desc": "Neon, compressed"
+    "desc": "Neon, Compressed"
   },
   {
     "number": 1066,
     "clazz": "2",
-    "desc": "Nitrogen, compressed"
+    "desc": "Nitrogen, Compressed"
   },
   {
     "number": 1067,
@@ -5362,12 +5362,12 @@
   {
     "number": 1071,
     "clazz": "2",
-    "desc": "Oil gas, compressed"
+    "desc": "Oil gas, Compressed"
   },
   {
     "number": 1072,
     "clazz": "2",
-    "desc": "Oxygen, compressed"
+    "desc": "Oxygen, Compressed"
   },
   {
     "number": 1073,
@@ -8067,7 +8067,7 @@
   {
     "number": 1612,
     "clazz": "2",
-    "desc": "Hexaethyl tetraphosphate and compressed gas mixtures"
+    "desc": "Hexaethyl tetraphosphate and Compressed gas mixtures"
   },
   {
     "number": 1613,
@@ -8307,7 +8307,7 @@
   {
     "number": 1660,
     "clazz": "2",
-    "desc": "Nitric oxide, compressed"
+    "desc": "Nitric oxide, Compressed"
   },
   {
     "number": 1661,
@@ -8522,7 +8522,7 @@
   {
     "number": 1703,
     "clazz": "-",
-    "desc": "(UN No. no longer in use) Tetraethyl dithiopyrophosphate and compressed gas mixture (UN No. no longer in use)[1]"
+    "desc": "(UN No. no longer in use) Tetraethyl dithiopyrophosphate and Compressed gas mixture (UN No. no longer in use)[1]"
   },
   {
     "number": 1704,
@@ -8532,7 +8532,7 @@
   {
     "number": 1705,
     "clazz": "-",
-    "desc": "(UN No. no longer in use) Tetraethyl pyrophosphate and compressed gas mixture (UN No. no longer in use)[1]"
+    "desc": "(UN No. no longer in use) Tetraethyl pyrophosphate and Compressed gas mixture (UN No. no longer in use)[1]"
   },
   {
     "number": 1706,
@@ -9297,12 +9297,12 @@
   {
     "number": 1858,
     "clazz": "2",
-    "desc": "Hexafluoropropylene, compressed or Refrigerant gas R 1216"
+    "desc": "Hexafluoropropylene, Compressed or Refrigerant gas R 1216"
   },
   {
     "number": 1859,
     "clazz": "2",
-    "desc": "Silicon tetrafluoride, compressed"
+    "desc": "Silicon tetrafluoride, Compressed"
   },
   {
     "number": 1860,
@@ -9562,7 +9562,7 @@
   {
     "number": 1911,
     "clazz": "2",
-    "desc": "Diborane, compressed"
+    "desc": "Diborane, Compressed"
   },
   {
     "number": 1912,
@@ -9792,7 +9792,7 @@
   {
     "number": 1957,
     "clazz": "2",
-    "desc": "Deuterium, compressed"
+    "desc": "Deuterium, Compressed"
   },
   {
     "number": 1958,
@@ -9817,7 +9817,7 @@
   {
     "number": 1962,
     "clazz": "2",
-    "desc": "Ethylene, compressed"
+    "desc": "Ethylene, Compressed"
   },
   {
     "number": 1963,
@@ -9827,7 +9827,7 @@
   {
     "number": 1964,
     "clazz": "2",
-    "desc": "Hydrocarbon gas mixture, compressed, n.o.s."
+    "desc": "Hydrocarbon gas mixture, Compressed, n.o.s."
   },
   {
     "number": 1965,
@@ -9862,7 +9862,7 @@
   {
     "number": 1971,
     "clazz": "2",
-    "desc": "Methane, compressed or Natural gas, compressed (with high methane content)"
+    "desc": "Methane, Compressed or Natural gas, Compressed (with high methane content)"
   },
   {
     "number": 1972,
@@ -9902,22 +9902,22 @@
   {
     "number": 1979,
     "clazz": "2",
-    "desc": "(UN No. no longer in use) Rare gases, mixtures, compressed (UN No. no longer in use)[1][2]"
+    "desc": "(UN No. no longer in use) Rare gases, mixtures, Compressed (UN No. no longer in use)[1][2]"
   },
   {
     "number": 1980,
     "clazz": "2",
-    "desc": "(UN No. no longer in use) Rare gases and oxygen mixtures, compressed (UN No. no longer in use)[1][2]"
+    "desc": "(UN No. no longer in use) Rare gases and oxygen mixtures, Compressed (UN No. no longer in use)[1][2]"
   },
   {
     "number": 1981,
     "clazz": "2",
-    "desc": "(UN No. no longer in use) Rare gases and nitrogen mixtures, compressed (UN No. no longer in use)[1][2]"
+    "desc": "(UN No. no longer in use) Rare gases and nitrogen mixtures, Compressed (UN No. no longer in use)[1][2]"
   },
   {
     "number": 1982,
     "clazz": "2",
-    "desc": "Tetrafluoromethane, compressed or Refrigerant gas R 14"
+    "desc": "Tetrafluoromethane, Compressed or Refrigerant gas R 14"
   },
   {
     "number": 1983,
@@ -10177,17 +10177,17 @@
   {
     "number": 2034,
     "clazz": "2",
-    "desc": "Hydrogen and Methane mixtures, compressed"
+    "desc": "Hydrogen and Methane mixtures, Compressed"
   },
   {
     "number": 2035,
     "clazz": "2",
-    "desc": "1,1,1-Trifluoroethane, compressed or Refrigerant gas R 143a"
+    "desc": "1,1,1-Trifluoroethane, Compressed or Refrigerant gas R 143a"
   },
   {
     "number": 2036,
     "clazz": "2",
-    "desc": "Xenon, compressed"
+    "desc": "Xenon, Compressed"
   },
   {
     "number": 2037,
@@ -10957,7 +10957,7 @@
   {
     "number": 2190,
     "clazz": "2",
-    "desc": "Oxygen difluoride, compressed"
+    "desc": "Oxygen difluoride, Compressed"
   },
   {
     "number": 2191,
@@ -10972,7 +10972,7 @@
   {
     "number": 2193,
     "clazz": "2",
-    "desc": "Hexafluoroethane, compressed or Refrigerant gas R 116"
+    "desc": "Hexafluoroethane, Compressed or Refrigerant gas R 116"
   },
   {
     "number": 2194,
@@ -10997,7 +10997,7 @@
   {
     "number": 2198,
     "clazz": "2",
-    "desc": "Phosphorus pentafluoride, compressed"
+    "desc": "Phosphorus pentafluoride, Compressed"
   },
   {
     "number": 2199,
@@ -11022,7 +11022,7 @@
   {
     "number": 2203,
     "clazz": "2",
-    "desc": "Silane, compressed"
+    "desc": "Silane, Compressed"
   },
   {
     "number": 2204,
@@ -12092,7 +12092,7 @@
   {
     "number": 2417,
     "clazz": "2",
-    "desc": "Carbonyl fluoride, compressed"
+    "desc": "Carbonyl fluoride, Compressed"
   },
   {
     "number": 2418,
@@ -12262,7 +12262,7 @@
   {
     "number": 2451,
     "clazz": "2",
-    "desc": "Nitrogen trifluoride, compressed"
+    "desc": "Nitrogen trifluoride, Compressed"
   },
   {
     "number": 2452,
@@ -13007,7 +13007,7 @@
   {
     "number": 2600,
     "clazz": "2",
-    "desc": "(UN No. no longer in use) Carbon monoxide and hydrogen mixture, compressed (UN No. no longer in use)[1][2]"
+    "desc": "(UN No. no longer in use) Carbon monoxide and hydrogen mixture, Compressed (UN No. no longer in use)[1][2]"
   },
   {
     "number": 2601,
@@ -16772,7 +16772,7 @@
   {
     "number": 3353,
     "clazz": "-",
-    "desc": "(UN No. no longer in use) Air bag inflators or Air bag modules or Seat belt pretensioners, compressed gas (UN No. no longer in use)[1][2]"
+    "desc": "(UN No. no longer in use) Air bag inflators or Air bag modules or Seat belt pretensioners, Compressed gas (UN No. no longer in use)[1][2]"
   },
   {
     "number": 3354,
