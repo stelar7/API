@@ -14,8 +14,8 @@ import java.util.stream.Collectors;
 public class OsuParser
 {
     
-    private static final Pattern      sectionPattern  = Pattern.compile("^\\[([a-zA-Z0-9]+)\\]$");
-    private static final Pattern      commentPattern  = Pattern.compile("^\\/\\/[a-zA-Z0-9 )(]*$");
+    private static final Pattern      sectionPattern  = Pattern.compile("^\\[([a-zA-Z0-9]+)]$");
+    private static final Pattern      commentPattern  = Pattern.compile("^//[a-zA-Z0-9 )(]*$");
     private static final Pattern      keyValuePattern = Pattern.compile("^([a-zA-Z0-9]+)[ ]*:[ ]*(.+)$");
     private static final Pattern      versionPattern  = Pattern.compile("^osu file format (v[0-9]+)$");
     private static final Pattern      intPattern      = Pattern.compile("^[0-9]+$");
@@ -23,7 +23,7 @@ public class OsuParser
     private static final List<String> eventLines      = new ArrayList<>();
     private static final List<String> objectLines     = new ArrayList<>();
     private static       String       sectionString   = "";
-    private static Beatmap beatmap;
+    private static       Beatmap      beatmap;
     
     private static void buildBeatmap()
     {
@@ -33,10 +33,10 @@ public class OsuParser
         }
         
         OsuParser.eventLines.forEach(OsuParser::parseEvent);
-        OsuParser.beatmap.breakTimes.sort((a, b) -> a.startTime > b.startTime ? 1 : -1);
+        OsuParser.beatmap.breakTimes.sort(Comparator.comparing(a -> a.startTime));
         
         OsuParser.timingLines.forEach(OsuParser::parseTimingPoint);
-        OsuParser.beatmap.timingPoints.sort((a, b) -> a.offset > b.offset ? 1 : -1);
+        OsuParser.beatmap.timingPoints.sort(Comparator.comparing(a -> a.offset));
         
         for (int i = 1; i < OsuParser.beatmap.timingPoints.size(); i++)
         {
@@ -50,7 +50,7 @@ public class OsuParser
         OsuParser.beatmap.bpmAvg = OsuParser.beatmap.timingPoints.stream().collect(Collectors.averagingDouble(tp -> tp.bpm)).intValue();
         
         OsuParser.objectLines.forEach(OsuParser::parseHitObject);
-        OsuParser.beatmap.hitObjects.sort((a, b) -> a.startTime > b.startTime ? 1 : -1);
+        OsuParser.beatmap.hitObjects.sort(Comparator.comparing(a -> a.startTime));
         
         OsuParser.computeMaxCombo();
         OsuParser.computeDuration();
@@ -68,8 +68,8 @@ public class OsuParser
             breakTime += b.endTime - b.startTime;
         }
         
-        OsuParser.beatmap.totalTime = (int) Math.floor(last.startTime / 1000);
-        OsuParser.beatmap.drainingTime = (int) Math.floor((last.startTime - first.startTime - breakTime) / 1000);
+        OsuParser.beatmap.totalTime = (int) Math.floor(last.startTime / 1000f);
+        OsuParser.beatmap.drainingTime = (int) Math.floor((last.startTime - first.startTime - breakTime) / 1000f);
         
     }
     
@@ -102,10 +102,6 @@ public class OsuParser
             switch (o.type)
             {
                 case SPINNER:
-                {
-                    maxCombo++;
-                    break;
-                }
                 case CIRCLE:
                 {
                     maxCombo++;
@@ -588,7 +584,7 @@ public class OsuParser
                     useme.remove(useme.size() - 1);
                     useme.add(pts.get(pts.size() - 1));
                     
-                    final Bezier  bezier = new Bezier(useme);
+                    final Bezier bezier = new Bezier(useme);
                     return bezier.valueAt(sliderLength);
                 }
                 
