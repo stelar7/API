@@ -2,6 +2,8 @@ package div;
 
 import java.text.*;
 import java.util.*;
+import java.util.concurrent.ThreadLocalRandom;
+import java.util.stream.*;
 
 
 public final class Miscellaneous
@@ -224,5 +226,142 @@ public final class Miscellaneous
             input[input.length - 1 - i] = temp;
         }
         return input;
+    }
+    
+    public static int gcd(int a, int b)
+    {
+        if (a == b && b == 0)
+        {
+            return 0;
+        }
+        
+        if (a == 0)
+        {
+            return b;
+        }
+        
+        if (b == 0)
+        {
+            return a;
+        }
+        
+        return 1;
+        
+        
+        /*
+        int shift = (a | b).trailingZeros();
+        u >>= a.trailingZeros();
+        do {
+            a >>= a.trailingZeros();
+            if(a>b) {
+                int t = b;
+                b = a;
+                a = t;
+            }
+            b = b - a;
+        } while(b != 0);
+        
+        return u << shift;
+        */
+    }
+    
+    public static int lcm(int a, int b)
+    {
+        return Math.abs(a * b) / gcd(a, b);
+    }
+    
+    static class VoseSampler<T>
+    {
+        Map<T, Float> distribution = new HashMap<>();
+        
+        Map<T, Float> probabilityTable    = new HashMap<>();
+        Map<T, T>     aliasTable          = new HashMap<>();
+        Map<T, Float> scaledProbabilities = new HashMap<>();
+        
+        Deque<T> smallProbabilities = new ArrayDeque<>();
+        Deque<T> largeProbabilities = new ArrayDeque<>();
+        
+        List<T> distributionList = new ArrayList<>();
+        
+        public VoseSampler(Map<T, Float> distribution)
+        {
+            this.distribution = distribution;
+            distributionList = new ArrayList<>(this.distribution.keySet());
+            
+            int n = distribution.size();
+            this.distribution.forEach((o, p) -> {
+                float scaled = scaledProbabilities.compute(o, (k, v) -> p * n);
+                
+                if (scaled < 1)
+                {
+                    smallProbabilities.add(o);
+                } else
+                {
+                    largeProbabilities.add(o);
+                }
+            });
+            
+            while (!smallProbabilities.isEmpty() && !largeProbabilities.isEmpty())
+            {
+                T small = smallProbabilities.poll();
+                T large = largeProbabilities.poll();
+                
+                probabilityTable.put(small, scaledProbabilities.get(small));
+                aliasTable.put(small, large);
+                
+                float scaled = scaledProbabilities.compute(large, (k, v) -> (scaledProbabilities.get(large) + scaledProbabilities.get(small)) - 1);
+                if (scaled < 1)
+                {
+                    smallProbabilities.add(large);
+                } else
+                {
+                    largeProbabilities.add(large);
+                }
+            }
+            
+            while (!largeProbabilities.isEmpty())
+            {
+                probabilityTable.compute(largeProbabilities.poll(), (k, v) -> 1f);
+            }
+            
+            while (!smallProbabilities.isEmpty())
+            {
+                probabilityTable.compute(smallProbabilities.poll(), (k, v) -> 1f);
+            }
+        }
+        
+        public T generateAlias()
+        {
+            int   pos  = ThreadLocalRandom.current().nextInt(distributionList.size());
+            float bias = ThreadLocalRandom.current().nextFloat();
+            
+            T     col   = distributionList.get(pos);
+            float prob  = probabilityTable.get(col);
+            T     alias = aliasTable.get(col);
+            
+            boolean toss = bias < prob;
+            return toss ? col : alias;
+        }
+        
+        public List<T> sample(int count)
+        {
+            return IntStream.range(0, count).mapToObj(i -> generateAlias()).collect(Collectors.toList());
+        }
+        
+        public static void main(String[] args)
+        {
+            VoseSampler<String> sampler = new VoseSampler<>(new HashMap<>()
+            {{
+                // should ideally sum to 1f
+                put("a", 0.10f);
+                put("b", 0.80f);
+                put("c", 0.05f);
+                put("d", 0.03f);
+                put("e", 0.02f);
+                put("x", 0.001f);
+            }});
+            
+            System.out.println(sampler.sample(1_000).stream().collect(Collectors.groupingBy(a -> a, Collectors.counting())));
+        }
     }
 }
